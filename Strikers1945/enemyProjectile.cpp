@@ -1,30 +1,29 @@
 #include "pch.h"
-#include "enemyProjectile.h"
+#include "EnemyProjectile.h"
 
-enemyProjectile::enemyProjectile(const std::string& name)
+EnemyProjectile::EnemyProjectile(const std::string& name)
 	: SpriteGo(name)
 {
 }
 
-void enemyProjectile::Init()
+void EnemyProjectile::Init()
 {
 	SpriteGo::Init();
-	SetTexture("graphics/Strikers1945/enemyProjectile.png");
+	SetTexture("graphics/Strikers1945/assets/bullet.bmp");
 	SetTextureRect({ 7, 20, 9, 16 });					 // Rect 정하기
 	SetOrigin(Origins::BC);
 }
 
-void enemyProjectile::Reset()
+void EnemyProjectile::Reset()
 {
-	SpriteGo::Reset();
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
 }
 
-void enemyProjectile::Update(float dt)
+void EnemyProjectile::Update(float dt)
 {
 	SpriteGo::Update(dt);
-	// 발사 관련은 Enemy에서
-	// 이 총알은 여기서 이동
-
+	time += dt;
+	
+	Translate(direction * speed * dt);
 }

@@ -18,8 +18,8 @@ protected :
 	AnimPlayer* player = nullptr;
 	
 	float time = 0.f;
-	float speed = 500.f;
-	int damage = 200;
+	float speed = 800.f;
+	int damage = 20;
 
 public :
 	Bullet(const std::string& name = "bullet");
@@ -27,5 +27,6 @@ public :
 
 	void Init() override;
 	void Reset() override;;
-	void Update(float dt) override;;
+	void Update(float dt) override;
+	void FixedUpdate(float dt);
 };

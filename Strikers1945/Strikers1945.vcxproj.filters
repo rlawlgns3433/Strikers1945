@@ -93,7 +93,7 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="enemyProjectile.cpp">
+    <ClCompile Include="EnemyProjectile.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\Spawner.cpp">
@@ -200,7 +200,7 @@
     <ClInclude Include="Enemy.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="enemyProjectile.h">
+    <ClInclude Include="EnemyProjectile.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Spawner.h">

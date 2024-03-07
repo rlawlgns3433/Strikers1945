@@ -11,6 +11,7 @@ public :
 	{
 		Regular1,
 		Regular2,
+		Regular3,
 		MidBoss,
 		Boss,
 		Speacial,
@@ -36,14 +37,22 @@ protected :
 
 	sf::Vector2f direction = {0.f, 1.f};
 
-	float speed;
-	float attackInterval = 5.f;
+	float speed = 300.f;
+	float continuousAttackInterval = 1.f;
+	float continuousAttackTimer = 0.f;
+	int maxContinuousAttackCount = 5;
+	int continuousAttackCount = maxContinuousAttackCount;
+
+	float attackInterval = 3.f;
 	float attackTimer = 0.f;
+
 
 	int maxHp = 100;
 	int hp = maxHp;
 	int damage = 10;
-	int projectileCount = 5;
+	int projectileCount = 200;
+
+	bool isAlive = true;
 
 public :
 	Enemy(const std::string& name = "enemy");
@@ -62,4 +71,6 @@ public :
 
 	void OnDamage(float damge);
 	void OnDie();
+
+	bool isDead() const { return !isAlive; }
 };

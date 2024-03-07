@@ -144,7 +144,7 @@
     <ClCompile Include="DataTables\DataTableManager.cpp" />
     <ClCompile Include="DataTables\StringTable.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="enemyProjectile.cpp" />
+    <ClCompile Include="EnemyProjectile.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Framework\InputManager.cpp" />
     <ClCompile Include="Framework\SoundManager.cpp" />
@@ -182,7 +182,7 @@
     <ClInclude Include="DataTables\DataTableManager.h" />
     <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="enemyProjectile.h" />
+    <ClInclude Include="EnemyProjectile.h" />
     <ClInclude Include="Framework\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Framework\InputManager.h" />

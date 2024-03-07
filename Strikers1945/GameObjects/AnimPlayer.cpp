@@ -12,10 +12,10 @@ void AnimPlayer::Init()
 {
 	SpriteGo::Init();
 	animator.SetTarget(&sprite);
+	SetScale({ 2.f,2.f });
 
 	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", false, });
 	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", true });
-
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	SetPosition({ 0, 450.f });

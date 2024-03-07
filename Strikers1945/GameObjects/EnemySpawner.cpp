@@ -34,8 +34,8 @@ void EnemySpawner::Reset()
 	enemyTypes.clear();
 	enemyTypes.push_back(Enemy::Types::Regular1);
 	enemyTypes.push_back(Enemy::Types::Regular1);
-	enemyTypes.push_back(Enemy::Types::Regular1);
-	enemyTypes.push_back(Enemy::Types::Regular1);
-	enemyTypes.push_back(Enemy::Types::Regular1);
-	enemyTypes.push_back(Enemy::Types::Regular1);
+	enemyTypes.push_back(Enemy::Types::Regular2);
+	enemyTypes.push_back(Enemy::Types::Regular2);
+	enemyTypes.push_back(Enemy::Types::Regular3);
+	enemyTypes.push_back(Enemy::Types::Regular3);
 }

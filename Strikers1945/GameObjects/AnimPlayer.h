@@ -39,7 +39,7 @@ protected:
 	sf::Vector2f direction;
 
 	float speed = 500.f;
-	float shootInterval = 0.1f;
+	float shootInterval = 0.08f;
 	float shootTimer = 0.f;
 
 	int maxHp = 200;

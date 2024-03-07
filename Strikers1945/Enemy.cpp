@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Enemy.h"
+#include "EnemyProjectile.h"
 
 Enemy* Enemy::Create(Types zombieType)
 {
@@ -10,24 +11,34 @@ Enemy* Enemy::Create(Types zombieType)
 	{
 	case Types::Regular1 :
 		enemy->maxHp = 100;
-		enemy->attackInterval = 5.f;
+		enemy->attackInterval = 0.1f;
 		enemy->damage = 10;
 		enemy->speed = 100.f;
-		enemy->animationClipId = "animation/Enemy/Idle.csv";
+		enemy->animationClipId = "animation/Enemy/enemy1/Idle.csv";
 		break;
 
 	case Types::Regular2:
 		enemy->maxHp = 100;
-		enemy->attackInterval = 5.f;
+		enemy->attackInterval = 0.1f;
 		enemy->damage = 10;
 		enemy->speed = 100.f;
+		enemy->animationClipId = "animation/Enemy/enemy2/Idle.csv";
+		break;
+
+	case Types::Regular3:
+		enemy->maxHp = 100;
+		enemy->attackInterval = 0.1f;
+		enemy->damage = 10;
+		enemy->speed = 100.f;
+		enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
 		break;
 
 	case Types::MidBoss:
 		enemy->maxHp = 100;
-		enemy->attackInterval = 5.f;
+		enemy->attackInterval = 0.1f;
 		enemy->damage = 10;
 		enemy->speed = 100.f;
+		enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
 		break;
 
 	case Types::Boss:
@@ -96,6 +107,18 @@ void Enemy::Update(float dt)
 
 void Enemy::Shoot()
 {
+	if (projectileCount > 0)
+	{
+		attackTimer = 0.f;
+		--projectileCount;
+		EnemyProjectile* projectile = new EnemyProjectile();
+		projectile->Init();
+		projectile->Reset();
+		projectile->SetPosition(position);
+		sceneGame->AddGameObject(projectile);
+
+		std::cout << "enemy shoot" << std::endl;
+	}
 }
 
 void Enemy::UpdateAwake(float dt)
@@ -105,13 +128,13 @@ void Enemy::UpdateAwake(float dt)
 void Enemy::UpdateGame(float dt)
 {
 	animator.Update(dt);
+	continuousAttackTimer += dt;
+	attackTimer += dt;
+
 	Translate(direction * speed * dt);
 
-	attackTimer += dt;
 	// 플레이어와 충돌처리
 	// 1. 충돌을 확인한다.
-
-
 	if (GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
 		Utils::MyMath::Distance(player->GetPosition(), position) < 40)
 	{
@@ -121,6 +144,24 @@ void Enemy::UpdateGame(float dt)
 		attackTimer = 0.f;
 		// 3. Enemy를 지운다.
 		OnDie();
+	}
+
+	if (continuousAttackTimer > continuousAttackInterval)
+	{
+		if (continuousAttackCount > 0)
+		{
+			if (attackTimer > attackInterval)
+			{
+				attackTimer = 0.f;
+				--continuousAttackCount;
+				Shoot();
+			}
+		}
+		else
+		{
+			continuousAttackTimer = 0.f;
+			continuousAttackCount = maxContinuousAttackCount;
+		}
 	}
 }
 
@@ -151,4 +192,5 @@ void Enemy::OnDie()
 {
 	SetActive(false);
 	sceneGame->RemoveGameObject(this);
+	sceneGame->enemyList.remove(this);
 }
