@@ -7,6 +7,7 @@
 #include "EnemySpawner.h"
 #include "BackGround.h"
 #include "Enemy.h"
+#include "EnemyProjectile.h"
 
 SceneGame::SceneGame(SceneIDs id) 
     : Scene(id)

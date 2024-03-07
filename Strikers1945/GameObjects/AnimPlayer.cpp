@@ -14,8 +14,10 @@ void AnimPlayer::Init()
 	animator.SetTarget(&sprite);
 	SetScale({ 2.f,2.f });
 
-	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", false, });
-	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", true });
+	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", false, false});
+	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", true, false });
+	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", false, true });
+
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	SetPosition({ 0, 450.f });
@@ -77,7 +79,12 @@ void AnimPlayer::UpdateGame(float dt)
 
 	Translate(direction * speed * dt);
 
-	if (direction.x != 0.f || direction.y > 0.f)
+
+	if (isDead)
+	{
+		currentClipInfo = clipInfos[2];
+	}
+	else if (direction.x != 0.f || direction.y > 0.f)
 	{
 		currentClipInfo = clipInfos[1];
 	}
@@ -86,7 +93,7 @@ void AnimPlayer::UpdateGame(float dt)
 		currentClipInfo = clipInfos[0];
 	}
 
-	const std::string& clipId = (direction.x != 0.f || direction.y != 0.f) ?
+	const std::string& clipId = isDead ? currentClipInfo.dead : (direction.x != 0.f || direction.y != 0.f) ?
 		currentClipInfo.move : currentClipInfo.idle;
 
 	if (animator.GetCurrentClipId() != clipId)
@@ -131,8 +138,18 @@ void AnimPlayer::Shoot()
 
 void AnimPlayer::OnDie()
 {
+	// 죽었을 때 애니메이션 재생
+	isDead = true;
+	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
+	animator.AddEvent("animation/Player/Dead.csv", 9, deadEvent);
+}
+
+void AnimPlayer::DeadEvent()
+{
+	// 애니메이션 끝날 때 이곳을 호출
+	// 플레이어 사망 프레임이 종료되었을 때 실행
+	isDead = true;
 	SetActive(false);
 	sceneGame->RemoveGameObject(this);
 	sceneGame->SetStatus(GameStatus::GameOver);
 }
-

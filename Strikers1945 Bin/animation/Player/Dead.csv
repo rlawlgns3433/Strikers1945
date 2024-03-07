@@ -1,0 +1,14 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+Dead,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Strikers1945/PlayerDead.png,0,0,16,16
+graphics/Strikers1945/PlayerDead.png,17,0,16,16
+graphics/Strikers1945/PlayerDead.png,34,0,16,16
+graphics/Strikers1945/PlayerDead.png,51,0,16,16
+graphics/Strikers1945/PlayerDead.png,68,0,16,16
+graphics/Strikers1945/PlayerDead.png,85,0,16,16
+graphics/Strikers1945/PlayerDead.png,102,0,16,16
+graphics/Strikers1945/PlayerDead.png,119,0,16,16
+graphics/Strikers1945/PlayerDead.png,136,0,16,16
+graphics/Strikers1945/PlayerDead.png,153,0,16,16

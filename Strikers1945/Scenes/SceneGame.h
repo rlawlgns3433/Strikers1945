@@ -7,6 +7,7 @@ class AnimPlayer;
 class EnemySpawner;
 class Background;
 class Enemy;
+class EnemyProjectile;
 
 class SceneGame : public Scene
 {
@@ -34,6 +35,7 @@ public :
 	AnimPlayer* player = nullptr;
 
 	std::list<Enemy*> enemyList;
+	std::vector<EnemyProjectile*> enemyProjectiles;
 
 	void Init() override;
 	void Release() override;

@@ -55,13 +55,6 @@ Enemy* Enemy::Create(Types zombieType)
 		break;
 	}
 
-	//const DataZombie& data = ZOMBIE_TABLE->Get(zombieType);
-	//zombie->textureId = data.textureId;
-	//zombie->maxHp = data.maxHp;
-	//zombie->speed = data.speed;
-	//zombie->damage = data.damage;
-	//zombie->attackInterval = data.attackInterval;
-
 	enemy->SetPosition({ Utils::Random::RandomRange(-270, 270), 550.f });
 
     return enemy;
@@ -115,8 +108,9 @@ void Enemy::Shoot()
 		projectile->Init();
 		projectile->Reset();
 		projectile->SetPosition(position);
+		projectile->SetDirection(Utils::MyMath::GetNormal(player->GetPosition() - position));
 		sceneGame->AddGameObject(projectile);
-
+		sceneGame->enemyProjectiles.push_back(projectile);
 		std::cout << "enemy shoot" << std::endl;
 	}
 }
@@ -140,7 +134,6 @@ void Enemy::UpdateGame(float dt)
 	{
 		// 2. 플레이어에 데미지를 먹인다.
 		player->OnDie();
-
 		attackTimer = 0.f;
 		// 3. Enemy를 지운다.
 		OnDie();
@@ -162,6 +155,17 @@ void Enemy::UpdateGame(float dt)
 			continuousAttackTimer = 0.f;
 			continuousAttackCount = maxContinuousAttackCount;
 		}
+	}
+
+	// 맵 아래로 충분히  나가게 된다면 오브젝트 삭제
+	
+	if (position.y > 500.f)
+	{
+		OnDie();
+	}
+	else if (position.y > 100.f)
+	{
+		continuousAttackCount = 0;
 	}
 }
 

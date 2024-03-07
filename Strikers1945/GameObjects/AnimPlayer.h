@@ -12,13 +12,15 @@ public:
 	{
 		std::string idle;
 		std::string move;
+		std::string dead;
 		bool isMove = false;
+		bool isDead = false;
 
 		ClipInfo()
 		{
 		}
-		ClipInfo(const std::string& idle, const std::string& move, bool isMove)
-			: idle(idle), move(move), isMove(isMove)
+		ClipInfo(const std::string& idle, const std::string& move, const std::string& dead, bool isMove, bool isDead)
+			: idle(idle), move(move), dead(dead), isMove(isMove), isDead(isDead)
 		{
 		}
 	};
@@ -65,4 +67,5 @@ public:
 
 	void Shoot();
 	void OnDie();
+	void DeadEvent();
 };

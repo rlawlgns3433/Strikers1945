@@ -1,7 +1,8 @@
 #pragma once
 #include "SpriteGo.h"
-#include "SceneGame.h"
-#include "AnimPlayer.h"
+
+class SceneGame;
+class AnimPlayer;
 
 class EnemyProjectile : public SpriteGo
 {
@@ -25,6 +26,9 @@ public:
 
 	void Init() override;
 	void Reset() override;;
-	void Update(float dt) override;;
+	void Update(float dt) override;
+	void FixedUpdate(float dt);
+
+	void SetDirection(const sf::Vector2f direction);
 };
 
