@@ -27,18 +27,13 @@ void EnemyProjectile::Update(float dt)
 	SpriteGo::Update(dt);
 	time += dt;
 	Translate(direction * speed * dt);
-
-	//if (GetGlobalBounds().intersects(player->GetGlobalBounds()))
-	//{
-	//	player->OnDie();
-	//	SetActive(false);
-	//	sceneGame->RemoveGameObject(this); // 오브젝트 풀링으로 변경 필요
-	//}
 }
 
 void EnemyProjectile::FixedUpdate(float dt)
 {
-	if (GetGlobalBounds().intersects(player->GetGlobalBounds()))
+	
+	if (Utils::MyMath::Distance(player->GetPosition(), position) >= 25) return ;
+	if (!player->IsDead() && GetGlobalBounds().intersects(player->GetGlobalBounds()))
 	{
 		player->OnDie();
 		SetActive(false);

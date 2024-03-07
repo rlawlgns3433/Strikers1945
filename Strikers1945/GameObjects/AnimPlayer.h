@@ -39,6 +39,7 @@ protected:
 
 	sf::Vector2f velocity;
 	sf::Vector2f direction;
+	sf::RectangleShape shape;
 
 	float speed = 500.f;
 	float shootInterval = 0.08f;
@@ -68,4 +69,6 @@ public:
 	void Shoot();
 	void OnDie();
 	void DeadEvent();
+
+	bool IsDead() const { return isDead; }
 };

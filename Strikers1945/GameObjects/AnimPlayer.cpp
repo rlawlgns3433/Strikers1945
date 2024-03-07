@@ -14,18 +14,24 @@ void AnimPlayer::Init()
 	animator.SetTarget(&sprite);
 	SetScale({ 2.f,2.f });
 
-	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", false, false});
+	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", false, false });
 	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", true, false });
 	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", false, true });
 
-
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	SetPosition({ 0, 450.f });
+
+
 }
 
 void AnimPlayer::Reset()
 {
 	animator.Play("animation/Player/Idle.csv");
+
+
+
+
+
 	SetOrigin(Origins::MC);
 	isDead = false;
 
@@ -77,8 +83,10 @@ void AnimPlayer::UpdateGame(float dt)
 		direction /= mag;
 	}
 
-	Translate(direction * speed * dt);
-
+	if (!isDead)
+	{
+		Translate(direction * speed * dt);
+	}
 
 	if (isDead)
 	{
@@ -101,12 +109,11 @@ void AnimPlayer::UpdateGame(float dt)
 		animator.Play(clipId);
 	}
 
-	// 플레이어 맵 이탈 체크
+		// 플레이어 맵 이탈 체크
 	if (position.x < -270) position.x = -270.f;
 	if (position.x > 270) position.x = 270.f;
 	if (position.y < -480) position.y = -480.f;
 	if (position.y > 480) position.y = 480.f;
-
 }
 
 void AnimPlayer::UpdateGameover(float dt)
@@ -120,6 +127,7 @@ void AnimPlayer::UpdatePause(float dt)
 void AnimPlayer::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
+	window.draw(shape);
 }
 
 void AnimPlayer::Shoot()
@@ -148,7 +156,6 @@ void AnimPlayer::DeadEvent()
 {
 	// 애니메이션 끝날 때 이곳을 호출
 	// 플레이어 사망 프레임이 종료되었을 때 실행
-	isDead = true;
 	SetActive(false);
 	sceneGame->RemoveGameObject(this);
 	sceneGame->SetStatus(GameStatus::GameOver);

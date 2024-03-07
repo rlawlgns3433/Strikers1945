@@ -35,7 +35,7 @@ public :
 	AnimPlayer* player = nullptr;
 
 	std::list<Enemy*> enemyList;
-	std::vector<EnemyProjectile*> enemyProjectiles;
+	std::vector<GameObject*> enemyProjectiles;
 
 	void Init() override;
 	void Release() override;
@@ -55,4 +55,5 @@ public :
 	bool IsInTilemap(const sf::Vector2f& point);
 	sf::Vector2f ClampByTilemap(const sf::Vector2f& point);
 	
+	const std::vector<GameObject*>& GetEnemyProjectileList() const { return enemyProjectiles; }
 };

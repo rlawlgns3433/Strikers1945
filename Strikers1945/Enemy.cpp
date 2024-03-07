@@ -111,7 +111,8 @@ void Enemy::Shoot()
 		projectile->SetDirection(Utils::MyMath::GetNormal(player->GetPosition() - position));
 		sceneGame->AddGameObject(projectile);
 		sceneGame->enemyProjectiles.push_back(projectile);
-		std::cout << "enemy shoot" << std::endl;
+		/*std::cout << "Projectiles : " << sceneGame->enemyProjectiles.size() << std::endl;
+		std::cout << "Enemys : " << sceneGame->enemyList.size() << std::endl;*/
 	}
 }
 
