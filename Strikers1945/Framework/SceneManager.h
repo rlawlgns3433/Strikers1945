@@ -6,6 +6,7 @@ class Scene;
 enum class SceneIDs
 {
 	None = -1,
+	SceneTitle,
 	SceneGame,
 	COUNT,
 };
@@ -23,11 +24,11 @@ protected:
 	SceneManager& operator=(SceneManager&&)		 = delete;
 
 	std::vector<Scene*> scenes;
-	SceneIDs startScene = SceneIDs::SceneGame;
+	SceneIDs startScene = SceneIDs::SceneTitle;
 	SceneIDs currentScene = startScene;
 
 	std::vector<std::string> TextureResourceNames = { };
-	std::vector<std::string> FontResourceNames = { "fonts/DS-DIGI.ttf" };
+	std::vector<std::string> FontResourceNames = { /*"fonts/DS-DIGI.ttf"*/};
 	std::vector<std::string> SoundResourceNames = {};
 
 	unsigned lives = 3;

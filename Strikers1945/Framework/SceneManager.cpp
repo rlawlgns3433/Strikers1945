@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SceneManager.h"
 #include "SceneGame.h"
+#include "SceneTitle.h"
 
 SceneManager::~SceneManager()
 {
@@ -12,6 +13,8 @@ void SceneManager::Init()
 	Release();
 
 	LoadAllResources();
+
+	scenes.push_back(new SceneTitle(SceneIDs::SceneTitle));
 	scenes.push_back(new SceneGame(SceneIDs::SceneGame));
 
 	for (auto scene : scenes)
