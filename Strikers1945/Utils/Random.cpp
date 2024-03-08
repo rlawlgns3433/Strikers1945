@@ -1,11 +1,18 @@
 #include "pch.h"
 #include "Random.h"
+#include <random>
 
 namespace Utils
 {
 	float Random::RandomValue()
 	{
-		return (float)rand() / RAND_MAX;
+		static std::random_device rd;
+
+		static std::mt19937 gen(rd());
+
+		std::uniform_real_distribution<float> dis(0.0f, 1.0f);
+
+		return dis(gen);
 	}
 
 	float Random::RandomRange(float min, float max)

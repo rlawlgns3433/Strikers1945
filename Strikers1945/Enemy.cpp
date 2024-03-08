@@ -62,8 +62,6 @@ Enemy* Enemy::Create(Types zombieType)
 		break;
 	}
 
-	enemy->SetPosition({ Utils::Random::RandomRange(-270, 270), 550.f });
-
     return enemy;
 }
 Enemy::Enemy(const std::string& name)
@@ -128,6 +126,7 @@ void Enemy::UpdateGame(float dt)
 {
 	animator.Update(dt);
 
+
 	if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/Dead.csv")
 	{
 		animator.Play("animation/Enemy/Dead.csv");
@@ -137,28 +136,31 @@ void Enemy::UpdateGame(float dt)
 
 	// Enemy 이동 테스트 중
 
-	if (position.y > 100.f && !isRotating) 
+	switch (type)
 	{
-		isRotating = true;
+	case Enemy::Types::Regular1:
+		MoveOnCircle(dt);
+		break;
+	case Enemy::Types::Regular2:
+		MoveOnCircle(dt);
+		break;
+	case Enemy::Types::Regular3:
+		MoveOnCircle(dt);
+		break;
+	case Enemy::Types::MidBoss:
+		break;
+	case Enemy::Types::Boss:
+		break;
+	case Enemy::Types::Speacial:
+		break;
+	case Enemy::Types::Gound:
+		break;
+	default:
+		break;
 	}
 
-	if (isRotating)
-	{
-		sf::Transform tr;
-		tr.rotate(360 * dt);
-		direction1 = tr * direction1;
-		Translate((direction + direction1) * speed * dt);
-	}
-	else
-	{
-		Translate(direction * speed * dt);
-	}
 
 	// Enemy 이동 테스트 중
-
-	//Utils::MyMath::Normalize(direction += velocity);
-
-
 
 	// 플레이어와 충돌처리
 	// 1. 충돌을 확인한다.
@@ -192,7 +194,7 @@ void Enemy::UpdateGame(float dt)
 
 	// 맵 아래로 충분히  나가게 된다면 오브젝트 삭제
 	
-	if (position.y > 500.f || position.x > 290.f)
+	if (position.y > 500.f || position.x > 320.f)
 	{
 		OnDie();
 	}
@@ -292,17 +294,74 @@ void Enemy::DeadEvent()
 	sceneGame->enemyList.remove(this);
 }
 
-// y가 특정 값이 되면 호출
-sf::Vector2f Enemy::RotateOnCircle(sf::Vector2f center, float radius, float deltaTime)
+void Enemy::MoveStraight(float dt)
 {
-	if (deltaTime >= 1)
+	Translate(direction * speed * dt);
+}
+
+void Enemy::MoveOnCircle(float dt)
+{
+	if (position.y > -400.f && !isRotating && !isPlaying)
 	{
-		isRotating = false;
-		return center;
+		isRotating = true;
 	}
 
-	float angle = Utils::MyMath::Lerp(startAngle, endAngle, deltaTime);
-	rot.rotate(angle);
-	newVector = rot * right;
-	return center + radius * newVector;
+	if (isRotating)
+	{
+		isPlaying = true;
+		sf::Transform tr;
+		tr.rotate(360 * dt);
+		direction1 = tr * direction1;
+		Translate((direction + direction1) * speed * dt);
+
+		rotateTimer += dt;
+		if (rotateTimer > 1.5f)
+		{
+			isRotating = false;
+		}
+	}
+	else
+	{
+		Translate(direction * speed * dt);
+	}
+}
+
+
+void Enemy::MoveSin(float dt)
+{
+	if (/*position.y > -400.f && */!isRotating && !isPlaying)
+	{
+		isRotating = true;
+	}
+
+	if (isRotating)
+	{
+		rotateTimer += dt;
+		isPlaying = true;
+
+		// direction1의 값은, -1 ~ 1
+		// direction1은 timer시간 동안 0~360의 값이 나와야 한다.
+		// direction1.x는 cos(0~360), y는 sin(0~360)
+
+		float angle = ((rotateTimer / 10.f) * 360);
+		float amplitude = 2.f;
+		float period = 0.2f;
+
+		direction1.x = sin(angle * period) * amplitude;
+
+		// 이동 적용
+		sf::Vector2f newVec = direction + direction1;
+		Utils::MyMath::GetNormal(newVec);
+
+		Translate(newVec * speed * dt);
+
+		if (rotateTimer > 2.f)
+		{
+			isRotating = false;
+		}
+	}
+	else
+	{
+		Translate(direction * speed * dt);
+	}
 }

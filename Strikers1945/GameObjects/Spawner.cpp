@@ -40,7 +40,7 @@ void Spawner::Update(float dt)
 
 		for (int i = 0; i < spawnCount; ++i)
 		{
-			sf::Vector2f spawnPosition = { Utils::Random::RandomRange(-270, 270), -510.f };
+			sf::Vector2f spawnPosition = { Utils::Random::RandomRange(-220, 220), -550.f };
 
 			GameObject* newGo = Create();
 			if (newGo == nullptr) return;

@@ -93,6 +93,7 @@ protected :
 	/// rotate Å×½ºÆ®
 	/// </summary>
 	bool isRotating = false;
+	bool isPlaying = false;
 
 public :
 	Enemy(const std::string& name = "enemy");
@@ -111,7 +112,9 @@ public :
 	void ShootFrontOneTime();
 	void ShootFrontThreeTime();
 
-	sf::Vector2f RotateOnCircle(sf::Vector2f center, float radius, float deltaTime);
+	void MoveStraight(float dt);
+	void MoveOnCircle(float dt);
+	void MoveSin(float dt);
 
 	void OnDamage(float damge);
 	void OnDie();
