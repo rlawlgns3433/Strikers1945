@@ -136,15 +136,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Background.cpp" />
+    <ClCompile Include="GameObjects\Background.cpp" />
     <ClCompile Include="GameObjects\Animator.cpp" />
     <ClCompile Include="GameObjects\AnimPlayer.cpp" />
     <ClCompile Include="AniTest.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\DataTableManager.cpp" />
     <ClCompile Include="DataTables\StringTable.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyProjectile.cpp" />
+    <ClCompile Include="GameObjects\Enemy.cpp" />
+    <ClCompile Include="GameObjects\EnemyProjectile.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Framework\InputManager.cpp" />
     <ClCompile Include="Framework\SoundManager.cpp" />
@@ -153,7 +153,7 @@
     <ClCompile Include="GameObjects\Spawner.cpp" />
     <ClCompile Include="GameObjects\Tilemap.cpp" />
     <ClCompile Include="GameObjects\UiHUD.cpp" />
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="GameObjects\Item.cpp" />
     <ClCompile Include="Scenes\SceneDev1.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="Utils\MyMath.cpp" />
@@ -175,15 +175,15 @@
     <ClCompile Include="Utils\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Background.h" />
+    <ClInclude Include="GameObjects\Background.h" />
     <ClInclude Include="GameObjects\Animator.h" />
     <ClInclude Include="GameObjects\AnimPlayer.h" />
     <ClInclude Include="AniTest.h" />
     <ClInclude Include="DataTables\DataTable.h" />
     <ClInclude Include="DataTables\DataTableManager.h" />
     <ClInclude Include="DataTables\StringTable.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyProjectile.h" />
+    <ClInclude Include="GameObjects\Enemy.h" />
+    <ClInclude Include="GameObjects\EnemyProjectile.h" />
     <ClInclude Include="Framework\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Framework\InputManager.h" />
@@ -193,7 +193,7 @@
     <ClInclude Include="GameObjects\Spawner.h" />
     <ClInclude Include="GameObjects\Tilemap.h" />
     <ClInclude Include="GameObjects\UiHUD.h" />
-    <ClInclude Include="Item.h" />
+    <ClInclude Include="GameObjects\Item.h" />
     <ClInclude Include="rapidcsv.h" />
     <ClInclude Include="Scenes\SceneDev1.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />

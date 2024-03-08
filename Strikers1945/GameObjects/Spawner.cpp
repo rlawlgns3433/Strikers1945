@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Spawner.h"
 #include "Enemy.h"
+#include "Background.h"
 
 Spawner::Spawner(const std::string& name)
 	: GameObject(name)
@@ -34,6 +35,8 @@ void Spawner::Update(float dt)
 	GameObject::Update(dt);
 
 	timer += dt;
+
+
 	if (timer > interval)
 	{
 		timer = 0.f;

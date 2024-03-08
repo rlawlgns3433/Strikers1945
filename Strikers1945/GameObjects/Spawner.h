@@ -3,6 +3,7 @@
 #include "SceneGame.h"
 
 class SceneGame;
+class Background;
 
 class Spawner : public GameObject
 {
@@ -13,6 +14,7 @@ protected :
 	Spawner& operator=(Spawner&&)	   = delete;
 
 	SceneGame* sceneGame = nullptr;
+	Background* background = nullptr;
 
 	float timer = 0.f;
 

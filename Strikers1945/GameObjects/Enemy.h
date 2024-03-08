@@ -94,9 +94,6 @@ protected :
 	bool isAlive = true;
 	bool iscenter = true;
 
-	/// <summary>
-	/// rotate Å×½ºÆ®
-	/// </summary>
 	bool isRotating = false;
 	bool isPlaying = false;
 

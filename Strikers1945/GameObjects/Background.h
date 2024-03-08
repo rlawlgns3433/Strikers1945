@@ -5,6 +5,14 @@ class SceneGame;
 
 class Background : public SpriteGo
 {
+public :
+	enum GamePhase
+	{
+		COMMON_ENEMY_PHASE, // 잡몹 나오는 단계
+		MID_BOSS_PHASE,     // 세미 보스 나오는 단계
+		BOSS_PHASE          // 보스 나오는 단계
+	};
+
 
 protected :
 	Background(const Background&)					= delete;
@@ -12,8 +20,10 @@ protected :
 	Background& operator=(const Background&)		= delete;
 	Background& operator=(Background&&)				= delete;
 
-	sf::Clock clock;
+	GamePhase phase;
 	SceneGame* sceneGame = nullptr;
+
+	sf::Clock clock;
 
 public :
 	Background(const std::string& name = "background");
@@ -23,5 +33,6 @@ public :
 	void Reset() override;
 	void Update(float dt) override;
 
+	GamePhase GetPhase() const { return phase; }
 };
 

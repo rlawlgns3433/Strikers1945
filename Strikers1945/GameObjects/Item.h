@@ -29,7 +29,6 @@ protected:
 	Item& operator=(const Item&) = delete;
 	Item& operator=(Item&&) = delete;
 
-
 	Types type;
 	MovementType movement;
 
@@ -39,6 +38,10 @@ protected:
 	AnimationClip currentClip;
 
 	std::string animationClipId;
+
+	sf::Vector2f direction = { 1.f, 0.f };
+
+	float speed = 300.f;
 
 public:
 	Item(const std::string& name = "");

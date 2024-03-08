@@ -5,6 +5,10 @@
 
 Enemy* Enemy::Create(Types enemyType)
 {
+	// TODO
+	// background의 phase 마다 등장하는 enemy의 종류가 다양해짐
+	// boss 페이즈 진행 시 더 이상 다른 몬스터를 생성하지 않고 보스만 하나 생성
+
 	Enemy* enemy = new Enemy();
 	enemy->type = enemyType;
 	
@@ -198,7 +202,7 @@ void Enemy::UpdateGame(float dt)
 	}
 
 	// 맵 아래로 충분히  나가게 된다면 오브젝트 삭제
-	if (position.y > 500.f || position.x > 320.f || (direction.y < 0 && position.y < -550.f))
+	if (position.y > 500.f || position.x > 320.f || (speed < 0 && position.y < -550.f))
 	{
 		DeadEvent();
 	}
@@ -237,11 +241,10 @@ void Enemy::OnDie()
 	if (isAlive)
 	{
 		hud->AddScore(score);
-		item = Item::Create(Item::Types::Gold);
+		item = Item::Create(Item::Types::PowerUp);
 		item->Init();
 		item->Reset();
 		item->SetPosition(position);
-
 		sceneGame->AddGameObject(item);
 	}
 	isAlive = false;

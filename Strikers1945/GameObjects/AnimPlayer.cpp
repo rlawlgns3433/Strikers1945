@@ -27,7 +27,7 @@ void AnimPlayer::Init()
 	SetPosition({ 0, 450.f });
 
 	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
-	animator.AddEvent("animation/Player/Dead.csv", 9, deadEvent);
+	animator.AddEvent("animation/Player/Dead.csv", 10, deadEvent);
 }
 
 void AnimPlayer::Reset()
@@ -73,7 +73,7 @@ void AnimPlayer::UpdateGame(float dt)
 	animator.Update(dt);
 	shootTimer += dt;
 
-	if (InputManager::GetKey(sf::Keyboard::LControl))
+	if (InputManager::GetKey(sf::Keyboard::LControl) && !isDead)
 	{
 		Shoot();
 	}
@@ -128,6 +128,7 @@ void AnimPlayer::UpdateGame(float dt)
 			isInvincible = false;
 			invincibleTimer = 0.f;
 			isDead = false;
+			SetActive(true);
 		}
 	}
 }

@@ -38,8 +38,7 @@ namespace Utils
 
 	sf::Vector2f Random::GetRandomVector2(float start, float end)
 	{
-		float randVal = (rand() % ((int)(end * 100) - (int)(start * 100))) + start * 100;
-		return sf::Vector2f(randVal / 100, randVal / 100);
+		return sf::Vector2f(RandomRange(start, end), RandomRange(start, end));
 	}
 
 	float Random::GetRandomAngle()

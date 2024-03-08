@@ -5,24 +5,28 @@
 
 Item* Item::Create(Types itemType)
 {
+    // TODO
+    // 아이템 등장에 대한 고민 필요
+
     Item* item = new Item();
     item->type = itemType;
 
     switch (item->type)
     {
-    case Types::Life :
+    case Types::Life:
         item->SetTexture("graphics/Strikers1945/assets/Life.png");
         item->movement = MovementType::Move;
         break;
-    case Types::Gold :
+    case Types::Gold:
         item->animationClipId = "animation/Item/Gold.csv";
         item->movement = MovementType::NotMove;
+        item->speed = 0.f;
         break;
-    case Types::PowerUp :
+    case Types::PowerUp:
         item->animationClipId = "animation/Item/PowerUp.csv";
         item->movement = MovementType::Move;
         break;
-    case Types::Bomb :
+    case Types::Bomb:
         item->animationClipId = "animation/Item/Bomb.csv";
         item->movement = MovementType::Move;
         break;
@@ -42,6 +46,7 @@ void Item::Init()
     animator.SetTarget(&sprite);
     sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
     player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
+    direction = Utils::Random::GetRandomVector2(-1.f, 1.f);
 }
 
 void Item::Reset()
@@ -62,6 +67,13 @@ void Item::Update(float dt)
         break;
     case Item::MovementType::Move:
         // 이동 로직을 구현
+        // 네 면에 닿게 되면 새로운 벡터로 변경
+        if (abs(position.x) >= 260 || abs(position.y) >= 480)
+        {
+            direction = Utils::Random::GetRandomVector2(-1.f, 1.f);
+        }
+
+        Translate(direction * speed * dt);
         break;
     }
 
