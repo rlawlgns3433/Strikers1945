@@ -3,6 +3,7 @@
 #include "Animator.h"
 #include "SceneGame.h"
 #include "AnimPlayer.h"
+#include "UiHUD.h"
 
 class Enemy : public SpriteGo
 {
@@ -54,6 +55,7 @@ protected :
 
 	SceneGame* sceneGame = nullptr;
 	AnimPlayer* player = nullptr;
+	UiHUD* hud = nullptr;
 	Animator animator;
 
 	std::string animationClipId;
@@ -80,11 +82,11 @@ protected :
 	float attackInterval = 3.f;
 	float attackTimer = 0.f;
 
-
 	int maxHp = 100;
 	int hp = maxHp;
 	int damage = 10;
 	int projectileCount = 200;
+	int score = 0;
 
 	bool isAlive = true;
 	bool iscenter = true;

@@ -8,6 +8,7 @@
 #include "BackGround.h"
 #include "Enemy.h"
 #include "EnemyProjectile.h"
+#include "UiHUD.h"
 
 SceneGame::SceneGame(SceneIDs id) 
     : Scene(id)
@@ -20,6 +21,7 @@ void SceneGame::Init()
 {
     worldView.setSize(windowX, windowY);
     worldView.setCenter(0, 0);
+    worldView.setViewport(sf::FloatRect(0.f, 0.1f, 1.f, 0.8f));
     uiView.setSize(windowX, windowY);
     uiView.setCenter(windowX * 0.5f, windowY * 0.5f);
 
@@ -31,6 +33,11 @@ void SceneGame::Init()
     
     background = new Background();
     AddGameObject(background);
+
+    hud = new UiHUD();
+    hud->Init();
+    hud->Reset();
+    AddGameObject(hud, Layers::Ui);
 
     Scene::Init(); // 모든 게임 오브젝트 Init()
 }
@@ -127,19 +134,4 @@ void SceneGame::SetStatus(GameStatus newStatus)
         FRAMEWORK.SetTimeScale(0.f);
         break;
     }
-}
-
-bool SceneGame::IsInTilemap(const sf::Vector2f& point)
-{
-    sf::FloatRect rect = tilemap->GetGlobalBounds();
-    rect = Utils::MyMath::ResizeRect(rect, tilemap->GetCellSize() * -2.f);
-
-    return rect.contains(point);
-}
-
-sf::Vector2f SceneGame::ClampByTilemap(const sf::Vector2f& point)
-{
-    sf::FloatRect rect = tilemap->GetGlobalBounds();
-    rect = Utils::MyMath::ResizeRect(rect, tilemap->GetCellSize() * -2.f);
-    return Utils::MyMath::Clamp(point, rect);
 }

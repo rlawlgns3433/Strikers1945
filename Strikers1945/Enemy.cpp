@@ -14,6 +14,7 @@ Enemy* Enemy::Create(Types zombieType)
 		enemy->attackInterval = 0.2f;
 		enemy->damage = 10;
 		enemy->speed = 300.f;
+		enemy->score = 100;
 		enemy->velocity = { 100, 200 };
 		enemy->animationClipId = "animation/Enemy/enemy1/Idle.csv";
 		enemy->shootType = ShootTypes::OneTime;
@@ -24,6 +25,7 @@ Enemy* Enemy::Create(Types zombieType)
 		enemy->attackInterval = 0.2f;
 		enemy->damage = 10;
 		enemy->speed = 300.f;
+		enemy->score = 200;
 		enemy->velocity = { 100, 200 };
 		enemy->animationClipId = "animation/Enemy/enemy2/Idle.csv";
 		enemy->shootType = ShootTypes::ThreeTime;
@@ -34,6 +36,7 @@ Enemy* Enemy::Create(Types zombieType)
 		enemy->attackInterval = 0.2f;
 		enemy->damage = 10;
 		enemy->speed = 300.f;
+		enemy->score = 300;
 		enemy->velocity = { -100, 200 };
 		enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
 		enemy->shootType = ShootTypes::ThreeTime;
@@ -74,6 +77,7 @@ void Enemy::Init()
 	animator.SetTarget(&sprite);
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
+	hud = dynamic_cast<UiHUD*>(sceneGame->FindGameObject("hud"));
 }
 
 void Enemy::Reset()
@@ -195,7 +199,7 @@ void Enemy::UpdateGame(float dt)
 	// 맵 아래로 충분히  나가게 된다면 오브젝트 삭제
 	if (position.y > 500.f || position.x > 320.f || (direction.y < 0 && position.y < -550.f))
 	{
-		OnDie();
+		DeadEvent();
 	}
 	else if (position.y > 100.f)
 	{
@@ -230,6 +234,7 @@ void Enemy::OnDamage(float damge)
 void Enemy::OnDie()
 {
 	isAlive = false;
+	hud->AddScore(score);
 	std::function<void()> deadEvent = std::bind(&Enemy::DeadEvent, this);
 	animator.AddEvent("animation/Enemy/Dead.csv", 9, deadEvent);
 }

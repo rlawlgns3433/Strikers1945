@@ -30,7 +30,6 @@ public :
 	SceneGame(SceneIDs id);
 	~SceneGame() override = default;
 
-	Tilemap* tilemap = nullptr;
 	UiHUD* hud = nullptr;
 	AnimPlayer* player = nullptr;
 
@@ -51,9 +50,6 @@ public :
 
 	GameStatus GetStatus() const { return this->status; }
 	void SetStatus(GameStatus newStatus);
-
-	bool IsInTilemap(const sf::Vector2f& point);
-	sf::Vector2f ClampByTilemap(const sf::Vector2f& point);
 	
 	const std::vector<GameObject*>& GetEnemyProjectileList() const { return enemyProjectiles; }
 };

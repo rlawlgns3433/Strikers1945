@@ -14,19 +14,25 @@ protected:
 	UiHUD& operator=(const UiHUD&) = delete;
 	UiHUD& operator=(UiHUD&&) = delete;
 	
+	// 나중에 이미지로 변경 필요
+	std::string scoreFormat = "Score : ";
+	std::string lifesFormat = "Lifes : ";
+	std::string bombCountFormat = "Bombs : ";
 
 	sf::Vector2f referenceResolution = { 960.f, 540.f };
 	sf::Vector2f resolution = referenceResolution;
+	sf::Vector2i windowSize = FRAMEWORK.GetWindowSize();
 
 	TextGo textScore;
 	TextGo textBombCount;
+	TextGo textLifes;
 
-	int score;
-	int bombCount;
-	int lifes;
+	int score = 0;
+	int bombCount = 0;
+	int lifes = 1;
 
 public:
-	UiHUD(const std::string& name = "");
+	UiHUD(const std::string& name = "hud");
 	~UiHUD() override = default;
 
 	void Init() override;
@@ -37,6 +43,7 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 
 	int GetScore() const { return score; }
+	void AddScore(int add);
 	void SetScore(int score);
 
 	int GetLifes() const { return lifes; }
