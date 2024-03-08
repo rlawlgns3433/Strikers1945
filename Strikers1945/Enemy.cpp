@@ -139,13 +139,13 @@ void Enemy::UpdateGame(float dt)
 	switch (type)
 	{
 	case Enemy::Types::Regular1:
-		MoveOnCircle(dt);
+		MoveStraight(dt);
 		break;
 	case Enemy::Types::Regular2:
 		MoveOnCircle(dt);
 		break;
 	case Enemy::Types::Regular3:
-		MoveOnCircle(dt);
+		MoveReturn(dt);
 		break;
 	case Enemy::Types::MidBoss:
 		break;
@@ -193,8 +193,7 @@ void Enemy::UpdateGame(float dt)
 	}
 
 	// 맵 아래로 충분히  나가게 된다면 오브젝트 삭제
-	
-	if (position.y > 500.f || position.x > 320.f)
+	if (position.y > 500.f || position.x > 320.f || (direction.y < 0 && position.y < -550.f))
 	{
 		OnDie();
 	}
@@ -202,6 +201,7 @@ void Enemy::UpdateGame(float dt)
 	{
 		continuousAttackCount = 0;
 	}
+
 }
 
 void Enemy::UpdateGameover(float dt)
@@ -329,7 +329,7 @@ void Enemy::MoveOnCircle(float dt)
 
 void Enemy::MoveSin(float dt)
 {
-	if (/*position.y > -400.f && */!isRotating && !isPlaying)
+	if (!isRotating && !isPlaying)
 	{
 		isRotating = true;
 	}
@@ -358,6 +358,39 @@ void Enemy::MoveSin(float dt)
 		if (rotateTimer > 2.f)
 		{
 			isRotating = false;
+		}
+	}
+	else
+	{
+		Translate(direction * speed * dt);
+	}
+}
+
+// 내려갔다가 다시 올라가는 형태 
+// 어떻게 파괴 처리할 지가 관건..
+// 1. direction.y가 마이너스이고 position.y가 -550보다 작아지면 파괴
+void Enemy::MoveReturn(float dt)
+{
+	if (position.y > 0 && !isRotating && !isPlaying)
+	{
+		isRotating = true;
+	}
+
+	if (isRotating)
+	{
+		rotateTimer += dt;
+		isPlaying = true;
+
+		sf::Transform tr;
+		tr.rotate(360 * dt);
+		direction1 = tr * direction1;
+		Translate((direction + direction1) * speed * dt);
+
+		std::cout << Utils::MyMath::Angle(direction + direction1) << std::endl;
+		if (direction1.y >= -0.95f && rotateTimer > 0.5f)
+		{
+			isRotating = false;
+			speed = -speed;
 		}
 	}
 	else

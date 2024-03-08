@@ -115,6 +115,7 @@ public :
 	void MoveStraight(float dt);
 	void MoveOnCircle(float dt);
 	void MoveSin(float dt);
+	void MoveReturn(float dt);
 
 	void OnDamage(float damge);
 	void OnDie();

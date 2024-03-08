@@ -59,9 +59,6 @@ void SceneGame::Update(float dt)
     Scene::Update(dt);
     SetStatus(status);
 
-    std::cout << Utils::Random::RandomValue() << std::endl;
-
-
     switch (status)
     {
     case GameStatus::Awake:
