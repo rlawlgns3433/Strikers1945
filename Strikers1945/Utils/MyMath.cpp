@@ -86,4 +86,14 @@ namespace Utils
 
 		return v;
 	}
+	void MyMath::AngleWithDirectionOffsets(const sf::Vector2f& look, sf::Vector2f& directionPlus30, sf::Vector2f& directionMinus30)
+	{
+		float angle = std::atan2(look.y, look.x);
+		float anglePlus30 = angle + Deg2Rad(20.0f);
+		float angleMinus30 = angle - Deg2Rad(20.0f);
+
+		directionPlus30 = sf::Vector2f(std::cos(anglePlus30), std::sin(anglePlus30));
+		directionMinus30 = sf::Vector2f(std::cos(angleMinus30), std::sin(angleMinus30));
+
+	}
 }

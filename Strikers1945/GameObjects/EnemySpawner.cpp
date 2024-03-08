@@ -13,6 +13,7 @@ GameObject* EnemySpawner::Create()
 	Enemy::Types enemyType = enemyTypes[Utils::Random::RandomRange(0, enemyTypes.size() - 1)];
 	Enemy* enemy = Enemy::Create(enemyType);
 
+
 	return enemy;
 }
 

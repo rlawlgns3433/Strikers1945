@@ -17,5 +17,7 @@ namespace Utils
 		static sf::Vector2f Clamp(const sf::Vector2f& vector, const sf::FloatRect& rect);
 		static sf::FloatRect ResizeRect(const sf::FloatRect& rect, const sf::Vector2f& delta);
 		static float Lerp(float min, float max, float deltaTime);
+
+		static void AngleWithDirectionOffsets(const sf::Vector2f& look, sf::Vector2f& directionPlus30, sf::Vector2f& directionMinus30);
 	};
 }

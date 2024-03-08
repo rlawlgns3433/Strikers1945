@@ -40,13 +40,14 @@ void Spawner::Update(float dt)
 
 		for (int i = 0; i < spawnCount; ++i)
 		{
-			sf::Vector2f spawnPosition = { Utils::Random::RandomRange(-270, 270), -550.f };
+			sf::Vector2f spawnPosition = { Utils::Random::RandomRange(-270, 270), -510.f };
 
 			GameObject* newGo = Create();
 			if (newGo == nullptr) return;
 			newGo->Init();
 			newGo->Reset();
 			newGo->SetPosition(spawnPosition);
+			//newGo->SetPosition({0, -400.f});
 			sceneGame->enemyList.push_back(dynamic_cast<Enemy*>(newGo));
 			sceneGame->AddGameObject(newGo);
 		}

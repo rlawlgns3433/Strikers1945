@@ -13,7 +13,7 @@ protected:
 	SpriteGo& operator=(SpriteGo&&) = delete;
 
 public:
-	sf::Shader shader;
+	sf::Shader* shader;
 
 	SpriteGo(const std::string& name = "");
 	void SetTexture(const sf::Texture& texture);

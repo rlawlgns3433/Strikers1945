@@ -18,7 +18,7 @@ protected :
 	AnimPlayer* player = nullptr;
 	
 	float time = 0.f;
-	float speed = 800.f;
+	float speed = 1000.f;
 	int damage = 20;
 
 public :

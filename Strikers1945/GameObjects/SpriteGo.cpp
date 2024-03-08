@@ -95,7 +95,8 @@ void SpriteGo::SetFlipY(bool flip)
 
 void SpriteGo::Init()
 {
-	shader.loadFromFile("transparent.frag", sf::Shader::Fragment);
+	shader = new sf::Shader();
+	shader->loadFromFile("transparent.frag", sf::Shader::Fragment);
 }
 
 void SpriteGo::Reset()
@@ -105,7 +106,7 @@ void SpriteGo::Reset()
 
 void SpriteGo::Draw(sf::RenderWindow& window)
 {
-	window.draw(sprite, &shader);
+	window.draw(sprite, shader);
 }
 
 

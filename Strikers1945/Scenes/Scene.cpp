@@ -65,8 +65,6 @@ void Scene::Update(float dt)
 			obj->Update(dt);
 		}
 	}
-
-
 }
 
 void Scene::LateUpdate(float dt)

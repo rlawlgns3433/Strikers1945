@@ -11,8 +11,8 @@ EnemyProjectile::EnemyProjectile(const std::string& name)
 void EnemyProjectile::Init()
 {
 	SpriteGo::Init();
-	SetTexture("graphics/Strikers1945/assets/bullet.bmp");
-	SetTextureRect({ 7, 20, 9, 16 });					 // Rect Á¤ÇÏ±â
+	SetTexture("graphics/Strikers1945/assets/bullet.png");
+	SetScale({ 0.5f, 0.5f });
 	SetOrigin(Origins::BC);
 }
 
@@ -31,7 +31,6 @@ void EnemyProjectile::Update(float dt)
 
 void EnemyProjectile::FixedUpdate(float dt)
 {
-	
 	if (Utils::MyMath::Distance(player->GetPosition(), position) >= 25) return ;
 	if (!player->IsDead() && GetGlobalBounds().intersects(player->GetGlobalBounds()))
 	{

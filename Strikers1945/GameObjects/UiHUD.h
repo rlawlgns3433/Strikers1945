@@ -14,33 +14,16 @@ protected:
 	UiHUD& operator=(const UiHUD&) = delete;
 	UiHUD& operator=(UiHUD&&) = delete;
 	
-	std::string formatScore = "SCORE : ";
-	std::string formatHighScore = "HIGH SCORE : ";
-	std::string formatWave = "WAVE : ";
-	std::string formatZombieCount = "ZOMBIES : ";
-	
-	sf::RectangleShape gaugeHp;
-	sf::Vector2f referenceResolution = { 1920.f, 1080.f };
+
+	sf::Vector2f referenceResolution = { 960.f, 540.f };
 	sf::Vector2f resolution = referenceResolution;
-	sf::Vector2f gaugeHpSize = { 400, 80 };
 
 	TextGo textScore;
-	TextGo textHighScore;
-	TextGo textAmmo;
-	TextGo textWave;
-	TextGo textZombieCount;
-
-	SpriteGo ammoIcon;
+	TextGo textBombCount;
 
 	int score;
-	int highScore;
-	int currentAmmo;
-	int fullAmmo;
-	int gunCapacity;
-	int hp;
-	int wave;
-	int zombieCount;
-
+	int bombCount;
+	int lifes;
 
 public:
 	UiHUD(const std::string& name = "");
@@ -53,18 +36,15 @@ public:
 	void FixedUpdate(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
 
-	//점수, 최고 점수, 총탄, 체력, 웨이브, 좀비 수
-
-	int GetScore() const { return this->score; }
+	int GetScore() const { return score; }
 	void SetScore(int score);
-	int GetHighScore() const { return this->highScore; }
-	void SetHighScore(int score);
-	void SetHp(int hp, int maxHp);
-	int GetHp() const { return this->hp; }
-	void SetWave(int wave);
-	int GetZombieCount() const { return this->zombieCount; }
-	void SetZombieCount(int zombieCount);
-	void SetResolution(const sf::Vector2f& resolution);
 
-	void SetAmmo(int current, int gunCap);
+	int GetLifes() const { return lifes; }
+	void AddLifes(int add);
+	void SetLifes(int lifes);
+
+	int GetBombCount() const { return bombCount; }
+	void AddBombCount(int add);
+	void SetBombCount(int bombCount);
+
 };

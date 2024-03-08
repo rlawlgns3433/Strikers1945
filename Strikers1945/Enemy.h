@@ -7,6 +7,21 @@
 class Enemy : public SpriteGo
 {
 public :
+	struct ClipInfo
+	{
+		std::string idle;
+		std::string dead;
+		bool isDead = false;
+
+		ClipInfo()
+		{
+		}
+		ClipInfo(const std::string& idle, const std::string& dead, bool isDead)
+			: idle(idle), dead(dead), isDead(isDead)
+		{
+		}
+	};
+
 	enum class Types
 	{
 		Regular1,
@@ -16,6 +31,13 @@ public :
 		Boss,
 		Speacial,
 		Gound
+	};
+
+	enum class ShootTypes
+	{
+		OneTime,
+		ThreeTime,
+
 	};
 
 	static const int totalTypes = 5;
@@ -28,6 +50,7 @@ protected :
 	Enemy& operator=(Enemy&&)			= delete;
 
 	Types type;
+	ShootTypes shootType;
 
 	SceneGame* sceneGame = nullptr;
 	AnimPlayer* player = nullptr;
@@ -35,7 +58,18 @@ protected :
 
 	std::string animationClipId;
 
+	sf::Transform rot;
+	sf::Vector2f right = { 1.f, 0.f };
+
 	sf::Vector2f direction = {0.f, 1.f};
+	sf::Vector2f velocity;
+	sf::Vector2f center;
+	sf::Vector2f newVector;
+	sf::Vector2f direction1 = {0,1};
+
+	float rotateTimer = 0.f;
+	float startAngle = -90.f;
+	float endAngle = 270.f;
 
 	float speed = 300.f;
 	float continuousAttackInterval = 1.f;
@@ -53,6 +87,12 @@ protected :
 	int projectileCount = 200;
 
 	bool isAlive = true;
+	bool iscenter = true;
+
+	/// <summary>
+	/// rotate Å×½ºÆ®
+	/// </summary>
+	bool isRotating = false;
 
 public :
 	Enemy(const std::string& name = "enemy");
@@ -68,9 +108,15 @@ public :
 	void Draw(sf::RenderWindow& window);
 
 	void Shoot();
+	void ShootFrontOneTime();
+	void ShootFrontThreeTime();
+
+	sf::Vector2f RotateOnCircle(sf::Vector2f center, float radius, float deltaTime);
 
 	void OnDamage(float damge);
 	void OnDie();
 
+	void SetDead(bool isDead) { this->isAlive = !isDead; }
 	bool isDead() const { return !isAlive; }
+	void DeadEvent();
 };

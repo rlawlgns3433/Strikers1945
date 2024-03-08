@@ -28,10 +28,6 @@ void AnimPlayer::Reset()
 {
 	animator.Play("animation/Player/Idle.csv");
 
-
-
-
-
 	SetOrigin(Origins::MC);
 	isDead = false;
 
