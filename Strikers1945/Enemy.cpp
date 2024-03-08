@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "Enemy.h"
 #include "EnemyProjectile.h"
+#include "Item.h"
 
-Enemy* Enemy::Create(Types zombieType)
+Enemy* Enemy::Create(Types enemyType)
 {
 	Enemy* enemy = new Enemy();
-	enemy->type = zombieType;
+	enemy->type = enemyType;
 	
 	switch (enemy->type)
 	{
@@ -233,8 +234,17 @@ void Enemy::OnDamage(float damge)
 
 void Enemy::OnDie()
 {
+	if (isAlive)
+	{
+		hud->AddScore(score);
+		item = Item::Create(Item::Types::Gold);
+		item->Init();
+		item->Reset();
+		item->SetPosition(position);
+
+		sceneGame->AddGameObject(item);
+	}
 	isAlive = false;
-	hud->AddScore(score);
 	std::function<void()> deadEvent = std::bind(&Enemy::DeadEvent, this);
 	animator.AddEvent("animation/Enemy/Dead.csv", 9, deadEvent);
 }
@@ -391,7 +401,6 @@ void Enemy::MoveReturn(float dt)
 		direction1 = tr * direction1;
 		Translate((direction + direction1) * speed * dt);
 
-		std::cout << Utils::MyMath::Angle(direction + direction1) << std::endl;
 		if (direction1.y >= -0.95f && rotateTimer > 0.5f)
 		{
 			isRotating = false;

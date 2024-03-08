@@ -34,11 +34,6 @@ void SceneGame::Init()
     background = new Background();
     AddGameObject(background);
 
-    hud = new UiHUD();
-    hud->Init();
-    hud->Reset();
-    AddGameObject(hud, Layers::Ui);
-
     Scene::Init(); // 모든 게임 오브젝트 Init()
 }
 

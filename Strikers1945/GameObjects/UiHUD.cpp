@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "UiHUD.h"
+#include "SceneGame.h"
+#include "AnimPlayer.h"
 
 UiHUD::UiHUD(const std::string& name)
 	: GameObject(name)
@@ -11,6 +13,11 @@ void UiHUD::Init()
 	//점수, 라이프 수, 폭탄 수, 일시 정지
 	GameObject::Init();
 	textScore.Init();
+	textBombCount.Init();
+	textLifes.Init();
+
+	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
+	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
 
 	sf::Font& font = *FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf");
 
@@ -31,9 +38,9 @@ void UiHUD::Reset()
 {
 	GameObject::Reset();
 
-	textScore.SetText(scoreFormat);
-	textBombCount.SetText(bombCountFormat);
-	textLifes.SetText(lifesFormat);
+	textScore.SetText(scoreFormat + std::to_string(player->GetScore()));
+	textBombCount.SetText(bombCountFormat + std::to_string(player->GetBombCount()));
+	textLifes.SetText(lifesFormat + std::to_string(player->GetLifes()));
 }
 
 void UiHUD::Update(float dt)

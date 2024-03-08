@@ -1,0 +1,8 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+ItemBomb,20,2,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Strikers1945/assets/bombItem.png,0,0,25,15
+graphics/Strikers1945/assets/bombItem.png,25,0,25,15
+graphics/Strikers1945/assets/bombItem.png,50,0,25,15
+graphics/Strikers1945/assets/bombItem.png,75,0,25,15

@@ -5,6 +5,8 @@
 
 class TextGo;
 class SpriteGo;
+class AnimPlayer;
+class SceneGame;
 
 class UiHUD : public GameObject
 {
@@ -23,6 +25,8 @@ protected:
 	sf::Vector2f resolution = referenceResolution;
 	sf::Vector2i windowSize = FRAMEWORK.GetWindowSize();
 
+	SceneGame* sceneGame = nullptr;
+	AnimPlayer* player = nullptr;
 	TextGo textScore;
 	TextGo textBombCount;
 	TextGo textLifes;

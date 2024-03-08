@@ -29,8 +29,6 @@ void Bullet::Update(float dt)
 	SpriteGo::Update(dt);
 	time += dt;
 	Translate(direction * speed * dt);
-
-
 }
 
 void Bullet::FixedUpdate(float dt)
@@ -40,7 +38,7 @@ void Bullet::FixedUpdate(float dt)
 
 	for (auto& enemy : list)
 	{
-		if (!enemy->GetActive()) continue;
+		if (!enemy->GetActive() || enemy->isDead()) continue;
 
 		if (GetGlobalBounds().intersects(enemy->GetGlobalBounds()))
 		{

@@ -4,6 +4,7 @@
 
 class SceneGame;
 class Tile;
+class UiHUD;
 
 class AnimPlayer : public SpriteGo
 {
@@ -32,8 +33,9 @@ protected:
 	AnimPlayer& operator=(AnimPlayer&&) = delete;
 
 	Animator animator;
-	SceneGame* sceneGame = nullptr;
 	ClipInfo currentClipInfo;
+	SceneGame* sceneGame = nullptr;
+	UiHUD* hud = nullptr;
 
 	std::vector<ClipInfo> clipInfos;
 
@@ -45,10 +47,17 @@ protected:
 	float shootInterval = 0.08f;
 	float shootTimer = 0.f;
 
+	float invincibleTimer = 0.f;
+	float invincibleInterval = 2.f;
+
 	int maxHp = 200;
 	int hp = maxHp;
+	int score = 0;
+	int lifes = 3;
+	int bombCount = 2;
 
 	bool isDead = false;
+	bool isInvincible = false;
 
 public:
 	AnimPlayer(const std::string& name = "player");
@@ -71,4 +80,9 @@ public:
 	void DeadEvent();
 
 	bool IsDead() const { return isDead; }
+	bool GetIsInvincible() const { return isInvincible; }
+
+	int GetScore() const { return score; }
+	int GetLifes() const { return lifes; }
+	int GetBombCount() const { return bombCount; }
 };

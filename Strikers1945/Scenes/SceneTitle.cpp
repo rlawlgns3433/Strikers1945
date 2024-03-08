@@ -21,6 +21,7 @@ void SceneTitle::Init()
 	worldView.setCenter(0, 0);
 	uiView.setSize(windowX, windowY);
 	uiView.setCenter(windowX * 0.5f, windowY * 0.5f);
+	
 
 	Scene::Init();
 }

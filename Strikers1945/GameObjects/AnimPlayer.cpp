@@ -2,6 +2,7 @@
 #include "AnimPlayer.h"
 #include "SceneGame.h"
 #include "Bullet.h"
+#include "UiHUD.h"
 
 AnimPlayer::AnimPlayer(const std::string& name)
 	: SpriteGo(name)
@@ -19,9 +20,14 @@ void AnimPlayer::Init()
 	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", false, true });
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
+	hud = new UiHUD();
+	hud->Init();
+	hud->Reset();
+	sceneGame->AddGameObject(hud, Layers::Ui);
 	SetPosition({ 0, 450.f });
 
-
+	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
+	animator.AddEvent("animation/Player/Dead.csv", 9, deadEvent);
 }
 
 void AnimPlayer::Reset()
@@ -30,8 +36,10 @@ void AnimPlayer::Reset()
 
 	SetOrigin(Origins::MC);
 	isDead = false;
-
 	currentClipInfo = clipInfos[0];
+
+	hud->SetBombCount(bombCount);
+	hud->SetLifes(lifes);
 }
 
 void AnimPlayer::Update(float dt)
@@ -110,6 +118,18 @@ void AnimPlayer::UpdateGame(float dt)
 	if (position.x > 270) position.x = 270.f;
 	if (position.y < -480) position.y = -480.f;
 	if (position.y > 480) position.y = 480.f;
+
+	if (isInvincible)
+	{
+		invincibleTimer += dt;
+
+		if (invincibleTimer > invincibleInterval)
+		{
+			isInvincible = false;
+			invincibleTimer = 0.f;
+			isDead = false;
+		}
+	}
 }
 
 void AnimPlayer::UpdateGameover(float dt)
@@ -144,15 +164,19 @@ void AnimPlayer::OnDie()
 {
 	// 죽었을 때 애니메이션 재생
 	isDead = true;
-	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
-	animator.AddEvent("animation/Player/Dead.csv", 9, deadEvent);
+	isInvincible = true;
 }
 
 void AnimPlayer::DeadEvent()
 {
+	hud->SetLifes(--lifes);
 	// 애니메이션 끝날 때 이곳을 호출
 	// 플레이어 사망 프레임이 종료되었을 때 실행
-	SetActive(false);
-	sceneGame->RemoveGameObject(this);
-	sceneGame->SetStatus(GameStatus::GameOver);
+	if (lifes <= 0)
+	{
+		SetActive(false);
+		sceneGame->RemoveGameObject(this);
+		sceneGame->SetStatus(GameStatus::GameOver);
+		return;
+	}
 }

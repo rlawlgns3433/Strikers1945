@@ -5,6 +5,8 @@
 #include "AnimPlayer.h"
 #include "UiHUD.h"
 
+class Item;
+
 class Enemy : public SpriteGo
 {
 public :
@@ -42,7 +44,7 @@ public :
 	};
 
 	static const int totalTypes = 5;
-	static Enemy* Create(Types zombieType);
+	static Enemy* Create(Types enemyType);
 
 protected :
 	Enemy(const Enemy&)					= delete;
@@ -56,6 +58,7 @@ protected :
 	SceneGame* sceneGame = nullptr;
 	AnimPlayer* player = nullptr;
 	UiHUD* hud = nullptr;
+	Item* item = nullptr;
 	Animator animator;
 
 	std::string animationClipId;
