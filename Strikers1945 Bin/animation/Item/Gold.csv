@@ -1,0 +1,17 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+ItemGold,20,2,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Strikers1945/assets/goldItem.png,7,7,14,14
+graphics/Strikers1945/assets/goldItem.png,21,7,14,14
+graphics/Strikers1945/assets/goldItem.png,35,7,14,14
+graphics/Strikers1945/assets/goldItem.png,49,7,14,14
+graphics/Strikers1945/assets/goldItem.png,63,7,14,14
+graphics/Strikers1945/assets/goldItem.png,77,7,14,14
+graphics/Strikers1945/assets/goldItem.png,91,7,14,14
+graphics/Strikers1945/assets/goldItem.png,105,7,14,14
+graphics/Strikers1945/assets/goldItem.png,119,7,14,14
+graphics/Strikers1945/assets/goldItem.png,133,7,14,14
+graphics/Strikers1945/assets/goldItem.png,147,7,14,14
+graphics/Strikers1945/assets/goldItem.png,161,7,14,14
+graphics/Strikers1945/assets/goldItem.png,175,7,14,14

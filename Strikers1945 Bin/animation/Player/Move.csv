@@ -1,0 +1,15 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+Move,10,2,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Strikers1945/PlayerMove.png,0,0,31,120
+graphics/Strikers1945/PlayerMove.png,32,0,31,120
+graphics/Strikers1945/PlayerMove.png,64,0,31,120
+graphics/Strikers1945/PlayerMove.png,96,0,31,120
+graphics/Strikers1945/PlayerMove.png,128,0,31,120
+graphics/Strikers1945/PlayerMove.png,160,0,31,120
+graphics/Strikers1945/PlayerMove.png,192,0,31,120
+graphics/Strikers1945/PlayerMove.png,224,0,31,120
+graphics/Strikers1945/PlayerMove.png,256,0,31,120
+graphics/Strikers1945/PlayerMove.png,288,0,31,120
+graphics/Strikers1945/PlayerMove.png,320,0,31,120

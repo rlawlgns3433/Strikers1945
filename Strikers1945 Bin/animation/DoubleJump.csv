@@ -1,0 +1,10 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+DoubleJump,20,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/PixelmanBoost/MainCharacters/MaskDude/DoubleJump.png,0,0,32,32
+graphics/PixelmanBoost/MainCharacters/MaskDude/DoubleJump.png,32,0,32,32
+graphics/PixelmanBoost/MainCharacters/MaskDude/DoubleJump.png,64,0,32,32
+graphics/PixelmanBoost/MainCharacters/MaskDude/DoubleJump.png,96,0,32,32
+graphics/PixelmanBoost/MainCharacters/MaskDude/DoubleJump.png,128,0,32,32
+graphics/PixelmanBoost/MainCharacters/MaskDude/DoubleJump.png,160,0,32,32
