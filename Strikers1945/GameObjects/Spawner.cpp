@@ -28,6 +28,7 @@ void Spawner::Reset()
 	GameObject::Reset();
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
+	background = dynamic_cast<Background*>(sceneGame->FindGameObject("background"));
 }
 
 void Spawner::Update(float dt)

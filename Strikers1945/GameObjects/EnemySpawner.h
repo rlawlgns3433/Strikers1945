@@ -1,6 +1,7 @@
 #pragma once
 #include "Spawner.h"
 #include "Enemy.h"
+#include "Background.h"
 
 class EnemySpawner : public Spawner
 {
@@ -13,6 +14,7 @@ protected :
 	SceneGame* sceneGame = nullptr;
 
 	std::vector<Enemy::Types> enemyTypes;
+	Background::GamePhase currentPhase = Background::GamePhase::CommonEnemyPhase;
 
 public :
 	static int enemyCount;
@@ -23,6 +25,11 @@ public :
 	GameObject* Create() override;
 
 	void Init() override;
+	void Update(float dt) override;
 	void Release() override;
 	void Reset() override;
+
+	void ResetCommonEnemyPhase();
+	void ResetMidBoosPhase();
+	void ResetBossPhase();
 };

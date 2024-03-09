@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Enemy.h"
 #include "EnemyProjectile.h"
-#include "Item.h"
 
 Enemy* Enemy::Create(Types enemyType)
 {
@@ -177,6 +176,7 @@ void Enemy::UpdateGame(float dt)
 		Utils::MyMath::Distance(player->GetPosition(), position) < 40)
 	{
 		// 2. 플레이어에 데미지를 먹인다.
+		// 파워 다운으로 변경 필요
 		player->OnDie();
 		attackTimer = 0.f;
 		// 3. Enemy를 지운다.
@@ -226,7 +226,7 @@ void Enemy::Draw(sf::RenderWindow& window)
 	SpriteGo::Draw(window);
 }
 
-void Enemy::OnDamage(float damge)
+void Enemy::OnDamage(float damage)
 {
 	hp -= damage;
 	if (hp <= 0)
@@ -240,13 +240,27 @@ void Enemy::OnDie()
 {
 	if (isAlive)
 	{
-		hud->AddScore(score);
-		item = Item::Create(Item::Types::PowerUp);
-		item->Init();
-		item->Reset();
-		item->SetPosition(position);
-		sceneGame->AddGameObject(item);
+		player->AddScore(score);
+		hud->SetScore(player->GetScore());
+
+		int itemChance = (int)(Utils::Random::RandomValue() * 100);
+		
+		if (itemChance < 1) itemType = Item::Types::Life;
+		else if (itemChance < 41) itemType = Item::Types::Gold;
+		else if (itemChance < 46) itemType = Item::Types::PowerUp;
+		else if (itemChance < 50) itemType = Item::Types::Bomb;
+		else itemType = Item::Types::None;
+
+		item = Item::Create(itemType);
+		if (item != nullptr)
+		{
+			item->Init();
+			item->Reset();
+			item->SetPosition(position);
+			sceneGame->AddGameObject(item);
+		}
 	}
+
 	isAlive = false;
 	std::function<void()> deadEvent = std::bind(&Enemy::DeadEvent, this);
 	animator.AddEvent("animation/Enemy/Dead.csv", 9, deadEvent);
@@ -310,6 +324,12 @@ void Enemy::DeadEvent()
 	SetActive(false);
 	sceneGame->RemoveGameObject(this);
 	sceneGame->enemyList.remove(this);
+}
+
+Item* Enemy::SpawnItem()
+{
+
+	return nullptr;
 }
 
 void Enemy::MoveStraight(float dt)

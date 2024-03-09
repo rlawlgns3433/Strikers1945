@@ -181,3 +181,25 @@ void AnimPlayer::DeadEvent()
 		return;
 	}
 }
+
+void AnimPlayer::AddPowerLevel(int add)
+{
+	powerLevel += add;
+
+	if (powerLevel > maxPowerLevel)
+	{
+		powerLevel = maxPowerLevel;
+	}
+	damage = 100 + 50 * (powerLevel - 1);
+}
+
+void AnimPlayer::SetPowerLevel(int powerLevel)
+{
+	this->powerLevel = powerLevel;
+
+	if (powerLevel > maxPowerLevel)
+	{
+		powerLevel = maxPowerLevel;
+	}
+	damage = 100 + 50 * (powerLevel - 1);
+}

@@ -1,0 +1,6 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+Bullet1,20,2,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Strikers1945/f4Bullet/F4_Player_Bullet1.bmp,0,0,33,22
+graphics/Strikers1945/f4Bullet/F4_Player_Bullet1.bmp,34,0,33,22

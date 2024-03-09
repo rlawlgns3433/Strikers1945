@@ -23,6 +23,28 @@ void EnemySpawner::Init()
 	interval = 5.f;
 }
 
+void EnemySpawner::Update(float dt)
+{
+
+	if (background->GetPhase() == currentPhase) return;
+
+	switch (background->GetPhase())
+	{
+	case Background::CommonEnemyPhase:
+
+		break;
+	case Background::MidBossPhase:
+
+		break;
+	case Background::BossPhase:
+
+		break;
+	}
+
+	currentPhase = background->GetPhase();
+	
+}
+
 void EnemySpawner::Release()
 {
 	Spawner::Release();
@@ -32,6 +54,11 @@ void EnemySpawner::Reset()
 {
 	Spawner::Reset();
 
+	ResetCommonEnemyPhase();
+}
+
+void EnemySpawner::ResetCommonEnemyPhase()
+{
 	enemyTypes.clear();
 	enemyTypes.push_back(Enemy::Types::Regular1);
 	enemyTypes.push_back(Enemy::Types::Regular1);
@@ -39,4 +66,16 @@ void EnemySpawner::Reset()
 	enemyTypes.push_back(Enemy::Types::Regular2);
 	enemyTypes.push_back(Enemy::Types::Regular3);
 	enemyTypes.push_back(Enemy::Types::Regular3);
+}
+
+void EnemySpawner::ResetMidBoosPhase()
+{
+	ResetCommonEnemyPhase();
+	enemyTypes.push_back(Enemy::Types::MidBoss);
+}
+
+void EnemySpawner::ResetBossPhase()
+{
+	enemyTypes.clear();
+	enemyTypes.push_back(Enemy::Types::Boss);
 }

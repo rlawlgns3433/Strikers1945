@@ -55,6 +55,10 @@ protected:
 	int score = 0;
 	int lifes = 3;
 	int bombCount = 2;
+	int damage = 100;
+
+	int maxPowerLevel = 4;
+	int powerLevel = 1;
 
 	bool isDead = false;
 	bool isInvincible = false;
@@ -83,6 +87,22 @@ public:
 	bool GetIsInvincible() const { return isInvincible; }
 
 	int GetScore() const { return score; }
-	int GetLifes() const { return lifes; }
-	int GetBombCount() const { return bombCount; }
+	void AddScore(int add) { score += add; };
+	void SetScore(int score) { this->score = score; }
+
+	int GetLife() const { return lifes; }
+	void AddLife(int add) { lifes += add; };
+	void SetLife(int life) { this->lifes = life; }
+	
+	int GetBombItem() const { return bombCount; }
+	void AddBombItem(int add) { bombCount += add; };
+	void SetBombItem(int bombCount) { this->bombCount = bombCount; }
+
+	int GetDamage() const { return damage; }
+	void AddDamage(int add) { damage += add; }
+	void SetDamage(int damage) { this->damage = damage; }
+
+	int GetPowerLevel() const { return powerLevel; }
+	void AddPowerLevel(int add);
+	void SetPowerLevel(int powerLevel);
 };

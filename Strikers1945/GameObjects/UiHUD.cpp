@@ -39,8 +39,8 @@ void UiHUD::Reset()
 	GameObject::Reset();
 
 	textScore.SetText(scoreFormat + std::to_string(player->GetScore()));
-	textBombCount.SetText(bombCountFormat + std::to_string(player->GetBombCount()));
-	textLifes.SetText(lifesFormat + std::to_string(player->GetLifes()));
+	textBombCount.SetText(bombCountFormat + std::to_string(player->GetBombItem()));
+	textLifes.SetText(lifesFormat + std::to_string(player->GetLife()));
 }
 
 void UiHUD::Update(float dt)

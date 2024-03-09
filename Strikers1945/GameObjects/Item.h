@@ -1,6 +1,7 @@
 #pragma once
 #include "SpriteGo.h"
 #include "Animator.h"
+#include "UiHUD.h"
 
 class AnimPlayer;
 class SceneGame;
@@ -14,6 +15,7 @@ public :
 		Gold,
 		PowerUp,
 		Bomb,
+		None,
 	};
 
 	enum class MovementType
@@ -35,6 +37,7 @@ protected:
 	Animator animator;
 	AnimPlayer* player = nullptr;
 	SceneGame* sceneGame = nullptr;
+	UiHUD* hud = nullptr;
 	AnimationClip currentClip;
 
 	std::string animationClipId;
