@@ -38,8 +38,9 @@ void Bullet::Update(float dt)
 
 void Bullet::FixedUpdate(float dt)
 {
-
 	const std::list<Enemy*> list = sceneGame->enemyList;
+
+	if (!GetActive()) return;
 
 	for (auto& enemy : list)
 	{

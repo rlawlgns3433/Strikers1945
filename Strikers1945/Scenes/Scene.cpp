@@ -128,10 +128,6 @@ void Scene::FixedUpdate(float dt)
 
 void Scene::Draw(sf::RenderWindow& window)
 {
-	//gameObjects.sort(Utils::Sort::sortGameObject);
-	//uiGameObjects.sort(Utils::Sort::sortGameObject);
-
-
 	const sf::View& saveView = window.getView();
 
 	window.setView(worldView);

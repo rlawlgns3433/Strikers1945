@@ -68,7 +68,7 @@ void EnemySpawner::Release()
 void EnemySpawner::Reset()
 {
 	Spawner::Reset();
-
+	bossCount = 0;
 	ResetCommonEnemyPhase();
 }
 

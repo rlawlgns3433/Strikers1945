@@ -36,16 +36,29 @@ void AnimPlayer::Reset()
 {
 	animator.Play("animation/Player/Idle.csv");
 
+	for (auto& bullet : unusingBulletlist)
+	{
+		bullet->SetActive(false);
+	}
+
+	for (auto& bullet : usingBulletlist)
+	{
+		bullet->SetActive(false);
+	}
+
 	SetOrigin(Origins::MC);
 	isDead = false;
+	isInvincible = true;
+	isCheated = false;
 	powerLevel = 1;
 	hp = maxHp;
 	lifes = 3;
 	bombCount = 2;
 	damage = 75;
+	score = 0;
 	currentClipInfo = clipInfos[0];
 
-
+	hud->SetScore(score);
 	hud->SetBombCount(bombCount);
 	hud->SetLifes(lifes);
 }
@@ -53,11 +66,6 @@ void AnimPlayer::Reset()
 void AnimPlayer::Release()
 {
 	SpriteGo::Release();
-	for (auto& bullet : unusingBulletlist)
-	{
-		delete bullet;
-	}
-	unusingBulletlist.clear();
 }
 
 void AnimPlayer::Update(float dt)
@@ -79,7 +87,6 @@ void AnimPlayer::Update(float dt)
 		UpdatePause(dt);
 		break;
 	}
-
 }
 
 void AnimPlayer::UpdateAwake(float dt)
@@ -222,6 +229,7 @@ void AnimPlayer::OnDie()
 		item->Init();
 		item->Reset();
 		item->SetPosition(position + sf::Vector2f(-50.f, -50.f));
+		sceneGame->ItemList.push_back(item);
 		sceneGame->AddGameObject(item);
 	}
 }
@@ -234,7 +242,6 @@ void AnimPlayer::DeadEvent()
 	if (lifes <= 0)
 	{
 		SetActive(false);
-		sceneGame->RemoveGameObject(this);
 		sceneGame->SetStatus(GameStatus::GameOver);
 		return;
 	}

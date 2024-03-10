@@ -136,9 +136,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjects\AnimPlayer.cpp" />
     <ClCompile Include="GameObjects\Background.cpp" />
     <ClCompile Include="GameObjects\Animator.cpp" />
-    <ClCompile Include="GameObjects\AnimPlayer.cpp" />
     <ClCompile Include="AniTest.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\DataTableManager.cpp" />

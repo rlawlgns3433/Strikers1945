@@ -34,5 +34,6 @@ public :
 	void Update(float dt) override;
 
 	GamePhase GetPhase() const { return phase; }
+	void SetPhase(GamePhase phase);
 };
 

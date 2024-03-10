@@ -1,0 +1,14 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+Countdown,3,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Strikers1945/countdown.png,446,963,14,15
+graphics/Strikers1945/countdown.png,450,963,14,15
+graphics/Strikers1945/countdown.png,454,963,14,15
+graphics/Strikers1945/countdown.png,458,963,14,15
+graphics/Strikers1945/countdown.png,462,963,14,15
+graphics/Strikers1945/countdown.png,466,963,14,15
+graphics/Strikers1945/countdown.png,470,963,14,15
+graphics/Strikers1945/countdown.png,474,963,14,15
+graphics/Strikers1945/countdown.png,478,963,14,15
+graphics/Strikers1945/countdown.png,482,963,14,15

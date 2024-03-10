@@ -38,7 +38,7 @@ void EnemyProjectile::Update(float dt)
 
 void EnemyProjectile::FixedUpdate(float dt)
 {
-	if (Utils::MyMath::Distance(player->GetPosition(), position) >= 25) return ;
+	if (Utils::MyMath::Distance(player->GetPosition(), position) >= 25 || !GetActive()) return ;
 	if (!player->IsDead() && GetGlobalBounds().intersects(player->GetGlobalBounds()))
 	{
 		player->OnDie();

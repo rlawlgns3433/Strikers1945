@@ -20,6 +20,7 @@ void Background::Reset()
 	SetOrigin(Origins::BC);
 	SetSortLayer(-1);
 	sceneGame->ResortGameObject(this);
+	sprite.setPosition(0, 0);
 }
 
 void Background::Update(float dt)
@@ -41,4 +42,20 @@ void Background::Update(float dt)
 	if (position.y < 4000.f) phase = GamePhase::CommonEnemyPhase;
 	else if (position.y < 9000.f) phase = GamePhase::MidBossPhase;
 	else phase = GamePhase::BossPhase;
+}
+
+void Background::SetPhase(GamePhase phase)
+{
+	switch (phase)
+	{
+	case Background::CommonEnemyPhase:
+		position.y = 540.f;
+		break;
+	case Background::MidBossPhase:
+		position.y = 4000.f;
+		break;
+	case Background::BossPhase:
+		position.y = 9000.f;
+		break;
+	}
 }

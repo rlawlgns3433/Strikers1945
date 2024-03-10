@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 
+class Item;
 class Tilemap;
 class UiHUD;
 class AnimPlayer;
@@ -9,6 +10,7 @@ class Background;
 class Enemy;
 class EnemyProjectile;
 class SpriteGo;
+class TextGo;
 
 class SceneGame : public Scene
 {
@@ -22,7 +24,14 @@ protected :
 	EnemySpawner* enemySpawner = nullptr;
 	Background* background = nullptr;
 	SpriteGo* pauseWindow = nullptr;
+	TextGo* textCountDown = nullptr;
 
+	sf::Clock clock;
+
+	int countDown = 10;
+
+	float countDownTimer = 0.f;
+	float countDownInterval = 1.f;
 	float windowX = 0.f;
 	float windowY = 0.f;
 
@@ -36,6 +45,7 @@ public :
 	std::list<Enemy*> enemyList;
 	std::list<EnemyProjectile*> usingProjectileList;
 	std::list<EnemyProjectile*> unusingProjectileList;
+	std::list<Item*> ItemList;
 
 	void Init() override;
 	void Release() override;

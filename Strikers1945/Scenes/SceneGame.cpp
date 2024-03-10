@@ -9,6 +9,8 @@
 #include "Enemy.h"
 #include "EnemyProjectile.h"
 #include "SpriteGo.h"
+#include "TextGo.h"
+#include "Item.h"
 
 SceneGame::SceneGame(SceneIDs id) 
     : Scene(id)
@@ -41,6 +43,13 @@ void SceneGame::Init()
     pauseWindow->SetActive(false);
     AddGameObject(pauseWindow, Layers::Ui);
 
+    textCountDown = new TextGo("countdown");
+    textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
+    textCountDown->SetPosition({ windowX * 0.5f, windowY * 0.5f });
+    textCountDown->SetOrigin(Origins::MC);
+    textCountDown->SetActive(false);
+    AddGameObject(textCountDown, Layers::Ui);
+
     Scene::Init(); // 모든 게임 오브젝트 Init()
 }
 
@@ -51,16 +60,44 @@ void SceneGame::Release()
 
 void SceneGame::Reset()
 {
+    for (auto& enemy : enemyList)
+    {
+        if (enemy != nullptr)
+            RemoveGameObject(enemy);
+    }
+    enemyList.clear();
+
+    for (auto& projectile : usingProjectileList)
+    {
+        if (projectile != nullptr)
+            RemoveGameObject(projectile);
+    }
+    usingProjectileList.clear();
+
+    for (auto& item : ItemList)
+    {
+        if (item != nullptr)
+            RemoveGameObject(item);
+    }
+    ItemList.clear();
+
+    player->Reset();
+    background->Reset();
+    textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
+    countDown = 10;
 }
 
 void SceneGame::Enter()
 {
 	Scene::Enter();
+    status = GameStatus::Game;
+    player->SetActive(true);
 }
 
 void SceneGame::Exit()
 {
 	FRAMEWORK.SetTimeScale(1.f);
+
 }
 
 void SceneGame::Update(float dt)
@@ -93,6 +130,8 @@ void SceneGame::UpdateAwake(float dt)
 
 void SceneGame::UpdateGame(float dt)
 {
+    textCountDown->SetActive(false);
+
     if (InputManager::GetKeyDown(sf::Keyboard::Escape))
     {
         status = GameStatus::Pause;
@@ -102,6 +141,19 @@ void SceneGame::UpdateGame(float dt)
     if (InputManager::GetKeyDown(sf::Keyboard::F2))
     {
         player->SetCheatMode();
+    }
+
+    if (InputManager::GetKeyDown(sf::Keyboard::F5))
+    {
+        background->SetPhase(Background::CommonEnemyPhase);
+    }
+    if (InputManager::GetKeyDown(sf::Keyboard::F6))
+    {
+        background->SetPhase(Background::MidBossPhase);
+    }
+    if (InputManager::GetKeyDown(sf::Keyboard::F7))
+    {
+        background->SetPhase(Background::BossPhase);
     }
 
     auto it = usingProjectileList.begin();
@@ -118,12 +170,26 @@ void SceneGame::UpdateGame(float dt)
             ++it;
         }
     }
-
-    std::cout << usingProjectileList.size() << " : " << unusingProjectileList.size() << std::endl;
 }
 
 void SceneGame::UpdateGameover(float dt)
 {
+    textCountDown->SetActive(true);
+    
+    if (clock.getElapsedTime().asSeconds() > 1.f)
+    {
+        textCountDown->SetText(std::to_string(--countDown));
+        std::cout << clock.getElapsedTime().asSeconds() << std::endl;
+        std::cout << countDown << std::endl;
+        clock.restart();
+    }
+
+    if (countDown <= 0)
+    {
+        SCENE_MANAGER.ChangeScene(SceneIDs::SceneTitle);
+        Reset();
+    }
+
 }
 
 void SceneGame::UpdatePause(float dt)
