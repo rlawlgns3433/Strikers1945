@@ -15,44 +15,41 @@ Enemy* Enemy::Create(Types enemyType)
 	{
 	case Types::Regular1 :
 		enemy->maxHp = 100;
-		enemy->attackInterval = 0.2f;
+		enemy->attackInterval = 1.f;
 		enemy->damage = 10;
-		enemy->speed = 300.f;
+		enemy->speed = 150.f;
 		enemy->score = 100;
-		enemy->velocity = { 100, 200 };
 		enemy->animationClipId = "animation/Enemy/enemy1/Idle.csv";
 		enemy->shootType = ShootTypes::OneTime;
 		break;
 
 	case Types::Regular2:
 		enemy->maxHp = 100;
-		enemy->attackInterval = 0.2f;
+		enemy->attackInterval = 1.f;
 		enemy->damage = 10;
-		enemy->speed = 300.f;
+		enemy->speed = 170.f;
 		enemy->score = 200;
-		enemy->velocity = { 100, 200 };
 		enemy->animationClipId = "animation/Enemy/enemy2/Idle.csv";
-		enemy->shootType = ShootTypes::ThreeTime;
+		enemy->shootType = ShootTypes::OneTime;
 		break;
 
 	case Types::Regular3:
 		enemy->maxHp = 100;
-		enemy->attackInterval = 0.2f;
+		enemy->attackInterval = 1.f;
 		enemy->damage = 10;
-		enemy->speed = 300.f;
+		enemy->speed = 180.f;
 		enemy->score = 300;
-		enemy->velocity = { -100, 200 };
 		enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
-		enemy->shootType = ShootTypes::ThreeTime;
+		enemy->shootType = ShootTypes::OneTime;
 		break;
 
 	case Types::MidBoss:
 		enemy->maxHp = 100;
 		enemy->attackInterval = 0.1f;
 		enemy->damage = 10;
-		enemy->speed = 100.f;
-		enemy->velocity = { -100, 200 };
-		enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
+		enemy->speed = 300.f;
+		enemy->animationClipId = "animation/Enemy/enemyMidBoss/Idle.csv";
+		enemy->shootType = ShootTypes::ThreeTime;
 		break;
 
 	case Types::Boss:
@@ -133,12 +130,29 @@ void Enemy::UpdateAwake(float dt)
 void Enemy::UpdateGame(float dt)
 {
 	animator.Update(dt);
-
-
-	if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/Dead.csv")
+	if (type == Enemy::Types::MidBoss)
 	{
-		animator.Play("animation/Enemy/Dead.csv");
+		if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/enemyMidBoss/Dead.csv")
+		{
+			animator.Play("animation/Enemy/enemyMidBoss/Dead.csv");
+		}
 	}
+	else
+	{
+		if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/Dead.csv")
+		{
+			animator.Play("animation/Enemy/Dead.csv");
+		}
+	}
+
+	//if (!isAlive &&animator.GetCurrentClipId() != "animation/Enemy/enemyMidBoss/Dead.csv")
+	//{
+	//	animator.Play("animation/Enemy/enemyMidBoss/Dead.csv");
+	//}
+	//else if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/Dead.csv")
+	//{
+	//	animator.Play("animation/Enemy/Dead.csv");
+	//}
 	continuousAttackTimer += dt;
 	attackTimer += dt;
 
@@ -156,6 +170,7 @@ void Enemy::UpdateGame(float dt)
 		MoveReturn(dt);
 		break;
 	case Enemy::Types::MidBoss:
+		MoveStraight(dt);
 		break;
 	case Enemy::Types::Boss:
 		break;
@@ -179,8 +194,6 @@ void Enemy::UpdateGame(float dt)
 		// 파워 다운으로 변경 필요
 		player->OnDie();
 		attackTimer = 0.f;
-		// 3. Enemy를 지운다.
-		animator.Play("animation/Enemy/Dead.csv");
 	}
 
 	if (isAlive && continuousAttackTimer > continuousAttackInterval)
@@ -284,40 +297,29 @@ void Enemy::ShootFrontOneTime()
 
 void Enemy::ShootFrontThreeTime()
 {
-	// TODO : 막 코딩 고치기... For문
 	if (projectileCount > 0)
 	{
 		attackTimer = 0.f;
 		--projectileCount;
-		EnemyProjectile* projectile = new EnemyProjectile();
-		projectile->Init();
-		projectile->Reset();
-		projectile->SetPosition(position);
-		projectile->SetDirection(Utils::MyMath::GetNormal(player->GetPosition() - position));
-		sceneGame->AddGameObject(projectile);
-		sceneGame->enemyProjectiles.push_back(projectile);
 
-		sf::Vector2f plus;
-		sf::Vector2f minus;
-		Utils::MyMath::AngleWithDirectionOffsets(Utils::MyMath::GetNormal(player->GetPosition() - position), plus, minus);
+		sf::Vector2f direction = Utils::MyMath::GetNormal(player->GetPosition() - position);
+		sf::Vector2f directions[3]; // 기본, 플러스, 마이너스 방향을 저장할 배열
+		Utils::MyMath::AngleWithDirectionOffsets(direction, directions[1], directions[2]);
+		directions[0] = direction; // 기본 방향 설정
 
-		EnemyProjectile* projectilePlus = new EnemyProjectile();
-		projectilePlus->Init();
-		projectilePlus->Reset();
-		projectilePlus->SetPosition(position);
-		projectilePlus->SetDirection(plus);
-		sceneGame->AddGameObject(projectilePlus);
-		sceneGame->enemyProjectiles.push_back(projectilePlus);
-
-		EnemyProjectile* projectileMinus = new EnemyProjectile();
-		projectileMinus->Init();
-		projectileMinus->Reset();
-		projectileMinus->SetPosition(position);
-		projectileMinus->SetDirection(minus);
-		sceneGame->AddGameObject(projectileMinus);
-		sceneGame->enemyProjectiles.push_back(projectileMinus);
+		for (int i = 0; i < 3; ++i) // 세 번의 발사를 위한 반복
+		{
+			EnemyProjectile* projectile = new EnemyProjectile();
+			projectile->Init();
+			projectile->Reset();
+			projectile->SetPosition(position);
+			projectile->SetDirection(directions[i]);
+			sceneGame->AddGameObject(projectile);
+			sceneGame->enemyProjectiles.push_back(projectile);
+		}
 	}
 }
+
 
 void Enemy::DeadEvent()
 {
@@ -326,10 +328,10 @@ void Enemy::DeadEvent()
 	sceneGame->enemyList.remove(this);
 }
 
-Item* Enemy::SpawnItem()
+void Enemy::MidBossPattern()
 {
+	// 1 3 5 7 9
 
-	return nullptr;
 }
 
 void Enemy::MoveStraight(float dt)

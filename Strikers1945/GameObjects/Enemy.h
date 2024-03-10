@@ -61,18 +61,6 @@ protected :
 	Item::Types itemType;
 	Animator animator;
 
-	std::vector<std::vector<float>> itemSpawnChance = 
-	{
-		// Power Level1 : life gold power bomb none
-		{0.01f, 0.41f, 0.46f, 0.50f, 1.f},
-		// Power Level2				
-		{0.02f, 0.42f, 0.46f, 0.50f, 1.f},
-		// Power Level3				
-		{0.03f, 0.43f, 0.45f, 0.50f, 1.f},
-		// Power Level4				
-		{0.04f, 0.44f, 0.45f, 0.50f, 1.f}
-	};
-
 	std::string animationClipId;
 
 	sf::Transform rot;
@@ -138,4 +126,6 @@ public :
 	void DeadEvent();
 
 	Item* SpawnItem();
+
+	void MidBossPattern();
 };

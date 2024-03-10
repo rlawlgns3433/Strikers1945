@@ -20,28 +20,30 @@ GameObject* EnemySpawner::Create()
 void EnemySpawner::Init()
 {
 	Spawner::Init();
-	interval = 5.f;
+	interval = 3.f;
 }
 
 void EnemySpawner::Update(float dt)
 {
+	Spawner::Update(dt);
 
-	if (background->GetPhase() == currentPhase) return;
+	if (background->GetPhase() == currentPhase /*&& currentPhase != Background::CommonEnemyPhase*/) return;
 
 	switch (background->GetPhase())
 	{
 	case Background::CommonEnemyPhase:
-
+		ResetCommonEnemyPhase();
 		break;
 	case Background::MidBossPhase:
-
+		ResetMidBoosPhase();
 		break;
 	case Background::BossPhase:
-
+		Enemy* enemy = Enemy::Create(Enemy::Types::Boss);
 		break;
 	}
 
 	currentPhase = background->GetPhase();
+	std::cout << currentPhase << std::endl;
 	
 }
 
@@ -60,12 +62,14 @@ void EnemySpawner::Reset()
 void EnemySpawner::ResetCommonEnemyPhase()
 {
 	enemyTypes.clear();
-	enemyTypes.push_back(Enemy::Types::Regular1);
-	enemyTypes.push_back(Enemy::Types::Regular1);
-	enemyTypes.push_back(Enemy::Types::Regular2);
-	enemyTypes.push_back(Enemy::Types::Regular2);
-	enemyTypes.push_back(Enemy::Types::Regular3);
-	enemyTypes.push_back(Enemy::Types::Regular3);
+	enemyTypes.push_back(Enemy::Types::MidBoss);
+
+	//enemyTypes.push_back(Enemy::Types::Regular1);
+	//enemyTypes.push_back(Enemy::Types::Regular1);
+	//enemyTypes.push_back(Enemy::Types::Regular2);
+	//enemyTypes.push_back(Enemy::Types::Regular2);
+	//enemyTypes.push_back(Enemy::Types::Regular3);
+	//enemyTypes.push_back(Enemy::Types::Regular3);
 }
 
 void EnemySpawner::ResetMidBoosPhase()

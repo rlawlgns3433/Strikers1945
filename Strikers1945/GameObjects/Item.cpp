@@ -14,7 +14,7 @@ Item* Item::Create(Types itemType)
     switch (item->type)
     {
     case Types::Life:
-        item->SetTexture("graphics/Strikers1945/assets/Life.png");
+        item->animationClipId = "animation/Item/Life.csv";
         item->movement = MovementType::Move;
         break;
     case Types::Gold:
@@ -67,6 +67,13 @@ void Item::Update(float dt)
     {
     case Item::MovementType::NotMove:
         //위치를 고정
+        Translate(sf::Vector2f(0, 1.f) * 100.f * dt);
+        // 맵 밖으로 나가면 소멸
+        if (position.y > 500.f || position.x > 320.f || (speed < 0 && position.y < -550.f))
+        {
+            SetActive(false);
+            sceneGame->RemoveGameObject(this);
+        }
         break;
     case Item::MovementType::Move:
         // 이동 로직을 구현
