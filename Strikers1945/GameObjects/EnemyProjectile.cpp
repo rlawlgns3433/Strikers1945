@@ -11,6 +11,7 @@ EnemyProjectile::EnemyProjectile(const std::string& name)
 void EnemyProjectile::Init()
 {
 	SpriteGo::Init();
+
 	SetTexture("graphics/Strikers1945/assets/bullet.png");
 	SetScale({ 0.5f, 0.5f });
 	SetOrigin(Origins::BC);

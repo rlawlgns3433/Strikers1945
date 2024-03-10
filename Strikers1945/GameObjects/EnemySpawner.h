@@ -18,6 +18,7 @@ protected :
 
 public :
 	static int enemyCount;
+	static int bossCount;
 
 	EnemySpawner(const std::string& name = "enemyspawner");
 	~EnemySpawner() override					   = default;

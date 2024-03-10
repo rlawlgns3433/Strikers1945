@@ -2,6 +2,7 @@
 #include "EnemySpawner.h"
 
 int EnemySpawner::enemyCount = 0;
+int EnemySpawner::bossCount = 0;
 
 EnemySpawner::EnemySpawner(const std::string& name)
 	: Spawner(name)
@@ -11,8 +12,17 @@ EnemySpawner::EnemySpawner(const std::string& name)
 GameObject* EnemySpawner::Create()
 {
 	Enemy::Types enemyType = enemyTypes[Utils::Random::RandomRange(0, enemyTypes.size() - 1)];
+	if (enemyType == Enemy::Types::Boss)
+	{
+		if (bossCount < 1)
+		{
+			++bossCount;
+			Enemy* enemy = Enemy::Create(enemyType);
+			return enemy;
+		}
+		return nullptr;
+	}
 	Enemy* enemy = Enemy::Create(enemyType);
-
 
 	return enemy;
 }
@@ -32,13 +42,16 @@ void EnemySpawner::Update(float dt)
 	switch (background->GetPhase())
 	{
 	case Background::CommonEnemyPhase:
+		spawnCount = 3;
 		ResetCommonEnemyPhase();
 		break;
 	case Background::MidBossPhase:
+		spawnCount = 2;
 		ResetMidBoosPhase();
 		break;
 	case Background::BossPhase:
-		Enemy* enemy = Enemy::Create(Enemy::Types::Boss);
+		spawnCount = 1;
+		ResetBossPhase();
 		break;
 	}
 
@@ -62,19 +75,18 @@ void EnemySpawner::Reset()
 void EnemySpawner::ResetCommonEnemyPhase()
 {
 	enemyTypes.clear();
-	enemyTypes.push_back(Enemy::Types::MidBoss);
-
-	//enemyTypes.push_back(Enemy::Types::Regular1);
-	//enemyTypes.push_back(Enemy::Types::Regular1);
-	//enemyTypes.push_back(Enemy::Types::Regular2);
-	//enemyTypes.push_back(Enemy::Types::Regular2);
-	//enemyTypes.push_back(Enemy::Types::Regular3);
-	//enemyTypes.push_back(Enemy::Types::Regular3);
+	enemyTypes.push_back(Enemy::Types::Regular1);
+	enemyTypes.push_back(Enemy::Types::Regular1);
+	enemyTypes.push_back(Enemy::Types::Regular2);
+	enemyTypes.push_back(Enemy::Types::Regular2);
+	enemyTypes.push_back(Enemy::Types::Regular3);
+	enemyTypes.push_back(Enemy::Types::Regular3);
 }
 
 void EnemySpawner::ResetMidBoosPhase()
 {
 	ResetCommonEnemyPhase();
+	enemyTypes.push_back(Enemy::Types::MidBoss);
 	enemyTypes.push_back(Enemy::Types::MidBoss);
 }
 

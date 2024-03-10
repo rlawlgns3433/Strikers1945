@@ -8,7 +8,7 @@
 #include "BackGround.h"
 #include "Enemy.h"
 #include "EnemyProjectile.h"
-#include "UiHUD.h"
+#include "SpriteGo.h"
 
 SceneGame::SceneGame(SceneIDs id) 
     : Scene(id)
@@ -33,6 +33,13 @@ void SceneGame::Init()
     
     background = new Background();
     AddGameObject(background);
+
+    pauseWindow = new SpriteGo("pauseWindow");
+    pauseWindow->SetTexture("graphics/Strikers1945/assets/pauseWindow.png");
+    pauseWindow->SetPosition({ windowX * 0.5f, windowY * 0.5f });
+    pauseWindow->SetOrigin(Origins::MC);
+    pauseWindow->SetActive(false);
+    AddGameObject(pauseWindow, Layers::Ui);
 
     Scene::Init(); // 모든 게임 오브젝트 Init()
 }
@@ -86,13 +93,16 @@ void SceneGame::UpdateAwake(float dt)
 
 void SceneGame::UpdateGame(float dt)
 {
-    //sf::Vector2f worldViewCenter = worldView.getCenter();
-    //worldViewCenter = Utils::Vector2::Lerp(worldViewCenter, player->GetPosition(), dt * 5);
-    //worldView.setCenter(worldViewCenter);
+    if (InputManager::GetKeyDown(sf::Keyboard::Escape))
+    {
+        status = GameStatus::Pause;
+        pauseWindow->SetActive(true);
+    }
 
-    //worldView.setCenter(player->GetPosition());
-
-
+    if (InputManager::GetKeyDown(sf::Keyboard::F2))
+    {
+        player->SetCheatMode();
+    }
 }
 
 void SceneGame::UpdateGameover(float dt)
@@ -101,6 +111,11 @@ void SceneGame::UpdateGameover(float dt)
 
 void SceneGame::UpdatePause(float dt)
 {
+    if (InputManager::GetKeyDown(sf::Keyboard::Escape))
+    {
+        status = GameStatus::Game;
+        pauseWindow->SetActive(false);
+    }
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)

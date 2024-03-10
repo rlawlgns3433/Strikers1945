@@ -45,6 +45,7 @@ Item::Item(const std::string& name)
 void Item::Init()
 {
     SpriteGo::Init();
+
     animator.SetTarget(&sprite);
     sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
     player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));

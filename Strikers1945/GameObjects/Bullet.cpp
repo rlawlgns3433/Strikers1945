@@ -17,25 +17,8 @@ void Bullet::Reset()
 {
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
-	SetTexture("graphics/Strikers1945/assets/bulletLevel" + std::to_string(player->GetPowerLevel()) + ".bmp");
-
-	//switch (player->GetPowerLevel())
-	//{
-	//case 1 :
-	//	break;
-	//case 2 :
-	//	SetTexture("graphics/Strikers1945/assets/bulletLevel2.bmp");
-	//	break;
-	//case 3 :
-	//	SetTexture("graphics/Strikers1945/assets/bulletLevel3.bmp");
-	//	break;
-	//case 4 :
-	//	SetTexture("graphics/Strikers1945/assets/bulletLevel4.bmp");
-	//	break;
-	////}
-	//SetTexture("graphics/Strikers1945/projectile.png");
-	//SetTextureRect({ 7, 20, 9, 16 });					 // Rect 정하기
-	//SetScale({ 2.f, 2.f });
+	if(player->GetIsCheated()) SetTexture("graphics/Strikers1945/assets/bulletLevel4.bmp");
+	else SetTexture("graphics/Strikers1945/assets/bulletLevel" + std::to_string(player->GetPowerLevel()) + ".bmp");
 	SetOrigin(Origins::BC);
 
 }
@@ -45,6 +28,12 @@ void Bullet::Update(float dt)
 	SpriteGo::Update(dt);
 	time += dt;
 	Translate(direction * speed * dt);
+
+	if (abs(position.x) > 270 || abs(position.y) > 480)
+	{
+		SetActive(false);
+		sceneGame->RemoveGameObject(this); // 이 부분은 오브젝트 풀링으로 변경 필요
+	}
 }
 
 void Bullet::FixedUpdate(float dt)

@@ -55,13 +55,15 @@ protected:
 	int score = 0;
 	int lifes = 3;
 	int bombCount = 2;
-	int damage = 100;
+	int damage = 75;
 
 	int maxPowerLevel = 4;
 	int powerLevel = 1;
 
 	bool isDead = false;
 	bool isInvincible = false;
+
+	bool isCheated = false;
 
 public:
 	AnimPlayer(const std::string& name = "player");
@@ -105,4 +107,8 @@ public:
 	int GetPowerLevel() const { return powerLevel; }
 	void AddPowerLevel(int add);
 	void SetPowerLevel(int powerLevel);
+
+	bool GetIsCheated() const { return isCheated; }
+	void SetCheatMode();
+
 };

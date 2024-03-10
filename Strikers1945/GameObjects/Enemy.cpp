@@ -14,9 +14,8 @@ Enemy* Enemy::Create(Types enemyType)
 	switch (enemy->type)
 	{
 	case Types::Regular1 :
-		enemy->maxHp = 100;
+		enemy->maxHp = 200;
 		enemy->attackInterval = 1.f;
-		enemy->damage = 10;
 		enemy->speed = 150.f;
 		enemy->score = 100;
 		enemy->animationClipId = "animation/Enemy/enemy1/Idle.csv";
@@ -24,9 +23,8 @@ Enemy* Enemy::Create(Types enemyType)
 		break;
 
 	case Types::Regular2:
-		enemy->maxHp = 100;
+		enemy->maxHp = 300;
 		enemy->attackInterval = 1.f;
-		enemy->damage = 10;
 		enemy->speed = 170.f;
 		enemy->score = 200;
 		enemy->animationClipId = "animation/Enemy/enemy2/Idle.csv";
@@ -34,9 +32,8 @@ Enemy* Enemy::Create(Types enemyType)
 		break;
 
 	case Types::Regular3:
-		enemy->maxHp = 100;
+		enemy->maxHp = 300;
 		enemy->attackInterval = 1.f;
-		enemy->damage = 10;
 		enemy->speed = 180.f;
 		enemy->score = 300;
 		enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
@@ -44,25 +41,27 @@ Enemy* Enemy::Create(Types enemyType)
 		break;
 
 	case Types::MidBoss:
-		enemy->maxHp = 100;
-		enemy->attackInterval = 0.1f;
-		enemy->damage = 10;
-		enemy->speed = 300.f;
+		enemy->maxHp = 3000;
+		enemy->attackInterval = 0.3f;
+		enemy->speed = 50.f;
+		enemy->score = 500;
 		enemy->animationClipId = "animation/Enemy/enemyMidBoss/Idle.csv";
-		enemy->shootType = ShootTypes::ThreeTime;
+		enemy->shootType = ShootTypes::MidBoss;
 		break;
 
 	case Types::Boss:
-
+		enemy->maxHp = 6000;
+		enemy->attackInterval = 0.1f;
+		enemy->speed = 50.f;
+		enemy->score = 500;
+		enemy->animationClipId = "animation/Enemy/enemyBoss/Idle.csv";
+		enemy->shootType = ShootTypes::Boss; 
 		break;
 	case Types::Speacial:
 
 		break;
 	case Types::Gound:
 
-		break;
-
-	default:
 		break;
 	}
 
@@ -75,16 +74,21 @@ Enemy::Enemy(const std::string& name)
 void Enemy::Init()
 {
     SpriteGo::Init();
+
 	animator.SetTarget(&sprite);
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
 	hud = dynamic_cast<UiHUD*>(sceneGame->FindGameObject("hud"));
+	background = dynamic_cast<Background*>(sceneGame->FindGameObject("background"));
 }
 
 void Enemy::Reset()
 {
 	animator.Play(animationClipId);
 	SetOrigin(Origins::MC);
+
+	maxHp *= (background->GetPhase() + 1);
+	hp = maxHp;
 }
 
 void Enemy::Update(float dt)
@@ -113,11 +117,18 @@ void Enemy::Shoot()
 	switch (shootType)
 	{
 	case Enemy::ShootTypes::OneTime:
-		ShootFrontOneTime();
+		TargetingShotPattern(5);
 		break;
 	case Enemy::ShootTypes::ThreeTime:
 		ShootFrontThreeTime();
 		break;
+	case Enemy::ShootTypes::MidBoss:
+		TargetingShotPattern(5);
+		SpreadShotPattern(5, 180, 500);
+	case Enemy::ShootTypes::Boss:
+		ShootFrontThreeTime();
+		SpreadShotPattern(15, 360, 1000);
+
 	default:
 		break;
 	}
@@ -145,14 +156,6 @@ void Enemy::UpdateGame(float dt)
 		}
 	}
 
-	//if (!isAlive &&animator.GetCurrentClipId() != "animation/Enemy/enemyMidBoss/Dead.csv")
-	//{
-	//	animator.Play("animation/Enemy/enemyMidBoss/Dead.csv");
-	//}
-	//else if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/Dead.csv")
-	//{
-	//	animator.Play("animation/Enemy/Dead.csv");
-	//}
 	continuousAttackTimer += dt;
 	attackTimer += dt;
 
@@ -161,18 +164,20 @@ void Enemy::UpdateGame(float dt)
 	switch (type)
 	{
 	case Enemy::Types::Regular1:
-		MoveStraight(dt);
-		break;
+		(this->*funcPointers[3])(dt);
 	case Enemy::Types::Regular2:
-		MoveOnCircle(dt);
-		break;
+		(this->*funcPointers[1])(dt);
 	case Enemy::Types::Regular3:
-		MoveReturn(dt);
+		(this->*funcPointers[2])(dt);
 		break;
 	case Enemy::Types::MidBoss:
 		MoveStraight(dt);
 		break;
 	case Enemy::Types::Boss:
+	{
+		if (position.y > -400.f) MoveRandom(dt);
+		else MoveStraight(dt);
+	}
 		break;
 	case Enemy::Types::Speacial:
 		break;
@@ -182,17 +187,18 @@ void Enemy::UpdateGame(float dt)
 		break;
 	}
 
-
-	// Enemy 이동 테스트 중
-
-	// 플레이어와 충돌처리
-	// 1. 충돌을 확인한다.
 	if (isAlive && GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
 		Utils::MyMath::Distance(player->GetPosition(), position) < 40)
 	{
-		// 2. 플레이어에 데미지를 먹인다.
 		// 파워 다운으로 변경 필요
-		player->OnDie();
+		if (player->GetPowerLevel() > 1)
+		{
+			player->AddPowerLevel(-1);
+		}
+		else
+		{
+			player->OnDie();
+		}
 		attackTimer = 0.f;
 	}
 
@@ -223,7 +229,6 @@ void Enemy::UpdateGame(float dt)
 	{
 		continuousAttackCount = 0;
 	}
-
 }
 
 void Enemy::UpdateGameover(float dt)
@@ -297,18 +302,18 @@ void Enemy::ShootFrontOneTime()
 
 void Enemy::ShootFrontThreeTime()
 {
-	if (projectileCount > 0)
+	if (projectileCount >= 3)
 	{
 		attackTimer = 0.f;
-		--projectileCount;
-
-		sf::Vector2f direction = Utils::MyMath::GetNormal(player->GetPosition() - position);
-		sf::Vector2f directions[3]; // 기본, 플러스, 마이너스 방향을 저장할 배열
+		direction = Utils::MyMath::GetNormal(player->GetPosition() - position);
+		sf::Vector2f directions[3];
 		Utils::MyMath::AngleWithDirectionOffsets(direction, directions[1], directions[2]);
-		directions[0] = direction; // 기본 방향 설정
+		directions[0] = direction;
 
-		for (int i = 0; i < 3; ++i) // 세 번의 발사를 위한 반복
+		for (int i = 0; i < 3; ++i)
 		{
+			--projectileCount;
+
 			EnemyProjectile* projectile = new EnemyProjectile();
 			projectile->Init();
 			projectile->Reset();
@@ -328,10 +333,56 @@ void Enemy::DeadEvent()
 	sceneGame->enemyList.remove(this);
 }
 
-void Enemy::MidBossPattern()
+void Enemy::BossPattern()
 {
-	// 1 3 5 7 9
+}
 
+void Enemy::SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed)
+{
+
+	// 보스에서 플레이어를 향하는 벡터
+	sf::Vector2f directionToPlayer = Utils::MyMath::GetNormal(player->GetPosition() - position);
+
+	// 플레이어를 향하는 방향의 각도를 계산 (라디안)
+	float playerAngle = std::atan2(directionToPlayer.y, directionToPlayer.x);
+
+	// 탄환 사이의 각도 (라디안)
+	float angleBetweenBullets = (spreadAngle * (3.14159265f / 180.0f)) / (bulletsCount - 1);
+
+	// 각도의 시작점을 플레이어를 향하는 방향으로 조정
+	float startingAngle = playerAngle - (spreadAngle * (3.14159265f / 180.0f) / 2);
+
+
+	for (int i = 0; i < bulletsCount; ++i)
+	{
+		float bulletAngle = angleBetweenBullets * i;
+		sf::Vector2f bulletDirection = sf::Vector2f(std::cos(bulletAngle), std::sin(bulletAngle)); // 각 탄환의 방향
+
+		EnemyProjectile* projectile = new EnemyProjectile();
+		projectile->Init();
+		projectile->Reset();
+		projectile->SetPosition(position);
+		projectile->SetSpeed(projectileSpeed);
+		projectile->SetDirection(bulletDirection);
+		sceneGame->AddGameObject(projectile);
+		sceneGame->enemyProjectiles.push_back(projectile);
+	}
+}
+
+void Enemy::TargetingShotPattern(int bulletsCount)
+{
+	sf::Vector2f playerPosition = player->GetPosition();
+
+	for (int i = 0; i < bulletsCount; ++i)
+	{
+		EnemyProjectile* bullet = new EnemyProjectile();
+		bullet->Init();
+		bullet->Reset();
+		bullet->SetPosition(this->GetPosition());
+		bullet->SetDirection(Utils::MyMath::GetNormal(playerPosition - this->GetPosition()));
+		sceneGame->AddGameObject(bullet);
+		sceneGame->enemyProjectiles.push_back(bullet);
+	}
 }
 
 void Enemy::MoveStraight(float dt)
@@ -379,10 +430,6 @@ void Enemy::MoveSin(float dt)
 		rotateTimer += dt;
 		isPlaying = true;
 
-		// direction1의 값은, -1 ~ 1
-		// direction1은 timer시간 동안 0~360의 값이 나와야 한다.
-		// direction1.x는 cos(0~360), y는 sin(0~360)
-
 		float angle = ((rotateTimer / 10.f) * 360);
 		float amplitude = 2.f;
 		float period = 0.2f;
@@ -406,9 +453,6 @@ void Enemy::MoveSin(float dt)
 	}
 }
 
-// 내려갔다가 다시 올라가는 형태 
-// 어떻게 파괴 처리할 지가 관건..
-// 1. direction.y가 마이너스이고 position.y가 -550보다 작아지면 파괴
 void Enemy::MoveReturn(float dt)
 {
 	if (position.y > 0 && !isRotating && !isPlaying)
@@ -424,9 +468,9 @@ void Enemy::MoveReturn(float dt)
 		sf::Transform tr;
 		tr.rotate(360 * dt);
 		direction1 = tr * direction1;
-		Translate((direction + direction1) * speed * dt);
+		Translate(Utils::MyMath::GetNormal(direction + direction1) * speed * dt);
 
-		if (direction1.y >= -0.95f && rotateTimer > 0.5f)
+		if (direction1.y >= -0.95f && rotateTimer > 1.5f)
 		{
 			isRotating = false;
 			speed = -speed;
@@ -436,4 +480,18 @@ void Enemy::MoveReturn(float dt)
 	{
 		Translate(direction * speed * dt);
 	}
+}
+
+void Enemy::MoveRandom(float dt)
+{
+	bossMovingChangeTimer += dt;
+	if (bossMovingChangeTimer > bossMovingChangeInterval || abs(position.x) > 200 || position.y > 0)
+	{
+		bossMovingChangeTimer = 0.f;
+		speed = Utils::Random::RandomRange(50, 300);
+		bossMovingDirection = { Utils::Random::GetRandomVector2(-1.f, 1.f)};
+		//Utils::MyMath::Normalize(bossMovingDirection);
+	}
+
+	Translate(bossMovingDirection * speed * dt);
 }

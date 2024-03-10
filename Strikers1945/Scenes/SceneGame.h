@@ -8,6 +8,7 @@ class EnemySpawner;
 class Background;
 class Enemy;
 class EnemyProjectile;
+class SpriteGo;
 
 class SceneGame : public Scene
 {
@@ -18,10 +19,9 @@ protected :
 	SceneGame& operator=(SceneGame&&)		= delete;	
 	
 	GameStatus status = GameStatus::Game;
-
 	EnemySpawner* enemySpawner = nullptr;
 	Background* background = nullptr;
-
+	SpriteGo* pauseWindow = nullptr;
 
 	float windowX = 0.f;
 	float windowY = 0.f;

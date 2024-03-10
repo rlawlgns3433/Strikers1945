@@ -12,6 +12,7 @@ AnimPlayer::AnimPlayer(const std::string& name)
 void AnimPlayer::Init()
 {
 	SpriteGo::Init();
+
 	animator.SetTarget(&sprite);
 	SetScale({ 2.f,2.f });
 
@@ -122,11 +123,13 @@ void AnimPlayer::UpdateGame(float dt)
 	if (isInvincible)
 	{
 		invincibleTimer += dt;
-
 		if (invincibleTimer > invincibleInterval)
 		{
 			isInvincible = false;
 			invincibleTimer = 0.f;
+		}
+		else if (invincibleTimer > invincibleInterval - 1.f)
+		{
 			isDead = false;
 			SetActive(true);
 		}
@@ -202,4 +205,21 @@ void AnimPlayer::SetPowerLevel(int powerLevel)
 		powerLevel = maxPowerLevel;
 	}
 	damage = 100 + 50 * (powerLevel - 1);
+}
+
+void AnimPlayer::SetCheatMode()
+{
+	if (isCheated)
+	{
+		SetLife(3);
+		SetPowerLevel(1);
+		hud->SetLifes(lifes);
+	}
+	else
+	{
+		SetLife(999);
+		SetPowerLevel(99);
+		hud->SetLifes(lifes);
+	}
+	isCheated = !isCheated;
 }
