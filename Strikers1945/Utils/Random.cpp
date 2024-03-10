@@ -15,6 +15,17 @@ namespace Utils
 		return dis(gen);
 	}
 
+	int Random::RandomRange(int min, int max)
+	{
+		static std::random_device rd;
+
+		static std::mt19937 generator(rd());
+
+		std::uniform_int_distribution<int> distribution(min, max);
+
+		return distribution(generator);
+	}
+
 	float Random::RandomRange(float min, float max)
 	{
 		float value = RandomValue();

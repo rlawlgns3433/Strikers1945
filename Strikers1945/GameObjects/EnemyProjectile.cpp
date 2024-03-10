@@ -11,6 +11,7 @@ EnemyProjectile::EnemyProjectile(const std::string& name)
 void EnemyProjectile::Init()
 {
 	SpriteGo::Init();
+
 	SetTexture("graphics/Strikers1945/assets/bullet.png");
 	SetScale({ 0.5f, 0.5f });
 	SetOrigin(Origins::BC);
@@ -27,16 +28,22 @@ void EnemyProjectile::Update(float dt)
 	SpriteGo::Update(dt);
 	time += dt;
 	Translate(direction * speed * dt);
+
+	if (abs(position.y) > 500.f || abs(position.x) > 320.f)
+	{
+		SetActive(false);
+		//sceneGame->RemoveGameObject(this);
+	}
 }
 
 void EnemyProjectile::FixedUpdate(float dt)
 {
-	if (Utils::MyMath::Distance(player->GetPosition(), position) >= 25) return ;
+	if (Utils::MyMath::Distance(player->GetPosition(), position) >= 25 || !GetActive()) return ;
 	if (!player->IsDead() && GetGlobalBounds().intersects(player->GetGlobalBounds()))
 	{
 		player->OnDie();
 		SetActive(false);
-		sceneGame->RemoveGameObject(this); // 오브젝트 풀링으로 변경 필요
+		//sceneGame->RemoveGameObject(this);
 	}
 }
 

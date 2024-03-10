@@ -8,9 +8,9 @@ class Background : public SpriteGo
 public :
 	enum GamePhase
 	{
-		COMMON_ENEMY_PHASE, // 잡몹 나오는 단계
-		MID_BOSS_PHASE,     // 세미 보스 나오는 단계
-		BOSS_PHASE          // 보스 나오는 단계
+		CommonEnemyPhase, // 잡몹 나오는 단계
+		MidBossPhase,     // 세미 보스 나오는 단계
+		BossPhase          // 보스 나오는 단계
 	};
 
 
@@ -34,5 +34,6 @@ public :
 	void Update(float dt) override;
 
 	GamePhase GetPhase() const { return phase; }
+	void SetPhase(GamePhase phase);
 };
 

@@ -30,5 +30,6 @@ public:
 	void FixedUpdate(float dt);
 
 	void SetDirection(const sf::Vector2f direction);
+	void SetSpeed(float speed) { this->speed = speed; }
 };
 

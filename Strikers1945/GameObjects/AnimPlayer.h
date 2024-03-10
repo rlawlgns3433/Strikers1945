@@ -5,6 +5,7 @@
 class SceneGame;
 class Tile;
 class UiHUD;
+class Bullet;
 
 class AnimPlayer : public SpriteGo
 {
@@ -38,6 +39,8 @@ protected:
 	UiHUD* hud = nullptr;
 
 	std::vector<ClipInfo> clipInfos;
+	std::list<Bullet*> usingBulletlist;
+	std::list<Bullet*> unusingBulletlist;
 
 	sf::Vector2f velocity;
 	sf::Vector2f direction;
@@ -55,9 +58,15 @@ protected:
 	int score = 0;
 	int lifes = 3;
 	int bombCount = 2;
+	int damage = 75;
+
+	int maxPowerLevel = 4;
+	int powerLevel = 1;
 
 	bool isDead = false;
 	bool isInvincible = false;
+
+	bool isCheated = false;
 
 public:
 	AnimPlayer(const std::string& name = "player");
@@ -65,6 +74,7 @@ public:
 
 	void Init() override;
 	void Reset() override;
+	void Release() override;
 	void Update(float dt) override;
 	void UpdateAwake(float dt);
 	void UpdateGame(float dt);
@@ -81,8 +91,29 @@ public:
 
 	bool IsDead() const { return isDead; }
 	bool GetIsInvincible() const { return isInvincible; }
+	void SetInvincible(bool invincible) { isInvincible = invincible; }
 
 	int GetScore() const { return score; }
-	int GetLifes() const { return lifes; }
-	int GetBombCount() const { return bombCount; }
+	void AddScore(int add) { score += add; };
+	void SetScore(int score) { this->score = score; }
+
+	int GetLife() const { return lifes; }
+	void AddLife(int add) { lifes += add; };
+	void SetLife(int life) { this->lifes = life; }
+	
+	int GetBombItem() const { return bombCount; }
+	void AddBombItem(int add) { bombCount += add; };
+	void SetBombItem(int bombCount) { this->bombCount = bombCount; }
+
+	int GetDamage() const { return damage; }
+	void AddDamage(int add) { damage += add; }
+	void SetDamage(int damage) { this->damage = damage; }
+
+	int GetPowerLevel() const { return powerLevel; }
+	void AddPowerLevel(int add);
+	void SetPowerLevel(int powerLevel);
+
+	bool GetIsCheated() const { return isCheated; }
+	void SetCheatMode();
+
 };

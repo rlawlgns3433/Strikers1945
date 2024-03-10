@@ -1,9 +1,0 @@
-ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
-WallJump,20,1,,
-,,,,
-TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/PixelmanBoost/MainCharacters/MaskDude/WallJump.png,0,0,32,32
-graphics/PixelmanBoost/MainCharacters/MaskDude/WallJump.png,32,0,32,32
-graphics/PixelmanBoost/MainCharacters/MaskDude/WallJump.png,64,0,32,32
-graphics/PixelmanBoost/MainCharacters/MaskDude/WallJump.png,96,0,32,32
-graphics/PixelmanBoost/MainCharacters/MaskDude/WallJump.png,128,0,32,32

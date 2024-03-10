@@ -1,0 +1,19 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+Dead,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Strikers1945/assets/MidBossDead.png,0,0,128,104
+graphics/Strikers1945/assets/MidBossDead.png,129,0,128,104
+graphics/Strikers1945/assets/MidBossDead.png,258,0,128,104
+graphics/Strikers1945/assets/MidBossDead.png,387,0,128,104
+graphics/Strikers1945/assets/MidBossDead.png,0,105,128,104
+graphics/Strikers1945/assets/MidBossDead.png,129,105,128,104
+graphics/Strikers1945/assets/MidBossDead.png,258,105,128,104
+graphics/Strikers1945/assets/MidBossDead.png,387,105,128,104
+graphics/Strikers1945/assets/MidBossDead.png,0,210,128,104
+graphics/Strikers1945/assets/MidBossDead.png,129,210,128,104
+graphics/Strikers1945/assets/MidBossDead.png,258,210,128,104
+graphics/Strikers1945/assets/MidBossDead.png,387,210,128,104
+graphics/Strikers1945/assets/MidBossDead.png,0,315,128,104
+graphics/Strikers1945/assets/MidBossDead.png,129,315,128,104
+graphics/Strikers1945/assets/MidBossDead.png,258,315,128,104

@@ -6,6 +6,7 @@ namespace Utils
 	{
 	public:
 		static float RandomValue(); // 0.0 ~ 1.0
+		static int RandomRange(int min, int max);
 		static float RandomRange(float min, float max);
 		static sf::Vector2f RandomOnUnitCircle();
 		static sf::Vector2f RandomInUnitCircle();

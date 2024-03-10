@@ -5,6 +5,7 @@ class SpriteGo : public GameObject
 {
 protected:
 	sf::Sprite sprite;
+	sf::RectangleShape bound;
 	std::string textureId;
 
 	SpriteGo(const SpriteGo&) = delete;
@@ -38,4 +39,5 @@ public:
 
 	sf::FloatRect GetLocalBounds() override;
 	sf::FloatRect GetGlobalBounds() override;
+
 };

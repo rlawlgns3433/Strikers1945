@@ -19,5 +19,6 @@ namespace Utils
 		static float Lerp(float min, float max, float deltaTime);
 
 		static void AngleWithDirectionOffsets(const sf::Vector2f& look, sf::Vector2f& directionPlus30, sf::Vector2f& directionMinus30);
+		static void GenerateDirectionVectors(const sf::Vector2f& look, std::vector<sf::Vector2f>& directions, int numVectors, float angleDifference);
 	};
 }

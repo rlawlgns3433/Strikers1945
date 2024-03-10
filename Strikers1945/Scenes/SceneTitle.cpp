@@ -29,8 +29,6 @@ void SceneTitle::Init()
 void SceneTitle::Release()
 {
 	Scene::Release();
-
-	textIntro = nullptr;
 }
 
 void SceneTitle::Enter()

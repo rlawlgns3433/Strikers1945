@@ -22,7 +22,7 @@ protected :
 	float intervalMin;
 	float intervalMax;
 
-	int spawnCount = 1.f;
+	int spawnCount = 3.f;
 	int spawnCountMin;
 	int spawnCountMax;
 

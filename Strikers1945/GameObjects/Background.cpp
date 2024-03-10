@@ -20,17 +20,18 @@ void Background::Reset()
 	SetOrigin(Origins::BC);
 	SetSortLayer(-1);
 	sceneGame->ResortGameObject(this);
+	sprite.setPosition(0, 0);
 }
 
 void Background::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
-	std::cout << position.y << std::endl;
+	//std::cout << position.y << std::endl;
 	if (sceneGame->GetStatus() == GameStatus::Game)
 	{
 		if (clock.getElapsedTime().asSeconds() > 0.01) {
-			position.y += 200.0f; // 속도 조절을 위해 이 값을 변경할 수 있음
+			position.y += 1.f; // 속도 조절을 위해 이 값을 변경할 수 있음
 			sprite.setPosition(0, position.y);
 			clock.restart();
 		}
@@ -38,7 +39,23 @@ void Background::Update(float dt)
 
 	if (position.y > sprite.getTexture()->getSize().y - FRAMEWORK.GetWindowSize().y * 0.5f) SetPosition(sf::Vector2f{ position.x, sprite.getTexture()->getSize().y - FRAMEWORK.GetWindowSize().y * 0.5f });
 
-	if (position.y < 4000.f) phase = GamePhase::COMMON_ENEMY_PHASE;
-	else if (position.y < 9000.f) phase = GamePhase::MID_BOSS_PHASE;
-	else phase = GamePhase::BOSS_PHASE;
+	if (position.y < 4000.f) phase = GamePhase::CommonEnemyPhase;
+	else if (position.y < 9000.f) phase = GamePhase::MidBossPhase;
+	else phase = GamePhase::BossPhase;
+}
+
+void Background::SetPhase(GamePhase phase)
+{
+	switch (phase)
+	{
+	case Background::CommonEnemyPhase:
+		position.y = 540.f;
+		break;
+	case Background::MidBossPhase:
+		position.y = 4000.f;
+		break;
+	case Background::BossPhase:
+		position.y = 9000.f;
+		break;
+	}
 }

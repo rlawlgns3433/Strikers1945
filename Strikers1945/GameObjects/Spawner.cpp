@@ -28,6 +28,7 @@ void Spawner::Reset()
 	GameObject::Reset();
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
+	background = dynamic_cast<Background*>(sceneGame->FindGameObject("background"));
 }
 
 void Spawner::Update(float dt)
@@ -36,6 +37,10 @@ void Spawner::Update(float dt)
 
 	timer += dt;
 
+	if (background->GetPhase() == Background::GamePhase::BossPhase)
+	{
+
+	}
 
 	if (timer > interval)
 	{
@@ -43,14 +48,13 @@ void Spawner::Update(float dt)
 
 		for (int i = 0; i < spawnCount; ++i)
 		{
-			sf::Vector2f spawnPosition = { Utils::Random::RandomRange(-220, 220), -550.f };
+			sf::Vector2f spawnPosition = { Utils::Random::RandomRange(-220.f, 220.f), -550.f };
 
 			GameObject* newGo = Create();
 			if (newGo == nullptr) return;
 			newGo->Init();
 			newGo->Reset();
 			newGo->SetPosition(spawnPosition);
-			//newGo->SetPosition({0, -400.f});
 			sceneGame->enemyList.push_back(dynamic_cast<Enemy*>(newGo));
 			sceneGame->AddGameObject(newGo);
 		}

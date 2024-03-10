@@ -3,6 +3,7 @@
 #include "SceneGame.h"
 #include "Bullet.h"
 #include "UiHUD.h"
+#include "Item.h"
 
 AnimPlayer::AnimPlayer(const std::string& name)
 	: SpriteGo(name)
@@ -12,6 +13,7 @@ AnimPlayer::AnimPlayer(const std::string& name)
 void AnimPlayer::Init()
 {
 	SpriteGo::Init();
+
 	animator.SetTarget(&sprite);
 	SetScale({ 2.f,2.f });
 
@@ -34,12 +36,36 @@ void AnimPlayer::Reset()
 {
 	animator.Play("animation/Player/Idle.csv");
 
+	for (auto& bullet : unusingBulletlist)
+	{
+		bullet->SetActive(false);
+	}
+
+	for (auto& bullet : usingBulletlist)
+	{
+		bullet->SetActive(false);
+	}
+
 	SetOrigin(Origins::MC);
 	isDead = false;
+	isInvincible = true;
+	isCheated = false;
+	powerLevel = 1;
+	hp = maxHp;
+	lifes = 3;
+	bombCount = 2;
+	damage = 75;
+	score = 0;
 	currentClipInfo = clipInfos[0];
 
+	hud->SetScore(score);
 	hud->SetBombCount(bombCount);
 	hud->SetLifes(lifes);
+}
+
+void AnimPlayer::Release()
+{
+	SpriteGo::Release();
 }
 
 void AnimPlayer::Update(float dt)
@@ -61,7 +87,6 @@ void AnimPlayer::Update(float dt)
 		UpdatePause(dt);
 		break;
 	}
-
 }
 
 void AnimPlayer::UpdateAwake(float dt)
@@ -122,13 +147,30 @@ void AnimPlayer::UpdateGame(float dt)
 	if (isInvincible)
 	{
 		invincibleTimer += dt;
-
 		if (invincibleTimer > invincibleInterval)
 		{
 			isInvincible = false;
 			invincibleTimer = 0.f;
+		}
+		else if (invincibleTimer > invincibleInterval - 1.f)
+		{
 			isDead = false;
 			SetActive(true);
+		}
+	}
+
+	auto it = usingBulletlist.begin();
+	while (it != usingBulletlist.end())
+	{
+		auto bullet = *it;
+		if (!bullet->GetActive())
+		{
+			it = usingBulletlist.erase(it);	
+			unusingBulletlist.push_back(bullet);
+		}
+		else
+		{
+			++it;
 		}
 	}
 }
@@ -152,12 +194,26 @@ void AnimPlayer::Shoot()
 	if (shootTimer >= shootInterval)
 	{
 		shootTimer = 0.f;
-		Bullet* bullet = new Bullet();
-		bullet->Init();
+
+		Bullet* bullet = nullptr;
+		if (unusingBulletlist.empty())
+		{
+			bullet = new Bullet();
+			bullet->Init();
+		}
+		else
+		{
+			bullet = unusingBulletlist.front();
+			unusingBulletlist.pop_front();
+		}
+		bullet->SetActive(true);
 		bullet->Reset();
 		bullet->SetPosition(position);
+
+		usingBulletlist.push_back(bullet);
 		sceneGame->AddGameObject(bullet);
 	}
+
 }
 
 
@@ -166,6 +222,16 @@ void AnimPlayer::OnDie()
 	// 죽었을 때 애니메이션 재생
 	isDead = true;
 	isInvincible = true;
+	if (powerLevel > 1)
+	{
+		powerLevel = 1;
+		Item* item = Item::Create(Item::Types::PowerUp);
+		item->Init();
+		item->Reset();
+		item->SetPosition(position + sf::Vector2f(-50.f, -50.f));
+		sceneGame->ItemList.push_back(item);
+		sceneGame->AddGameObject(item);
+	}
 }
 
 void AnimPlayer::DeadEvent()
@@ -176,8 +242,46 @@ void AnimPlayer::DeadEvent()
 	if (lifes <= 0)
 	{
 		SetActive(false);
-		sceneGame->RemoveGameObject(this);
 		sceneGame->SetStatus(GameStatus::GameOver);
 		return;
 	}
+}
+
+void AnimPlayer::AddPowerLevel(int add)
+{
+	powerLevel += add;
+
+	if (powerLevel > maxPowerLevel)
+	{
+		powerLevel = maxPowerLevel;
+	}
+	damage = 100 + 50 * (powerLevel - 1);
+}
+
+void AnimPlayer::SetPowerLevel(int powerLevel)
+{
+	this->powerLevel = powerLevel;
+
+	if (powerLevel > maxPowerLevel)
+	{
+		powerLevel = maxPowerLevel;
+	}
+	damage = 100 + 50 * (powerLevel - 1);
+}
+
+void AnimPlayer::SetCheatMode()
+{
+	if (isCheated)
+	{
+		SetLife(3);
+		SetPowerLevel(1);
+		hud->SetLifes(lifes);
+	}
+	else
+	{
+		SetLife(999);
+		SetPowerLevel(99);
+		hud->SetLifes(lifes);
+	}
+	isCheated = !isCheated;
 }
