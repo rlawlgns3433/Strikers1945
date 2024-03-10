@@ -5,6 +5,7 @@
 class SceneGame;
 class Tile;
 class UiHUD;
+class Bullet;
 
 class AnimPlayer : public SpriteGo
 {
@@ -38,6 +39,8 @@ protected:
 	UiHUD* hud = nullptr;
 
 	std::vector<ClipInfo> clipInfos;
+	std::list<Bullet*> usingBulletlist;
+	std::list<Bullet*> unusingBulletlist;
 
 	sf::Vector2f velocity;
 	sf::Vector2f direction;
@@ -71,6 +74,7 @@ public:
 
 	void Init() override;
 	void Reset() override;
+	void Release() override;
 	void Update(float dt) override;
 	void UpdateAwake(float dt);
 	void UpdateGame(float dt);
@@ -87,6 +91,7 @@ public:
 
 	bool IsDead() const { return isDead; }
 	bool GetIsInvincible() const { return isInvincible; }
+	void SetInvincible(bool invincible) { isInvincible = invincible; }
 
 	int GetScore() const { return score; }
 	void AddScore(int add) { score += add; };

@@ -103,6 +103,7 @@ void SceneGame::UpdateGame(float dt)
     {
         player->SetCheatMode();
     }
+
 }
 
 void SceneGame::UpdateGameover(float dt)

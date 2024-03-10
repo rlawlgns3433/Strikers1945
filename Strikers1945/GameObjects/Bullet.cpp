@@ -32,7 +32,7 @@ void Bullet::Update(float dt)
 	if (abs(position.x) > 270 || abs(position.y) > 480)
 	{
 		SetActive(false);
-		sceneGame->RemoveGameObject(this); // 이 부분은 오브젝트 풀링으로 변경 필요
+		//sceneGame->RemoveGameObject(this); // 이 부분은 오브젝트 풀링으로 변경 필요
 	}
 }
 
@@ -49,7 +49,7 @@ void Bullet::FixedUpdate(float dt)
 		{
 			enemy->OnDamage(player->GetDamage());
 			SetActive(false);
-			sceneGame->RemoveGameObject(this); // 이 부분은 오브젝트 풀링으로 변경 필요
+			//sceneGame->RemoveGameObject(this); // 이 부분은 오브젝트 풀링으로 변경 필요
 		}
 	}
 }

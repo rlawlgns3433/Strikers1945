@@ -34,7 +34,9 @@ public :
 	AnimPlayer* player = nullptr;
 
 	std::list<Enemy*> enemyList;
-	std::vector<GameObject*> enemyProjectiles;
+	std::list<EnemyProjectile*> enemyProjectiles;
+	std::list<EnemyProjectile*> usingProjectileList;
+	std::list<EnemyProjectile*> unusingProjectileList;
 
 	void Init() override;
 	void Release() override;
@@ -50,6 +52,4 @@ public :
 
 	GameStatus GetStatus() const { return this->status; }
 	void SetStatus(GameStatus newStatus);
-	
-	const std::vector<GameObject*>& GetEnemyProjectileList() const { return enemyProjectiles; }
 };

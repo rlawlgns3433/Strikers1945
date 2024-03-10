@@ -3,6 +3,7 @@
 #include "SceneGame.h"
 #include "Bullet.h"
 #include "UiHUD.h"
+#include "Item.h"
 
 AnimPlayer::AnimPlayer(const std::string& name)
 	: SpriteGo(name)
@@ -37,10 +38,26 @@ void AnimPlayer::Reset()
 
 	SetOrigin(Origins::MC);
 	isDead = false;
+	powerLevel = 1;
+	hp = maxHp;
+	lifes = 3;
+	bombCount = 2;
+	damage = 75;
 	currentClipInfo = clipInfos[0];
+
 
 	hud->SetBombCount(bombCount);
 	hud->SetLifes(lifes);
+}
+
+void AnimPlayer::Release()
+{
+	SpriteGo::Release();
+	for (auto& bullet : unusingBulletlist)
+	{
+		delete bullet;
+	}
+	unusingBulletlist.clear();
 }
 
 void AnimPlayer::Update(float dt)
@@ -71,6 +88,9 @@ void AnimPlayer::UpdateAwake(float dt)
 
 void AnimPlayer::UpdateGame(float dt)
 {
+
+	std::cout << unusingBulletlist.size() << " : " << usingBulletlist.size() << std::endl;
+
 	animator.Update(dt);
 	shootTimer += dt;
 
@@ -134,6 +154,21 @@ void AnimPlayer::UpdateGame(float dt)
 			SetActive(true);
 		}
 	}
+
+	auto it = usingBulletlist.begin();
+	while (it != usingBulletlist.end())
+	{
+		auto bullet = *it;
+		if (!bullet->GetActive())
+		{
+			it = usingBulletlist.erase(it);	
+			unusingBulletlist.push_back(bullet);
+		}
+		else
+		{
+			++it;
+		}
+	}
 }
 
 void AnimPlayer::UpdateGameover(float dt)
@@ -155,12 +190,26 @@ void AnimPlayer::Shoot()
 	if (shootTimer >= shootInterval)
 	{
 		shootTimer = 0.f;
-		Bullet* bullet = new Bullet();
-		bullet->Init();
+
+		Bullet* bullet = nullptr;
+		if (unusingBulletlist.empty())
+		{
+			bullet = new Bullet();
+			bullet->Init();
+		}
+		else
+		{
+			bullet = unusingBulletlist.front();
+			unusingBulletlist.pop_front();
+		}
+		bullet->SetActive(true);
 		bullet->Reset();
 		bullet->SetPosition(position);
+
+		usingBulletlist.push_back(bullet);
 		sceneGame->AddGameObject(bullet);
 	}
+
 }
 
 
@@ -169,6 +218,15 @@ void AnimPlayer::OnDie()
 	// 죽었을 때 애니메이션 재생
 	isDead = true;
 	isInvincible = true;
+	if (powerLevel > 1)
+	{
+		powerLevel = 1;
+		Item* item = Item::Create(Item::Types::PowerUp);
+		item->Init();
+		item->Reset();
+		item->SetPosition(position + sf::Vector2f(-50.f, -50.f));
+		sceneGame->AddGameObject(item);
+	}
 }
 
 void AnimPlayer::DeadEvent()

@@ -28,6 +28,12 @@ void EnemyProjectile::Update(float dt)
 	SpriteGo::Update(dt);
 	time += dt;
 	Translate(direction * speed * dt);
+
+	if (abs(position.y) > 500.f || abs(position.x) > 320.f)
+	{
+		SetActive(false);
+		sceneGame->RemoveGameObject(this);
+	}
 }
 
 void EnemyProjectile::FixedUpdate(float dt)
@@ -37,7 +43,7 @@ void EnemyProjectile::FixedUpdate(float dt)
 	{
 		player->OnDie();
 		SetActive(false);
-		sceneGame->RemoveGameObject(this); // 오브젝트 풀링으로 변경 필요
+		sceneGame->RemoveGameObject(this);
 	}
 }
 

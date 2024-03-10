@@ -15,7 +15,7 @@ Enemy* Enemy::Create(Types enemyType)
 	{
 	case Types::Regular1 :
 		enemy->maxHp = 200;
-		enemy->attackInterval = 1.f;
+		enemy->attackInterval = 0.5f;
 		enemy->speed = 150.f;
 		enemy->score = 100;
 		enemy->animationClipId = "animation/Enemy/enemy1/Idle.csv";
@@ -24,7 +24,7 @@ Enemy* Enemy::Create(Types enemyType)
 
 	case Types::Regular2:
 		enemy->maxHp = 300;
-		enemy->attackInterval = 1.f;
+		enemy->attackInterval = 0.5f;
 		enemy->speed = 170.f;
 		enemy->score = 200;
 		enemy->animationClipId = "animation/Enemy/enemy2/Idle.csv";
@@ -33,7 +33,7 @@ Enemy* Enemy::Create(Types enemyType)
 
 	case Types::Regular3:
 		enemy->maxHp = 300;
-		enemy->attackInterval = 1.f;
+		enemy->attackInterval = 0.5f;
 		enemy->speed = 180.f;
 		enemy->score = 300;
 		enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
@@ -190,15 +190,7 @@ void Enemy::UpdateGame(float dt)
 	if (isAlive && GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
 		Utils::MyMath::Distance(player->GetPosition(), position) < 40)
 	{
-		// 파워 다운으로 변경 필요
-		if (player->GetPowerLevel() > 1)
-		{
-			player->AddPowerLevel(-1);
-		}
-		else
-		{
-			player->OnDie();
-		}
+		player->OnDie();
 		attackTimer = 0.f;
 	}
 
