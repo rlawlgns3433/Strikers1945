@@ -104,6 +104,22 @@ void SceneGame::UpdateGame(float dt)
         player->SetCheatMode();
     }
 
+    auto it = usingProjectileList.begin();
+    while (it != usingProjectileList.end())
+    {
+        auto projectile = *it;
+        if (!projectile->GetActive())
+        {
+            it = usingProjectileList.erase(it);
+            unusingProjectileList.push_back(projectile);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    std::cout << usingProjectileList.size() << " : " << unusingProjectileList.size() << std::endl;
 }
 
 void SceneGame::UpdateGameover(float dt)

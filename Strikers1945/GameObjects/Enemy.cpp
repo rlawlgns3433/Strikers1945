@@ -117,13 +117,13 @@ void Enemy::Shoot()
 	switch (shootType)
 	{
 	case Enemy::ShootTypes::OneTime:
-		TargetingShotPattern(5);
+		TargetingShotPattern(1);
 		break;
 	case Enemy::ShootTypes::ThreeTime:
 		ShootFrontThreeTime();
 		break;
 	case Enemy::ShootTypes::MidBoss:
-		TargetingShotPattern(5);
+		TargetingShotPattern(1);
 		SpreadShotPattern(5, 180, 500);
 	case Enemy::ShootTypes::Boss:
 		ShootFrontThreeTime();
@@ -282,13 +282,31 @@ void Enemy::ShootFrontOneTime()
 	{
 		attackTimer = 0.f;
 		--projectileCount;
-		EnemyProjectile* projectile = new EnemyProjectile();
-		projectile->Init();
+		//EnemyProjectile* projectile = new EnemyProjectile();
+		//projectile->Init();
+		//projectile->Reset();
+		//projectile->SetPosition(position);
+		//projectile->SetDirection(Utils::MyMath::GetNormal(player->GetPosition() - position));
+		//sceneGame->AddGameObject(projectile);
+		//sceneGame->enemyProjectiles.push_back(projectile);
+
+		EnemyProjectile* projectile = nullptr;
+		if (sceneGame->unusingProjectileList.empty())
+		{
+			projectile = new EnemyProjectile();
+			projectile->Init();
+		}
+		else
+		{
+			projectile = sceneGame->unusingProjectileList.front();
+			sceneGame->unusingProjectileList.pop_front();
+		}
 		projectile->Reset();
+		projectile->SetActive(true);
 		projectile->SetPosition(position);
 		projectile->SetDirection(Utils::MyMath::GetNormal(player->GetPosition() - position));
+		sceneGame->usingProjectileList.push_back(projectile);
 		sceneGame->AddGameObject(projectile);
-		sceneGame->enemyProjectiles.push_back(projectile);
 	}
 }
 
@@ -302,17 +320,40 @@ void Enemy::ShootFrontThreeTime()
 		Utils::MyMath::AngleWithDirectionOffsets(direction, directions[1], directions[2]);
 		directions[0] = direction;
 
-		for (int i = 0; i < 3; ++i)
-		{
+		//for (int i = 0; i < 3; ++i)
+		//{
+		//	--projectileCount;
+
+		//	EnemyProjectile* projectile = new EnemyProjectile();
+		//	projectile->Init();
+		//	projectile->Reset();
+		//	projectile->SetPosition(position);
+		//	projectile->SetDirection(directions[i]);
+		//	sceneGame->AddGameObject(projectile);
+		//	sceneGame->enemyProjectiles.push_back(projectile);
+		//}
+
+		for (int i = 0; i < 3; ++i) {
 			--projectileCount;
 
-			EnemyProjectile* projectile = new EnemyProjectile();
-			projectile->Init();
+			EnemyProjectile* projectile = nullptr;
+			if (sceneGame->unusingProjectileList.empty()) 
+			{
+				projectile = new EnemyProjectile();
+				projectile->Init();
+			}
+			else 
+			{
+				projectile = sceneGame->unusingProjectileList.front();
+				sceneGame->unusingProjectileList.pop_front();
+			}
+
 			projectile->Reset();
+			projectile->SetActive(true);
 			projectile->SetPosition(position);
 			projectile->SetDirection(directions[i]);
+			sceneGame->usingProjectileList.push_back(projectile);
 			sceneGame->AddGameObject(projectile);
-			sceneGame->enemyProjectiles.push_back(projectile);
 		}
 	}
 }
@@ -331,34 +372,53 @@ void Enemy::BossPattern()
 
 void Enemy::SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed)
 {
-
-	// 보스에서 플레이어를 향하는 벡터
 	sf::Vector2f directionToPlayer = Utils::MyMath::GetNormal(player->GetPosition() - position);
-
-	// 플레이어를 향하는 방향의 각도를 계산 (라디안)
 	float playerAngle = std::atan2(directionToPlayer.y, directionToPlayer.x);
-
-	// 탄환 사이의 각도 (라디안)
 	float angleBetweenBullets = (spreadAngle * (3.14159265f / 180.0f)) / (bulletsCount - 1);
-
-	// 각도의 시작점을 플레이어를 향하는 방향으로 조정
 	float startingAngle = playerAngle - (spreadAngle * (3.14159265f / 180.0f) / 2);
 
 
+	//for (int i = 0; i < bulletsCount; ++i)
+	//{
+	//	float bulletAngle = angleBetweenBullets * i;
+	//	sf::Vector2f bulletDirection = sf::Vector2f(std::cos(bulletAngle), std::sin(bulletAngle)); // 각 탄환의 방향
+
+	//	EnemyProjectile* projectile = new EnemyProjectile();
+	//	projectile->Init();
+	//	projectile->Reset();
+	//	projectile->SetPosition(position);
+	//	projectile->SetSpeed(projectileSpeed);
+	//	projectile->SetDirection(bulletDirection);
+	//	sceneGame->AddGameObject(projectile);
+	//	sceneGame->enemyProjectiles.push_back(projectile);
+	//}
+	
 	for (int i = 0; i < bulletsCount; ++i)
 	{
-		float bulletAngle = angleBetweenBullets * i;
-		sf::Vector2f bulletDirection = sf::Vector2f(std::cos(bulletAngle), std::sin(bulletAngle)); // 각 탄환의 방향
+		float bulletAngle = startingAngle + angleBetweenBullets * i;
+		sf::Vector2f bulletDirection = sf::Vector2f(std::cos(bulletAngle), std::sin(bulletAngle));
 
-		EnemyProjectile* projectile = new EnemyProjectile();
-		projectile->Init();
+		EnemyProjectile* projectile = nullptr;
+		if (sceneGame->unusingProjectileList.empty())
+		{
+			projectile = new EnemyProjectile();
+			projectile->Init();
+		}
+		else
+		{
+			projectile = sceneGame->unusingProjectileList.front();
+			sceneGame->unusingProjectileList.pop_front();
+		}
+
 		projectile->Reset();
+		projectile->SetActive(true);
 		projectile->SetPosition(position);
 		projectile->SetSpeed(projectileSpeed);
 		projectile->SetDirection(bulletDirection);
+		sceneGame->usingProjectileList.push_back(projectile);
 		sceneGame->AddGameObject(projectile);
-		sceneGame->enemyProjectiles.push_back(projectile);
 	}
+
 }
 
 void Enemy::TargetingShotPattern(int bulletsCount)
@@ -367,13 +427,32 @@ void Enemy::TargetingShotPattern(int bulletsCount)
 
 	for (int i = 0; i < bulletsCount; ++i)
 	{
-		EnemyProjectile* bullet = new EnemyProjectile();
-		bullet->Init();
-		bullet->Reset();
-		bullet->SetPosition(this->GetPosition());
-		bullet->SetDirection(Utils::MyMath::GetNormal(playerPosition - this->GetPosition()));
-		sceneGame->AddGameObject(bullet);
-		sceneGame->enemyProjectiles.push_back(bullet);
+		//EnemyProjectile* bullet = new EnemyProjectile();
+		//bullet->Init();
+		//bullet->Reset();
+		//bullet->SetPosition(this->GetPosition());
+		//bullet->SetDirection(Utils::MyMath::GetNormal(playerPosition - this->GetPosition()));
+		//sceneGame->AddGameObject(bullet);
+		//sceneGame->enemyProjectiles.push_back(bullet);
+
+		EnemyProjectile* projectile = nullptr;
+		if (sceneGame->unusingProjectileList.empty())
+		{
+			projectile = new EnemyProjectile();
+			projectile->Init();
+		}
+		else
+		{
+			projectile = sceneGame->unusingProjectileList.front();
+			sceneGame->unusingProjectileList.pop_front();
+		}
+
+		projectile->Reset();
+		projectile->SetActive(true);
+		projectile->SetPosition(position);
+		projectile->SetDirection(Utils::MyMath::GetNormal(playerPosition - position));
+		sceneGame->usingProjectileList.push_back(projectile);
+		sceneGame->AddGameObject(projectile);
 	}
 }
 

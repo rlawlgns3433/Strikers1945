@@ -88,9 +88,6 @@ void AnimPlayer::UpdateAwake(float dt)
 
 void AnimPlayer::UpdateGame(float dt)
 {
-
-	std::cout << unusingBulletlist.size() << " : " << usingBulletlist.size() << std::endl;
-
 	animator.Update(dt);
 	shootTimer += dt;
 

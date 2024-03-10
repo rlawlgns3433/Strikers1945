@@ -32,7 +32,7 @@ void EnemyProjectile::Update(float dt)
 	if (abs(position.y) > 500.f || abs(position.x) > 320.f)
 	{
 		SetActive(false);
-		sceneGame->RemoveGameObject(this);
+		//sceneGame->RemoveGameObject(this);
 	}
 }
 
@@ -43,7 +43,7 @@ void EnemyProjectile::FixedUpdate(float dt)
 	{
 		player->OnDie();
 		SetActive(false);
-		sceneGame->RemoveGameObject(this);
+		//sceneGame->RemoveGameObject(this);
 	}
 }
 

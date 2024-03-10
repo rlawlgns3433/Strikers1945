@@ -34,7 +34,6 @@ public :
 	AnimPlayer* player = nullptr;
 
 	std::list<Enemy*> enemyList;
-	std::list<EnemyProjectile*> enemyProjectiles;
 	std::list<EnemyProjectile*> usingProjectileList;
 	std::list<EnemyProjectile*> unusingProjectileList;
 
