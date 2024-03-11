@@ -57,14 +57,24 @@ void SceneManager::LoadAllResources()
 
 void SceneManager::ChangeScene(SceneIDs id)
 {
-	scenes[(int)currentScene]->Exit();
-	currentScene = id;
-	scenes[(int)currentScene]->Enter();
+	nextScene = id;
 }
 
-void SceneManager::Update(float dt)
+bool SceneManager::Update(float dt)
 {
 	scenes[(int)currentScene]->Update(dt);
+
+	if (nextScene != SceneIDs::None)
+	{
+		scenes[(int)currentScene]->Exit();
+		currentScene = nextScene;
+		scenes[(int)currentScene]->Enter();
+
+		nextScene = SceneIDs::None;
+		return false;
+	}
+
+	return true;
 }
 
 void SceneManager::LateUpdate(float dt)

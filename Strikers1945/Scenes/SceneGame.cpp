@@ -60,6 +60,25 @@ void SceneGame::Release()
 
 void SceneGame::Reset()
 {
+
+
+    player->Reset();
+    background->Reset();
+    textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
+    countDown = 10;
+}
+
+void SceneGame::Enter()
+{
+	Scene::Enter();
+    status = GameStatus::Game;
+    player->SetActive(true);
+}
+
+void SceneGame::Exit()
+{
+	FRAMEWORK.SetTimeScale(1.f);
+
     for (auto& enemy : enemyList)
     {
         if (enemy != nullptr)
@@ -81,27 +100,15 @@ void SceneGame::Reset()
     }
     ItemList.clear();
 
-    player->Reset();
-    background->Reset();
-    textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
-    countDown = 10;
-}
-
-void SceneGame::Enter()
-{
-	Scene::Enter();
-    status = GameStatus::Game;
-    player->SetActive(true);
-}
-
-void SceneGame::Exit()
-{
-	FRAMEWORK.SetTimeScale(1.f);
+    Scene::Exit();
 
 }
 
 void SceneGame::Update(float dt)
 {
+    std::cout << unusingProjectileList.size() << " : " << unusingProjectileList.size() << " : ";
+    std::cout << enemyList.size() << std::endl;
+
     Scene::Update(dt);
     SetStatus(status);
 
@@ -174,8 +181,16 @@ void SceneGame::UpdateGame(float dt)
 
 void SceneGame::UpdateGameover(float dt)
 {
+
+    if (InputManager::GetKeyDown(sf::Keyboard::Space))
+    {
+        textCountDown->SetText(std::to_string(--countDown));
+        std::cout << clock.getElapsedTime().asSeconds() << std::endl;
+        std::cout << countDown << std::endl;
+        clock.restart();
+    }
+
     textCountDown->SetActive(true);
-    
     if (clock.getElapsedTime().asSeconds() > 1.f)
     {
         textCountDown->SetText(std::to_string(--countDown));
@@ -189,7 +204,6 @@ void SceneGame::UpdateGameover(float dt)
         SCENE_MANAGER.ChangeScene(SceneIDs::SceneTitle);
         Reset();
     }
-
 }
 
 void SceneGame::UpdatePause(float dt)

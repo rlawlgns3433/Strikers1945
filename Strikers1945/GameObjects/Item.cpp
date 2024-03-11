@@ -73,7 +73,7 @@ void Item::Update(float dt)
         if (position.y > 500.f || position.x > 320.f || (speed < 0 && position.y < -550.f))
         {
             SetActive(false);
-            sceneGame->RemoveGameObject(this);
+            //sceneGame->RemoveGameObject(this);
         }
         break;
     case Item::MovementType::Move:
@@ -99,7 +99,7 @@ void Item::FixedUpdate(float dt)
 {
     SpriteGo::FixedUpdate(dt);
 
-    if (GetGlobalBounds().intersects(player->GetGlobalBounds()))
+    if (GetActive() && GetGlobalBounds().intersects(player->GetGlobalBounds()))
     {
         switch (type)
         {
@@ -121,7 +121,7 @@ void Item::FixedUpdate(float dt)
         }
 
         SetActive(false);
-        sceneGame->RemoveGameObject(this);
+        //sceneGame->RemoveGameObject(this);
     }
 
 }

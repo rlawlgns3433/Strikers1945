@@ -64,14 +64,10 @@ protected :
 	Item::Types itemType;
 	Animator animator;
 
-	typedef void (Enemy::* FunctionPointer)(float);
-	std::vector<FunctionPointer> funcPointers = 
-	{
-		&Enemy::MoveStraight,
-		&Enemy::MoveOnCircle,
-		&Enemy::MoveSin,
-		&Enemy::MoveReturn,
-	};
+	std::vector<std::function<void(float)>> regularEnemyMoveFuncs;
+	std::vector<std::function<void(float)>> bossMoveFuncs;
+	std::vector<std::function<void(float)>> regularEnemyAttackFuncs;
+	std::vector<std::function<void(float)>> bossAttackFuncs;
 
 	std::vector<sf::Vector2f> midBossDirections;
 	std::string animationClipId;
@@ -100,6 +96,7 @@ protected :
 	float bossMovingChangeTimer = 0.f;
 	float bossMovingChangeInterval = 3;
 
+	int storedFuncIdx;
 	int maxHp = 100;
 	int hp = maxHp;
 	int damage = 10;
@@ -109,10 +106,8 @@ protected :
 	bool isAlive = true;
 	bool iscenter = true;
 
-	bool isRotating = false;
+	bool isMoving = false;
 	bool isPlaying = false;
-
-
 
 	// 테스트중
 	float shotTimer = 0.0f; // 타이머, 0.1초마다 리셋됩니다.
@@ -134,15 +129,15 @@ public :
 	void Shoot();
 	void ShootFrontOneTime();
 	void ShootFrontThreeTime();
-	void BossPattern();
 	void SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed);
-	void TargetingShotPattern(int bulletsCount);
+	void TargetingShotPattern(int bulletsCount = 1);
 
 	void MoveStraight(float dt);
 	void MoveOnCircle(float dt);
 	void MoveSin(float dt);
 	void MoveReturn(float dt);
 	void MoveRandom(float dt);
+	void MoveTowardPlayer(float dt);
 
 	void OnDamage(float damage);
 	void OnDie();

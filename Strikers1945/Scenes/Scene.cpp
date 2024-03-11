@@ -48,6 +48,20 @@ void Scene::Enter()
 	}
 }
 
+void Scene::Exit()
+{
+	for (GameObject* obj : removeGameObjects)
+	{
+		if (obj == nullptr) continue;
+		gameObjects.remove(obj);
+		uiGameObjects.remove(obj);
+
+		delete obj;
+		obj = nullptr;
+	}
+	removeGameObjects.clear();
+}
+
 void Scene::Update(float dt)
 {
 	for (GameObject* obj : gameObjects)

@@ -39,16 +39,19 @@ void Framework::Do()
 
         //Update
         InputManager::Update(GetDeltaTime());
-        SCENE_MANAGER.Update(GetDeltaTime());
-        SCENE_MANAGER.LateUpdate(GetDeltaTime());
-
-        float fdt = fixedDeltaTime.asSeconds();
-
-        if (fdt > fixedUpdateTime)
+        if (SCENE_MANAGER.Update(GetDeltaTime()))
         {
-            SCENE_MANAGER.FixeUpdate(fdt);
-            fixedDeltaTime = sf::Time::Zero;
+            SCENE_MANAGER.LateUpdate(GetDeltaTime());
+
+            float fdt = fixedDeltaTime.asSeconds();
+
+            if (fdt > fixedUpdateTime)
+            {
+                SCENE_MANAGER.FixeUpdate(fdt);
+                fixedDeltaTime = sf::Time::Zero;
+            }
         }
+        
 
         // Draw
         window.clear();

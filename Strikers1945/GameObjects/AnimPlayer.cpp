@@ -14,6 +14,7 @@ void AnimPlayer::Init()
 {
 	SpriteGo::Init();
 
+
 	animator.SetTarget(&sprite);
 	SetScale({ 2.f,2.f });
 
@@ -26,7 +27,6 @@ void AnimPlayer::Init()
 	hud->Init();
 	hud->Reset();
 	sceneGame->AddGameObject(hud, Layers::Ui);
-	SetPosition({ 0, 450.f });
 
 	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
 	animator.AddEvent("animation/Player/Dead.csv", 10, deadEvent);
@@ -34,6 +34,7 @@ void AnimPlayer::Init()
 
 void AnimPlayer::Reset()
 {
+	SetPosition({ 0, 450.f });
 	animator.Play("animation/Player/Idle.csv");
 
 	for (auto& bullet : unusingBulletlist)

@@ -27,7 +27,6 @@ void Background::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
-	//std::cout << position.y << std::endl;
 	if (sceneGame->GetStatus() == GameStatus::Game)
 	{
 		if (clock.getElapsedTime().asSeconds() > 0.01) {

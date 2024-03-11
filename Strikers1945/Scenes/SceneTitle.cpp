@@ -62,7 +62,9 @@ void SceneTitle::Update(float dt)
 
 	if (InputManager::GetKeyDown(sf::Keyboard::Enter))
 	{
+
 		SCENE_MANAGER.ChangeScene(SceneIDs::SceneGame);
+		std::cout << "SCENETITLE" << std::endl;
 	}
 }
 

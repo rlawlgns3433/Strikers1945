@@ -4,10 +4,6 @@
 
 Enemy* Enemy::Create(Types enemyType)
 {
-	// TODO
-	// background의 phase 마다 등장하는 enemy의 종류가 다양해짐
-	// boss 페이즈 진행 시 더 이상 다른 몬스터를 생성하지 않고 보스만 하나 생성
-
 	Enemy* enemy = new Enemy();
 	enemy->type = enemyType;
 	
@@ -74,12 +70,39 @@ Enemy::Enemy(const std::string& name)
 void Enemy::Init()
 {
     SpriteGo::Init();
-
 	animator.SetTarget(&sprite);
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
 	hud = dynamic_cast<UiHUD*>(sceneGame->FindGameObject("hud"));
 	background = dynamic_cast<Background*>(sceneGame->FindGameObject("background"));
+
+	switch (type)
+	{
+	case Enemy::Types::Regular1:
+	case Enemy::Types::Regular2:
+	case Enemy::Types::Regular3:
+		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveStraight, this, std::placeholders::_1));
+		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveOnCircle, this, std::placeholders::_1));
+		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveSin, this, std::placeholders::_1));
+		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveReturn, this, std::placeholders::_1));
+		storedFuncIdx = Utils::Random::RandomRange(0, regularEnemyMoveFuncs.size() - 1);
+		break;
+	case Enemy::Types::MidBoss:
+		break;
+	case Enemy::Types::Boss:
+		bossMoveFuncs.push_back(std::bind(&Enemy::MoveRandom, this, std::placeholders::_1));
+		bossMoveFuncs.push_back(std::bind(&Enemy::MoveTowardPlayer, this, std::placeholders::_1));
+		break;
+	case Enemy::Types::Speacial:
+		break;
+	case Enemy::Types::Gound:
+		break;
+	default:
+		break;
+	}
+
+
+
 }
 
 void Enemy::Reset()
@@ -117,13 +140,13 @@ void Enemy::Shoot()
 	switch (shootType)
 	{
 	case Enemy::ShootTypes::OneTime:
-		TargetingShotPattern(1);
+		TargetingShotPattern();
 		break;
 	case Enemy::ShootTypes::ThreeTime:
 		ShootFrontThreeTime();
 		break;
 	case Enemy::ShootTypes::MidBoss:
-		TargetingShotPattern(1);
+		TargetingShotPattern();
 		SpreadShotPattern(5, 180, 500);
 	case Enemy::ShootTypes::Boss:
 		ShootFrontThreeTime();
@@ -164,18 +187,19 @@ void Enemy::UpdateGame(float dt)
 	switch (type)
 	{
 	case Enemy::Types::Regular1:
-		(this->*funcPointers[3])(dt);
 	case Enemy::Types::Regular2:
-		(this->*funcPointers[1])(dt);
 	case Enemy::Types::Regular3:
-		(this->*funcPointers[2])(dt);
+	{
+		regularEnemyMoveFuncs[storedFuncIdx](dt);
+	}
+
 		break;
 	case Enemy::Types::MidBoss:
 		MoveStraight(dt);
 		break;
 	case Enemy::Types::Boss:
 	{
-		if (position.y > -400.f) MoveRandom(dt);
+		if (position.y > -400.f) /*MoveTowardPlayer(dt);*/ bossMoveFuncs[storedFuncIdx](dt);
 		else MoveStraight(dt);
 	}
 		break;
@@ -275,8 +299,6 @@ void Enemy::OnDie()
 	isAlive = false;
 	std::function<void()> deadEvent = std::bind(&Enemy::DeadEvent, this);
 	animator.AddEvent("animation/Enemy/Dead.csv", 9, deadEvent);
-
-
 }
 
 void Enemy::ShootFrontOneTime()
@@ -300,7 +322,7 @@ void Enemy::ShootFrontOneTime()
 		projectile->Reset();
 		projectile->SetActive(true);
 		projectile->SetPosition(position);
-		projectile->SetDirection(Utils::MyMath::GetNormal(player->GetPosition() - position));
+		projectile->SetDirection(direction);
 		sceneGame->usingProjectileList.push_back(projectile);
 		sceneGame->AddGameObject(projectile);
 	}
@@ -311,7 +333,7 @@ void Enemy::ShootFrontThreeTime()
 	if (projectileCount >= 3)
 	{
 		attackTimer = 0.f;
-		direction = Utils::MyMath::GetNormal(player->GetPosition() - position);
+		//direction = Utils::MyMath::GetNormal(player->GetPosition() - position);
 		sf::Vector2f directions[3];
 		Utils::MyMath::AngleWithDirectionOffsets(direction, directions[1], directions[2]);
 		directions[0] = direction;
@@ -346,16 +368,12 @@ void Enemy::DeadEvent()
 {
 	SetActive(false);
 	sceneGame->enemyList.remove(this);
-	sceneGame->RemoveGameObject(this);
+	//sceneGame->RemoveGameObject(this);
 
 	if (type == Enemy::Types::Boss)
 	{
 		sceneGame->SetStatus(GameStatus::GameOver);
 	}
-}
-
-void Enemy::BossPattern()
-{
 }
 
 void Enemy::SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed)
@@ -427,23 +445,23 @@ void Enemy::MoveStraight(float dt)
 
 void Enemy::MoveOnCircle(float dt)
 {
-	if (position.y > -400.f && !isRotating && !isPlaying)
+	if (position.y > -400.f && !isMoving && !isPlaying)
 	{
-		isRotating = true;
+		isMoving = true;
 	}
 
-	if (isRotating)
+	if (isMoving)
 	{
 		isPlaying = true;
 		sf::Transform tr;
 		tr.rotate(360 * dt);
 		direction1 = tr * direction1;
-		Translate((direction + direction1) * speed * dt);
+		Translate((direction + direction1) * speed * 0.5f * dt);
 
 		rotateTimer += dt;
-		if (rotateTimer > 1.5f)
+		if (rotateTimer > 3.f)
 		{
-			isRotating = false;
+			isMoving = false;
 		}
 	}
 	else
@@ -455,12 +473,12 @@ void Enemy::MoveOnCircle(float dt)
 
 void Enemy::MoveSin(float dt)
 {
-	if (!isRotating && !isPlaying)
+	if (!isMoving && !isPlaying)
 	{
-		isRotating = true;
+		isMoving = true;
 	}
 
-	if (isRotating)
+	if (isMoving)
 	{
 		rotateTimer += dt;
 		isPlaying = true;
@@ -475,11 +493,11 @@ void Enemy::MoveSin(float dt)
 		sf::Vector2f newVec = direction + direction1;
 		Utils::MyMath::GetNormal(newVec);
 
-		Translate(newVec * speed * dt);
+		Translate(newVec * speed * 0.5f * dt);
 
-		if (rotateTimer > 2.f)
+		if (rotateTimer > 4.f)
 		{
-			isRotating = false;
+			isMoving = false;
 		}
 	}
 	else
@@ -490,12 +508,12 @@ void Enemy::MoveSin(float dt)
 
 void Enemy::MoveReturn(float dt)
 {
-	if (position.y > 0 && !isRotating && !isPlaying)
+	if (position.y > 0 && !isMoving && !isPlaying)
 	{
-		isRotating = true;
+		isMoving = true;
 	}
 
-	if (isRotating)
+	if (isMoving)
 	{
 		rotateTimer += dt;
 		isPlaying = true;
@@ -503,11 +521,11 @@ void Enemy::MoveReturn(float dt)
 		sf::Transform tr;
 		tr.rotate(360 * dt);
 		direction1 = tr * direction1;
-		Translate(Utils::MyMath::GetNormal(direction + direction1) * speed * dt);
+		Translate(Utils::MyMath::GetNormal(direction + direction1) * speed * 0.5f * dt);
 
-		if (direction1.y >= -0.95f && rotateTimer > 1.5f)
+		if (direction1.y >= -0.95f && rotateTimer > 4.f)
 		{
-			isRotating = false;
+			isMoving = false;
 			speed = -speed;
 		}
 	}
@@ -525,8 +543,28 @@ void Enemy::MoveRandom(float dt)
 		bossMovingChangeTimer = 0.f;
 		speed = Utils::Random::RandomRange(50, 300);
 		bossMovingDirection = { Utils::Random::GetRandomVector2(-1.f, 1.f)};
-		//Utils::MyMath::Normalize(bossMovingDirection);
 	}
 
 	Translate(bossMovingDirection * speed * dt);
+}
+
+void Enemy::MoveTowardPlayer(float dt)
+{
+	bossMovingChangeTimer += dt;
+	if (bossMovingChangeTimer > bossMovingChangeInterval)
+	{
+		bossMovingChangeTimer = 0.f;
+		isMoving = false;
+	}
+
+	if (!isMoving)
+	{
+		isMoving = true;
+		sf::Vector2f playerPosition = player->GetPosition();
+		direction = Utils::MyMath::GetNormal(playerPosition - position);
+
+		speed = Utils::Random::RandomRange(150.f, 250.f);
+		Translate(direction * speed * dt);
+	}
+
 }

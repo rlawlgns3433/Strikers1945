@@ -26,6 +26,7 @@ protected:
 	std::vector<Scene*> scenes;
 	SceneIDs startScene = SceneIDs::SceneTitle;
 	SceneIDs currentScene = startScene;
+	SceneIDs nextScene = SceneIDs::None;
 
 	std::vector<std::string> TextureResourceNames = { };
 	std::vector<std::string> FontResourceNames = { /*"fonts/DS-DIGI.ttf"*/};
@@ -47,7 +48,7 @@ public:
 	
 	void LoadAllResources();
 	void ChangeScene(SceneIDs id);
-	void Update(float dt);
+	bool Update(float dt);
 	void LateUpdate(float dt);
 	void FixeUpdate(float dt);
 	void Draw(sf::RenderWindow& window);
