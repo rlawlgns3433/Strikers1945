@@ -145,5 +145,7 @@ public :
 	void SetDead(bool isDead) { this->isAlive = !isDead; }
 	bool isDead() const { return !isAlive; }
 	void DeadEvent();
+	void MidBossDeadEvent();
+	void BossDeadEvent();
 
 };

@@ -76,6 +76,13 @@ void Enemy::Init()
 	hud = dynamic_cast<UiHUD*>(sceneGame->FindGameObject("hud"));
 	background = dynamic_cast<Background*>(sceneGame->FindGameObject("background"));
 
+	std::function<void()> deadEvent = std::bind(&Enemy::DeadEvent, this);
+	animator.AddEvent("animation/Enemy/Dead.csv", 9, deadEvent);
+	std::function<void()> midBossDeadEvent = std::bind(&Enemy::MidBossDeadEvent, this);
+	animator.AddEvent("animation/Enemy/enemyMidBoss/Dead.csv", 14, midBossDeadEvent);
+	std::function<void()> bossDeadEvent = std::bind(&Enemy::BossDeadEvent, this);
+	animator.AddEvent("animation/Enemy/enemyBoss/Dead.csv", 15, bossDeadEvent);
+
 	switch (type)
 	{
 	case Enemy::Types::Regular1:
@@ -100,9 +107,6 @@ void Enemy::Init()
 	default:
 		break;
 	}
-
-
-
 }
 
 void Enemy::Reset()
@@ -164,7 +168,15 @@ void Enemy::UpdateAwake(float dt)
 void Enemy::UpdateGame(float dt)
 {
 	animator.Update(dt);
-	if (type == Enemy::Types::MidBoss)
+	
+	if (type == Enemy::Types::Boss)
+	{
+		if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/enemyBoss/Dead.csv")
+		{
+			animator.Play("animation/Enemy/enemyBoss/Dead.csv");
+		}
+	}
+	else if (type == Enemy::Types::MidBoss)
 	{
 		if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/enemyMidBoss/Dead.csv")
 		{
@@ -368,12 +380,17 @@ void Enemy::DeadEvent()
 {
 	SetActive(false);
 	sceneGame->enemyList.remove(this);
-	//sceneGame->RemoveGameObject(this);
+}
 
-	if (type == Enemy::Types::Boss)
-	{
-		sceneGame->SetStatus(GameStatus::GameOver);
-	}
+void Enemy::MidBossDeadEvent()
+{
+	DeadEvent();
+}
+
+void Enemy::BossDeadEvent()
+{
+	DeadEvent();
+	sceneGame->SetStatus(GameStatus::GameOver);
 }
 
 void Enemy::SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed)
