@@ -108,6 +108,7 @@ void Scene::LateUpdate(float dt)
 
 	for (GameObject* obj : removeGameObjects)
 	{
+		if (obj == nullptr) continue;
 		gameObjects.remove(obj);
 		uiGameObjects.remove(obj);
 
