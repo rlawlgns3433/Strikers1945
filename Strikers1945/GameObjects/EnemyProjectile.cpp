@@ -12,7 +12,7 @@ void EnemyProjectile::Init()
 {
 	SpriteGo::Init();
 	SetTexture("graphics/Strikers1945/assets/bullet.png");
-	SetScale({ 0.5f, 0.5f });
+	SetScale({ 0.5f, 0.5f });	
 	SetOrigin(Origins::BC);
 }
 
@@ -49,4 +49,5 @@ void EnemyProjectile::FixedUpdate(float dt)
 void EnemyProjectile::SetDirection(const sf::Vector2f direction)
 {
 	this->direction = direction;
+	Utils::MyMath::Normalize(this->direction);
 }

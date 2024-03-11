@@ -106,8 +106,8 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
-    std::cout << unusingProjectileList.size() << " : " << unusingProjectileList.size() << " : ";
-    std::cout << enemyList.size() << std::endl;
+   /* std::cout << unusingProjectileList.size() << " : " << unusingProjectileList.size() << " : ";
+    std::cout << enemyList.size() << std::endl;*/
 
     Scene::Update(dt);
     SetStatus(status);

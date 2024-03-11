@@ -8,7 +8,7 @@ def remove_white_background(image_path, output_path):
     newData = []
     for item in datas:
         # 흰색을 찾으면, 해당 픽셀을 투명하게 만듦
-        if item[0] > 220 and item[1] > 220 and item[2] > 220:  # RGB 각각의 값이 220보다 크면 흰색으로 간주
+        if item[0] < 2 and item[1] < 2 and item[2] < 2:  # RGB 각각의 값이 220보다 크면 흰색으로 간주
             newData.append((255, 255, 255, 0))  # 투명한 픽셀로 변경
         else:
             newData.append(item)
@@ -18,4 +18,4 @@ def remove_white_background(image_path, output_path):
     img.save(output_path, "PNG")  # PNG 형식으로 저장
 
 # 사용 예시
-remove_white_background("D:/Kyungil/SFML/Strikers1945/Strikers1945 Bin/graphics/Strikers1945/assets/StageOneBoss.png", "D:/Kyungil/SFML/Strikers1945/Strikers1945 Bin/graphics/Strikers1945/assets/StageOneBoss1.png")
+remove_white_background("D:/Kyungil/SFML/Strikers1945/Strikers1945 Bin/graphics/lazer.png", "D:/Kyungil/SFML/Strikers1945/Strikers1945 Bin/graphics/lazer1.png")

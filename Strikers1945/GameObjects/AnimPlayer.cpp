@@ -156,6 +156,7 @@ void AnimPlayer::UpdateGame(float dt)
 		else if (invincibleTimer > invincibleInterval - 1.f)
 		{
 			isDead = false;
+			SetPosition({ 0, 460 });
 			SetActive(true);
 		}
 	}

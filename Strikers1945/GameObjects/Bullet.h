@@ -22,7 +22,7 @@ protected :
 	float speed = 1000.f;
 
 public :
-	Bullet(const std::string& name = "bullet");
+	Bullet(const std::string& name = "razer");
 	~Bullet() override					= default;
 
 	void Init() override;
