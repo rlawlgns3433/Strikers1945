@@ -69,7 +69,8 @@ protected :
 	std::vector<std::function<void(float)>> bossMoveFuncs;
 
 	std::vector<sf::Vector2f> midBossDirections;
-	std::string animationClipId;
+	std::string animationMoveClipId;
+	std::string animationDeadClipId;
 
 	sf::Clock clock;
 	sf::Transform rot;

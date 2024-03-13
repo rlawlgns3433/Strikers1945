@@ -6,7 +6,8 @@ struct EnemyData
 {
 	Enemy::Types id;
 	std::string nameId;
-	std::string animationClipId;
+	std::string animationMoveClipId;
+	std::string animationDeadClipId;
 
 	int maxHp;
 	int speed;
@@ -25,7 +26,7 @@ public:
 protected:
 	EnemyTable(const EnemyTable&) = delete;
 	EnemyTable(EnemyTable&&) = delete;
-	EnemyTable& operator=(const EnemyTable&) = delete;
+	EnemyTable& operator=(const EnemyTable&) = delete; 
 	EnemyTable& operator=(EnemyTable&&) = delete;
 	
 	std::unordered_map <Enemy::Types, EnemyData> table;

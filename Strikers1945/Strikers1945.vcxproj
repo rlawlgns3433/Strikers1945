@@ -143,7 +143,6 @@
     <ClCompile Include="AniTest.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\DataTableManager.cpp" />
-    <ClCompile Include="DataTables\StringTable.cpp" />
     <ClCompile Include="GameObjects\Enemy.cpp" />
     <ClCompile Include="GameObjects\EnemyProjectile.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
@@ -155,6 +154,7 @@
     <ClCompile Include="GameObjects\Tilemap.cpp" />
     <ClCompile Include="GameObjects\UiHUD.cpp" />
     <ClCompile Include="GameObjects\Item.cpp" />
+    <ClCompile Include="DataTables\ItemTable.cpp" />
     <ClCompile Include="Razer.cpp" />
     <ClCompile Include="Scenes\SceneDev1.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
@@ -184,7 +184,6 @@
     <ClInclude Include="AniTest.h" />
     <ClInclude Include="DataTables\DataTable.h" />
     <ClInclude Include="DataTables\DataTableManager.h" />
-    <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="GameObjects\Enemy.h" />
     <ClInclude Include="GameObjects\EnemyProjectile.h" />
     <ClInclude Include="Framework\Defines.h" />
@@ -197,6 +196,7 @@
     <ClInclude Include="GameObjects\Tilemap.h" />
     <ClInclude Include="GameObjects\UiHUD.h" />
     <ClInclude Include="GameObjects\Item.h" />
+    <ClInclude Include="DataTables\ItemTable.h" />
     <ClInclude Include="rapidcsv.h" />
     <ClInclude Include="Razer.h" />
     <ClInclude Include="Scenes\SceneDev1.h" />

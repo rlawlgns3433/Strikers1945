@@ -1,41 +1,49 @@
 #include "pch.h"
 #include "Item.h"
 #include "AnimPlayer.h"
-#include "SceneGame.h"  
+#include "SceneGame.h"
+#include "ItemTable.h"
 
 Item* Item::Create(Types itemType)
 {
     // TODO
     // 아이템 등장에 대한 고민 필요
 
+    if (itemType == Types::None) return nullptr;
+
     Item* item = new Item();
     item->type = itemType;
 
-    switch (item->type)
-    {
-    case Types::Life:
-        item->animationClipId = "animation/Item/Life.csv";
-        item->movement = MovementType::Move;
-        item->speed = 300.f;
-        break;
-    case Types::Gold:
-        item->animationClipId = "animation/Item/Gold.csv";
-        item->movement = MovementType::NotMove;
-        item->speed = 0.f;
-        break;
-    case Types::PowerUp:
-        item->animationClipId = "animation/Item/PowerUp.csv";
-        item->movement = MovementType::Move;
-        item->speed = 300.f;
-        break;
-    case Types::Bomb:
-        item->animationClipId = "animation/Item/Bomb.csv";
-        item->movement = MovementType::Move;
-        item->speed = 300.f;
-        break;
-    default :
-        return nullptr;
-    }
+    const ItemData& data = ITEM_TABLE->Get(itemType);
+    item->animationClipId = data.animationClipId;
+    item->movement = data.movement;
+    item->speed = data.speed;
+
+    //switch (item->type)
+    //{
+    //case Types::Life:
+    //    item->animationClipId = "animation/Item/Life.csv";
+    //    item->movement = MovementType::Move;
+    //    item->speed = 300.f;
+    //    break;
+    //case Types::Gold:
+    //    item->animationClipId = "animation/Item/Gold.csv";
+    //    item->movement = MovementType::NotMove;
+    //    item->speed = 0.f;
+    //    break;
+    //case Types::PowerUp:
+    //    item->animationClipId = "animation/Item/PowerUp.csv";
+    //    item->movement = MovementType::Move;
+    //    item->speed = 300.f;
+    //    break;
+    //case Types::Bomb:
+    //    item->animationClipId = "animation/Item/Bomb.csv";
+    //    item->movement = MovementType::Move;
+    //    item->speed = 300.f;
+    //    break;
+    //default :
+    //    return nullptr;
+    //}
 
     return item;
 }
@@ -90,7 +98,6 @@ void Item::Update(float dt)
         Translate(direction * speed * dt);
         break;
     }
-
 }
 
 void Item::LateUpdate(float dt)

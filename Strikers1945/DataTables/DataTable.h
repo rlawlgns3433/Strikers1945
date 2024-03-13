@@ -5,7 +5,8 @@ public :
 	enum class Types // Data TableÀÇ °³¼ö
 	{
 		String, 
-		Enemy
+		Enemy,
+		Item
 	};
 	static const int TotalTypes = 2;
 

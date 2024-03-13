@@ -15,6 +15,10 @@ void DataTableManager::Init()
 	DataTable* enemyTable = new EnemyTable(DataTable::Types::Enemy);
 	enemyTable->Load();
 	tables.insert({ DataTable::Types::Enemy, enemyTable });
+
+	DataTable* itemTable = new ItemTable(DataTable::Types::Item);
+	itemTable->Load();
+	tables.insert({ DataTable::Types::Item, itemTable });
 }
 
 void DataTableManager::Release()

@@ -28,12 +28,13 @@ bool EnemyTable::Load()
         table[id] = EnemyData();
         table[id].id = id;
         table[id].nameId = row[1];
-        table[id].animationClipId = row[2];
-        table[id].maxHp = std::stoi(row[3]);
-        table[id].speed = std::stoi(row[4]);
-        table[id].score = std::stoi(row[5]);
-        table[id].attackInterval = std::stof(row[6]);
-        table[id].shootType = (Enemy::ShootTypes)std::stoi(row[7]);
+        table[id].animationMoveClipId = row[2];
+        table[id].animationDeadClipId = row[3];
+        table[id].maxHp = std::stoi(row[4]);
+        table[id].speed = std::stoi(row[5]);
+        table[id].score = std::stoi(row[6]);
+        table[id].attackInterval = std::stof(row[7]);
+        table[id].shootType = (Enemy::ShootTypes)std::stoi(row[8]);
     }
     
     return true;

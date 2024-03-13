@@ -10,7 +10,8 @@ Enemy* Enemy::Create(Types enemyType)
 	enemy->type = enemyType;
 
 	const EnemyData& data = ENEMY_TABLE->Get(enemyType);
-	enemy->animationClipId = data.animationClipId;
+	enemy->animationMoveClipId = data.animationMoveClipId;
+	enemy->animationDeadClipId = data.animationDeadClipId;
 	enemy->maxHp = data.maxHp;
 	enemy->speed = data.speed;
 	enemy->score = data.score;
@@ -121,7 +122,7 @@ void Enemy::Init()
 
 void Enemy::Reset()
 {
-	animator.Play(animationClipId);
+	animator.Play(animationMoveClipId);
 	SetOrigin(Origins::MC);
 	Utils::Origin::SetOrigin(razerShape, Origins::TC);
 
@@ -182,27 +183,27 @@ void Enemy::UpdateGame(float dt)
 {
 	animator.Update(dt);
 	
-	if (type == Enemy::Types::Boss)
-	{
-		if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/enemyBoss/Dead.csv")
+	//if (type == Enemy::Types::Boss)
+	//{
+		if (!isAlive && animator.GetCurrentClipId() != animationDeadClipId)
 		{
-			animator.Play("animation/Enemy/enemyBoss/Dead.csv");
+			animator.Play(animationDeadClipId);
 		}
-	}
-	else if (type == Enemy::Types::MidBoss)
-	{
-		if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/enemyMidBoss/Dead.csv")
-		{
-			animator.Play("animation/Enemy/enemyMidBoss/Dead.csv");
-		}
-	}
-	else
-	{
-		if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/Dead.csv")
-		{
-			animator.Play("animation/Enemy/Dead.csv");
-		}
-	}
+	//}
+	//else if (type == Enemy::Types::MidBoss)
+	//{
+	//	if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/enemyMidBoss/Dead.csv")
+	//	{
+	//		animator.Play("animation/Enemy/enemyMidBoss/Dead.csv");
+	//	}
+	//}
+	//else
+	//{
+	//	if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/Dead.csv")
+	//	{
+	//		animator.Play("animation/Enemy/Dead.csv");
+	//	}
+	//}
 
 	continuousAttackTimer += dt;
 	attackTimer += dt;
