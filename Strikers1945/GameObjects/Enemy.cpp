@@ -18,69 +18,15 @@ Enemy* Enemy::Create(Types enemyType)
 	enemy->attackInterval = data.attackInterval;
 	enemy->shootType = data.shootType;
 
-	//switch (enemy->type)
-	//{
-	//case Types::Regular1 :
-	//	enemy->maxHp = 200;
-	//	enemy->attackInterval = 0.5f;
-	//	enemy->speed = 150.f;
-	//	enemy->score = 100;
-	//	enemy->animationClipId = "animation/Enemy/enemy1/Idle.csv";
-	//	enemy->shootType = ShootTypes::OneTime;
-	//	break;
-
-	//case Types::Regular2:
-	//	enemy->maxHp = 300;
-	//	enemy->attackInterval = 0.5f;
-	//	enemy->speed = 170.f;
-	//	enemy->score = 200;
-	//	enemy->animationClipId = "animation/Enemy/enemy2/Idle.csv";
-	//	enemy->shootType = ShootTypes::OneTime;
-	//	break;
-
-	//case Types::Regular3:
-	//	enemy->maxHp = 300;
-	//	enemy->attackInterval = 0.5f;
-	//	enemy->speed = 180.f;
-	//	enemy->score = 300;
-	//	enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
-	//	enemy->shootType = ShootTypes::OneTime;
-	//	break;
-
-	//case Types::MidBoss:
-	//	enemy->maxHp = 3000;
-	//	enemy->attackInterval = 0.3f;
-	//	enemy->speed = 50.f;
-	//	enemy->score = 800;
-	//	enemy->animationClipId = "animation/Enemy/enemyMidBoss/Idle.csv";
-	//	enemy->shootType = ShootTypes::MidBoss;
-	//	break;
-
-	//case Types::Boss:
-	//	enemy->maxHp = 6000;
-	//	enemy->attackInterval = 0.1f;
-	//	enemy->speed = 50.f;
-	//	enemy->score = 1000;
-	//	enemy->animationClipId = "animation/Enemy/enemyBoss/Idle.csv";
-	//	enemy->shootType = ShootTypes::Boss; 
-	//	break;
-	//case Types::Speacial:
-
-	//	break;
-	//case Types::Gound:
-
-	//	break;
-	//}
-
-    return enemy;
+	return enemy;
 }
 Enemy::Enemy(const std::string& name)
-    : SpriteGo(name)
+	: SpriteGo(name)
 {
 }
 void Enemy::Init()
 {
-    SpriteGo::Init();
+	SpriteGo::Init();
 	animator.SetTarget(&sprite);
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
@@ -165,13 +111,8 @@ void Enemy::Shoot()
 		TargetingShotPattern();
 		SpreadShotPattern(5, 180, 500);
 	case Enemy::ShootTypes::Boss:
-
-
-		//ShootFrontThreeTime();
-		//SpreadShotPattern(15, 360, 1000);
-
-	default:
-		break;
+		ShootFrontThreeTime();
+		SpreadShotPattern(15, 360, 1000);
 	}
 }
 
@@ -182,29 +123,11 @@ void Enemy::UpdateAwake(float dt)
 void Enemy::UpdateGame(float dt)
 {
 	animator.Update(dt);
-	
-	//if (type == Enemy::Types::Boss)
-	//{
-		if (!isAlive && animator.GetCurrentClipId() != animationDeadClipId)
-		{
-			animator.Play(animationDeadClipId);
-		}
-	//}
-	//else if (type == Enemy::Types::MidBoss)
-	//{
-	//	if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/enemyMidBoss/Dead.csv")
-	//	{
-	//		animator.Play("animation/Enemy/enemyMidBoss/Dead.csv");
-	//	}
-	//}
-	//else
-	//{
-	//	if (!isAlive && animator.GetCurrentClipId() != "animation/Enemy/Dead.csv")
-	//	{
-	//		animator.Play("animation/Enemy/Dead.csv");
-	//	}
-	//}
 
+	if (!isAlive && animator.GetCurrentClipId() != animationDeadClipId)
+	{
+		animator.Play(animationDeadClipId);
+	}
 	continuousAttackTimer += dt;
 	attackTimer += dt;
 
@@ -219,7 +142,7 @@ void Enemy::UpdateGame(float dt)
 		regularEnemyMoveFuncs[storedFuncIdx](dt);
 	}
 
-		break;
+	break;
 	case Enemy::Types::MidBoss:
 		MoveStraight(dt);
 		break;
@@ -250,7 +173,7 @@ void Enemy::UpdateGame(float dt)
 		}
 		else MoveStraight(dt);
 	}
-		break;
+	break;
 	case Enemy::Types::Speacial:
 		break;
 	case Enemy::Types::Gound:
@@ -336,7 +259,7 @@ void Enemy::OnDie()
 		hud->SetScore(player->GetScore());
 
 		int itemChance = (int)(Utils::Random::RandomValue() * 100);
-		
+
 		if (itemChance < 1) itemType = Item::Types::Life;
 		else if (itemChance < 41) itemType = Item::Types::Gold;
 		else if (itemChance < 46) itemType = Item::Types::PowerUp;
@@ -355,8 +278,6 @@ void Enemy::OnDie()
 	}
 
 	isAlive = false;
-	std::function<void()> deadEvent = std::bind(&Enemy::DeadEvent, this);
-	animator.AddEvent("animation/Enemy/Dead.csv", 9, deadEvent);
 }
 
 void Enemy::ShootFrontOneTime()
@@ -399,12 +320,12 @@ void Enemy::ShootFrontThreeTime()
 			--projectileCount;
 
 			EnemyProjectile* projectile = nullptr;
-			if (sceneGame->unusingProjectileList.empty()) 
+			if (sceneGame->unusingProjectileList.empty())
 			{
 				projectile = new EnemyProjectile();
 				projectile->Init();
 			}
-			else 
+			else
 			{
 				projectile = sceneGame->unusingProjectileList.front();
 				sceneGame->unusingProjectileList.pop_front();
@@ -444,7 +365,7 @@ void Enemy::SpreadShotPattern(int bulletsCount, float spreadAngle, float project
 	float playerAngle = std::atan2(directionToPlayer.y, directionToPlayer.x);
 	float angleBetweenBullets = (spreadAngle * (3.14159265f / 180.0f)) / (bulletsCount - 1);
 	float startingAngle = playerAngle - (spreadAngle * (3.14159265f / 180.0f) / 2);
-	
+
 	for (int i = 0; i < bulletsCount; ++i)
 	{
 		float bulletAngle = startingAngle + angleBetweenBullets * i;
@@ -653,11 +574,10 @@ void Enemy::MoveRandom(float dt)
 		{
 			speed = Utils::Random::RandomRange(150, 300);
 			bossMovingDirection = Utils::MyMath::GetNormal(Utils::Random::GetRandomVector2(-1.f, 1.f));
-		}
-		while ((position.x < -FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x < 0) || (position.x > FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x > 0) ||
+		} while ((position.x < -FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x < 0) || (position.x > FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x > 0) ||
 			(position.y < -FRAMEWORK.GetWindowSize().y * 0.5f && bossMovingDirection.y < 0));
 	}
-	
+
 	Translate(bossMovingDirection * speed * dt);
 }
 
