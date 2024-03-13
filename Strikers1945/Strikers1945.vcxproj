@@ -155,6 +155,8 @@
     <ClCompile Include="GameObjects\UiHUD.cpp" />
     <ClCompile Include="GameObjects\Item.cpp" />
     <ClCompile Include="DataTables\ItemTable.cpp" />
+    <ClCompile Include="HelperBullet.cpp" />
+    <ClCompile Include="PlayerHelper.cpp" />
     <ClCompile Include="Razer.cpp" />
     <ClCompile Include="Scenes\SceneDev1.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
@@ -197,6 +199,8 @@
     <ClInclude Include="GameObjects\UiHUD.h" />
     <ClInclude Include="GameObjects\Item.h" />
     <ClInclude Include="DataTables\ItemTable.h" />
+    <ClInclude Include="HelperBullet.h" />
+    <ClInclude Include="PlayerHelper.h" />
     <ClInclude Include="rapidcsv.h" />
     <ClInclude Include="Razer.h" />
     <ClInclude Include="Scenes\SceneDev1.h" />

@@ -61,4 +61,6 @@ public :
 
 	GameStatus GetStatus() const { return this->status; }
 	void SetStatus(GameStatus newStatus);
+
+	const std::list<Enemy*>& GetEnemyList() const { return enemyList; }
 };

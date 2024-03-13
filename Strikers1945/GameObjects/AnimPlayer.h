@@ -6,6 +6,7 @@ class SceneGame;
 class Tile;
 class UiHUD;
 class Bullet;
+class PlayerHelper;
 
 class AnimPlayer : public SpriteGo
 {
@@ -39,6 +40,8 @@ protected:
 	UiHUD* hud = nullptr;
 
 	std::vector<ClipInfo> clipInfos;
+	std::vector<PlayerHelper*> playerHelpers;
+	std::vector<sf::Vector2f> playerHelpersOffset;
 	std::list<Bullet*> usingBulletlist;
 	std::list<Bullet*> unusingBulletlist;
 
@@ -59,13 +62,13 @@ protected:
 	int lifes = 3;
 	int bombCount = 2;
 	int damage = 750;
+	int currentHelperCount = 0;
 
 	int maxPowerLevel = 4;
 	int powerLevel = 1;
 
 	bool isDead = false;
 	bool isInvincible = false;
-
 	bool isCheated = false;
 
 public:
@@ -82,38 +85,41 @@ public:
 	void UpdatePause(float dt);
 	void Draw(sf::RenderWindow& window) override;
 
-	sf::Vector2f GetVelocity() const { return velocity; }
-	void SetVelocity(const sf::Vector2f& velocity) { this->velocity = velocity; }
-
 	void Shoot();
 	void OnDie();
 	void DeadEvent();
 
-	bool IsDead() const { return isDead; }
-	bool GetIsInvincible() const { return isInvincible; }
-	void SetInvincible(bool invincible) { isInvincible = invincible; }
+	sf::Vector2f GetVelocity() const { return velocity; }
+	void SetVelocity(const sf::Vector2f& velocity) { this->velocity = velocity; }
 
-	int GetScore() const { return score; }
-	void AddScore(int add) { score += add; };
-	void SetScore(int score) { this->score = score; }
+	inline bool IsDead() const { return isDead; }
+	inline bool GetIsInvincible() const { return isInvincible; }
+	inline void SetInvincible(bool invincible) { isInvincible = invincible; }
 
-	int GetLife() const { return lifes; }
-	void AddLife(int add) { lifes += add; };
-	void SetLife(int life) { this->lifes = life; }
-	
-	int GetBombItem() const { return bombCount; }
-	void AddBombItem(int add) { bombCount += add; };
-	void SetBombItem(int bombCount) { this->bombCount = bombCount; }
+	inline int GetScore() const { return score; }
+	inline void AddScore(int add) { score += add; };
+	inline void SetScore(int score) { this->score = score; }
 
-	int GetDamage() const { return damage; }
-	void AddDamage(int add) { damage += add; }
-	void SetDamage(int damage) { this->damage = damage; }
+	inline int GetLife() const { return lifes; }
+	inline void AddLife(int add) { lifes += add; };
+	inline void SetLife(int life) { this->lifes = life; }
 
-	int GetPowerLevel() const { return powerLevel; }
+	inline int GetBombItem() const { return bombCount; }
+	inline void AddBombItem(int add) { bombCount += add; };
+	inline void SetBombItem(int bombCount) { this->bombCount = bombCount; }
+
+	inline int GetDamage() const { return damage; }
+	inline void AddDamage(int add) { damage += add; }
+	inline void SetDamage(int damage) { this->damage = damage; }
+
+	inline int GetPowerLevel() const { return powerLevel; }
 	void AddPowerLevel(int add);
-	void SetPowerLevel(int powerLevel);
+	inline void SetPowerLevel(int powerLevel);
 
-	bool GetIsCheated() const { return isCheated; }
+	inline bool GetIsCheated() const { return isCheated; }
 	void SetCheatMode();
 
+	inline int GetHelperCount() const { return currentHelperCount; }
+	inline void AddHelperCount(int add) { currentHelperCount += add; }
+	inline void SetHelperCount(int currentHelperCount) { this->currentHelperCount = currentHelperCount; }
 };

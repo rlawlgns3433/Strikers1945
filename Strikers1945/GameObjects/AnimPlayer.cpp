@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "UiHUD.h"
 #include "Item.h"
+#include "PlayerHelper.h"
 
 AnimPlayer::AnimPlayer(const std::string& name)
 	: SpriteGo(name)
@@ -30,6 +31,15 @@ void AnimPlayer::Init()
 
 	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
 	animator.AddEvent("animation/Player/Dead.csv", 10, deadEvent);
+
+
+	playerHelpersOffset =
+	{
+		{-40.f, 0},
+		{40.f, 0},
+		{-80.f, 0},
+		{80.f, 0}
+	};
 }
 
 void AnimPlayer::Reset()
@@ -48,6 +58,7 @@ void AnimPlayer::Reset()
 	}
 
 	SetOrigin(Origins::MC);
+	currentClipInfo = clipInfos[0];
 	isDead = false;
 	isInvincible = true;
 	isCheated = false;
@@ -57,7 +68,22 @@ void AnimPlayer::Reset()
 	bombCount = 2;
 	damage = 75;
 	score = 0;
-	currentClipInfo = clipInfos[0];
+	currentHelperCount = 4;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		// 플레이어 헬퍼 4개 생성
+		PlayerHelper* helper = new PlayerHelper();
+		helper->Init();
+		helper->Reset();
+		helper->SetPosition(position + playerHelpersOffset[i]);
+		
+		// 플레이어 헬퍼 4개 모두 비활성화
+		//helper->SetActive(false);
+		playerHelpers.push_back(helper);
+		// 플레이어 헬퍼 카운트에 따라 SetActive(true)
+		sceneGame->AddGameObject(helper);
+	}
 
 	hud->SetScore(score);
 	hud->SetBombCount(bombCount);
@@ -258,6 +284,16 @@ void AnimPlayer::AddPowerLevel(int add)
 		powerLevel = maxPowerLevel;
 	}
 	damage = 100 + 50 * (powerLevel - 1);
+
+	currentHelperCount += add;
+	if (currentHelperCount < 0)
+	{
+		currentHelperCount = 0;
+	}
+	else if (currentHelperCount > 4)
+	{
+		currentHelperCount = 4;
+	}
 }
 
 void AnimPlayer::SetPowerLevel(int powerLevel)
@@ -269,6 +305,16 @@ void AnimPlayer::SetPowerLevel(int powerLevel)
 		powerLevel = maxPowerLevel;
 	}
 	damage = 100 + 50 * (powerLevel - 1);
+
+	currentHelperCount = powerLevel - 1;
+	if (currentHelperCount < 0)
+	{
+		currentHelperCount = 0;
+	}
+	else if (currentHelperCount > 4)
+	{
+		currentHelperCount = 4;
+	}
 }
 
 void AnimPlayer::SetCheatMode()
