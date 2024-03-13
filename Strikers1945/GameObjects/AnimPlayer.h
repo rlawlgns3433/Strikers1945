@@ -16,14 +16,15 @@ public:
 		std::string idle;
 		std::string move;
 		std::string dead;
+		std::string bomb;
 		bool isMove = false;
 		bool isDead = false;
 
 		ClipInfo()
 		{
 		}
-		ClipInfo(const std::string& idle, const std::string& move, const std::string& dead, bool isMove, bool isDead)
-			: idle(idle), move(move), dead(dead), isMove(isMove), isDead(isDead)
+		ClipInfo(const std::string& idle, const std::string& move, const std::string& dead, const std::string& bomb, bool isMove, bool isDead)
+			: idle(idle), move(move), dead(dead), bomb(bomb), isMove(isMove), isDead(isDead)
 		{
 		}
 	};
@@ -69,6 +70,7 @@ protected:
 
 	bool isDead = false;
 	bool isInvincible = false;
+	bool isBomb = false;
 	bool isCheated = false;
 
 public:
@@ -86,8 +88,10 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 
 	void Shoot();
+	void UseBomb();
 	void OnDie();
 	void DeadEvent();
+	void BombEvent();
 
 	sf::Vector2f GetVelocity() const { return velocity; }
 	void SetVelocity(const sf::Vector2f& velocity) { this->velocity = velocity; }
@@ -120,6 +124,6 @@ public:
 	void SetCheatMode();
 
 	inline int GetHelperCount() const { return currentHelperCount; }
-	inline void AddHelperCount(int add) { currentHelperCount += add; }
-	inline void SetHelperCount(int currentHelperCount) { this->currentHelperCount = currentHelperCount; }
+	void AddHelperCount(int add);
+	void SetHelperCount(int currentHelperCount);
 };

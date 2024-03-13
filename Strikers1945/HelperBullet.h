@@ -16,8 +16,7 @@ protected :
 	sf::Vector2f direction;
 
 	float speed = 1000.f;
-	float damage = 500.f;
-
+	float damage = 50.f;
 	bool isDeterminedTarget = false;
 
 public:

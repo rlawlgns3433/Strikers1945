@@ -46,7 +46,6 @@ void HelperBullet::Update(float dt)
 	}
 
 	Translate(direction * speed * dt);
-
 }
  
 void HelperBullet::FixedUpdate(float dt)
@@ -80,12 +79,9 @@ Enemy* HelperBullet::FindClosestEnemy()
 		float curEnemyDist = Utils::MyMath::Distance(position, enemy->GetPosition());
 		if (enemyDist > curEnemyDist)
 		{
-			std::cout << enemyDist << " : " << curEnemyDist << std::endl;
-
 			closestEnemy.first = enemy;
 			closestEnemy.second = curEnemyDist;
 			enemyDist = curEnemyDist;
-			 
 		}
 	}
 	return closestEnemy.first;
