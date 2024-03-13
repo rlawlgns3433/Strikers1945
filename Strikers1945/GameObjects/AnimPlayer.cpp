@@ -193,7 +193,7 @@ void AnimPlayer::UpdateGame(float dt)
 
 		if (!isBomb)
 		{
-			if (invincibleTimer > invincibleInterval
+			if (invincibleTimer > invincibleInterval) 
 
 			{
 				isInvincible = false;
@@ -274,6 +274,7 @@ void AnimPlayer::UseBomb()
 	if (bombCount <= 0) return;
 
 	isBomb = true;
+	isInvincible = true;
 	hud->SetBombCount(--bombCount);
 
 	std::cout << animator.GetCurrentClipId() << std::endl;
