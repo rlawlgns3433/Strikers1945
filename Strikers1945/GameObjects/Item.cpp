@@ -16,6 +16,7 @@ Item* Item::Create(Types itemType)
     case Types::Life:
         item->animationClipId = "animation/Item/Life.csv";
         item->movement = MovementType::Move;
+        item->speed = 300.f;
         break;
     case Types::Gold:
         item->animationClipId = "animation/Item/Gold.csv";
@@ -25,10 +26,12 @@ Item* Item::Create(Types itemType)
     case Types::PowerUp:
         item->animationClipId = "animation/Item/PowerUp.csv";
         item->movement = MovementType::Move;
+        item->speed = 300.f;
         break;
     case Types::Bomb:
         item->animationClipId = "animation/Item/Bomb.csv";
         item->movement = MovementType::Move;
+        item->speed = 300.f;
         break;
     default :
         return nullptr;

@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataTables\EnemyTable.cpp" />
     <ClCompile Include="GameObjects\AnimPlayer.cpp" />
     <ClCompile Include="GameObjects\Background.cpp" />
     <ClCompile Include="GameObjects\Animator.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Utils\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataTables\EnemyTable.h" />
     <ClInclude Include="GameObjects\Background.h" />
     <ClInclude Include="GameObjects\Animator.h" />
     <ClInclude Include="GameObjects\AnimPlayer.h" />

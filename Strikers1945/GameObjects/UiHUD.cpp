@@ -6,6 +6,7 @@
 UiHUD::UiHUD(const std::string& name)
 	: GameObject(name)
 {
+	windowSize = FRAMEWORK.GetWindowSize();
 }
 
 void UiHUD::Init()

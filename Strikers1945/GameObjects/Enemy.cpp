@@ -1,65 +1,75 @@
 #include "pch.h"
 #include "Enemy.h"
 #include "EnemyProjectile.h"
+#include "EnemyTable.h"
+#include "rapidcsv.h"
 
 Enemy* Enemy::Create(Types enemyType)
 {
 	Enemy* enemy = new Enemy();
 	enemy->type = enemyType;
-	
-	switch (enemy->type)
-	{
-	case Types::Regular1 :
-		enemy->maxHp = 200;
-		enemy->attackInterval = 0.5f;
-		enemy->speed = 150.f;
-		enemy->score = 100;
-		enemy->animationClipId = "animation/Enemy/enemy1/Idle.csv";
-		enemy->shootType = ShootTypes::OneTime;
-		break;
 
-	case Types::Regular2:
-		enemy->maxHp = 300;
-		enemy->attackInterval = 0.5f;
-		enemy->speed = 170.f;
-		enemy->score = 200;
-		enemy->animationClipId = "animation/Enemy/enemy2/Idle.csv";
-		enemy->shootType = ShootTypes::OneTime;
-		break;
+	const EnemyData& data = ENEMY_TABLE->Get(enemyType);
+	enemy->animationClipId = data.animationClipId;
+	enemy->maxHp = data.maxHp;
+	enemy->speed = data.speed;
+	enemy->score = data.score;
+	enemy->attackInterval = data.attackInterval;
+	enemy->shootType = data.shootType;
 
-	case Types::Regular3:
-		enemy->maxHp = 300;
-		enemy->attackInterval = 0.5f;
-		enemy->speed = 180.f;
-		enemy->score = 300;
-		enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
-		enemy->shootType = ShootTypes::OneTime;
-		break;
+	//switch (enemy->type)
+	//{
+	//case Types::Regular1 :
+	//	enemy->maxHp = 200;
+	//	enemy->attackInterval = 0.5f;
+	//	enemy->speed = 150.f;
+	//	enemy->score = 100;
+	//	enemy->animationClipId = "animation/Enemy/enemy1/Idle.csv";
+	//	enemy->shootType = ShootTypes::OneTime;
+	//	break;
 
-	case Types::MidBoss:
-		enemy->maxHp = 3000;
-		enemy->attackInterval = 0.3f;
-		enemy->speed = 50.f;
-		enemy->score = 500;
-		enemy->animationClipId = "animation/Enemy/enemyMidBoss/Idle.csv";
-		enemy->shootType = ShootTypes::MidBoss;
-		break;
+	//case Types::Regular2:
+	//	enemy->maxHp = 300;
+	//	enemy->attackInterval = 0.5f;
+	//	enemy->speed = 170.f;
+	//	enemy->score = 200;
+	//	enemy->animationClipId = "animation/Enemy/enemy2/Idle.csv";
+	//	enemy->shootType = ShootTypes::OneTime;
+	//	break;
 
-	case Types::Boss:
-		enemy->maxHp = 6000;
-		enemy->attackInterval = 0.1f;
-		enemy->speed = 50.f;
-		enemy->score = 500;
-		enemy->animationClipId = "animation/Enemy/enemyBoss/Idle.csv";
-		enemy->shootType = ShootTypes::Boss; 
-		break;
-	case Types::Speacial:
+	//case Types::Regular3:
+	//	enemy->maxHp = 300;
+	//	enemy->attackInterval = 0.5f;
+	//	enemy->speed = 180.f;
+	//	enemy->score = 300;
+	//	enemy->animationClipId = "animation/Enemy/enemy3/Idle.csv";
+	//	enemy->shootType = ShootTypes::OneTime;
+	//	break;
 
-		break;
-	case Types::Gound:
+	//case Types::MidBoss:
+	//	enemy->maxHp = 3000;
+	//	enemy->attackInterval = 0.3f;
+	//	enemy->speed = 50.f;
+	//	enemy->score = 800;
+	//	enemy->animationClipId = "animation/Enemy/enemyMidBoss/Idle.csv";
+	//	enemy->shootType = ShootTypes::MidBoss;
+	//	break;
 
-		break;
-	}
+	//case Types::Boss:
+	//	enemy->maxHp = 6000;
+	//	enemy->attackInterval = 0.1f;
+	//	enemy->speed = 50.f;
+	//	enemy->score = 1000;
+	//	enemy->animationClipId = "animation/Enemy/enemyBoss/Idle.csv";
+	//	enemy->shootType = ShootTypes::Boss; 
+	//	break;
+	//case Types::Speacial:
+
+	//	break;
+	//case Types::Gound:
+
+	//	break;
+	//}
 
     return enemy;
 }
@@ -637,12 +647,16 @@ void Enemy::MoveRandom(float dt)
 	{
 		bossMovingChangeTimer = 0.f;
 		storedFuncIdx = Utils::Random::RandomRange(0, bossMoveFuncs.size() - 1);
-		speed = Utils::Random::RandomRange(150, 300);
-		bossMovingDirection = Utils::MyMath::GetNormal(Utils::Random::GetRandomVector2(-1.f, 1.f));
-		if ((position.x < -FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x < 0)|| (position.x > FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x > 0) ||
-			(position.y < -FRAMEWORK.GetWindowSize().y * 0.5f && bossMovingDirection.y < 0)) return;
-	}
 
+		do
+		{
+			speed = Utils::Random::RandomRange(150, 300);
+			bossMovingDirection = Utils::MyMath::GetNormal(Utils::Random::GetRandomVector2(-1.f, 1.f));
+		}
+		while ((position.x < -FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x < 0) || (position.x > FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x > 0) ||
+			(position.y < -FRAMEWORK.GetWindowSize().y * 0.5f && bossMovingDirection.y < 0));
+	}
+	
 	Translate(bossMovingDirection * speed * dt);
 }
 
@@ -653,26 +667,21 @@ void Enemy::MoveTowardPlayer(float dt)
 	if ((position.x < -FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x < 0) || (position.x > FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x > 0) ||
 		(position.y < -FRAMEWORK.GetWindowSize().y * 0.5f && bossMovingDirection.y < 0)) return;
 
-	// bossMovingChangeInterval이 경과했을 때만 새로운 방향과 속도를 설정합니다.
 	if (bossMovingChangeTimer > bossMovingChangeInterval)
 	{
 		bossMovingChangeTimer = 0.f; // 타이머 리셋
 		isMoving = true; // 움직임 시작
 
-		// 이동 함수 인덱스를 랜덤하게 선택합니다.
 		storedFuncIdx = Utils::Random::RandomRange(0, bossMoveFuncs.size() - 1);
 
-		// 플레이어의 위치를 기반으로 새 방향과 속도를 설정합니다.
 		sf::Vector2f playerPosition = player->GetPosition();
 		direction = Utils::MyMath::GetNormal(playerPosition - position);
 		speed = Utils::Random::RandomRange(150.f, 250.f);
 	}
 
-	// isMoving이 true일 때만 이동을 수행합니다.
 	if (isMoving)
 	{
 		Translate(direction * speed * dt);
-
 	}
 
 }

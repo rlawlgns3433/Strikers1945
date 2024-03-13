@@ -23,7 +23,7 @@ protected:
 
 	sf::Vector2f referenceResolution = { 960.f, 540.f };
 	sf::Vector2f resolution = referenceResolution;
-	sf::Vector2i windowSize = FRAMEWORK.GetWindowSize();
+	sf::Vector2i windowSize;
 
 	SceneGame* sceneGame = nullptr;
 	AnimPlayer* player = nullptr;

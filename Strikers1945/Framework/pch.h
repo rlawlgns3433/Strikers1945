@@ -27,7 +27,6 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "DataTableManager.h"
-#include "StringTable.h"
 #include "Framework.h"
 
 // Utils

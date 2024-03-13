@@ -12,11 +12,9 @@ void DataTableManager::Init()
 {
 	Release();
 	
-	// String Table ·Îµå
-	DataTable* table = new StringTable(DataTable::Types::String);
-	table->Load();
-	tables.insert({ DataTable::Types::String, table});
-
+	DataTable* enemyTable = new EnemyTable(DataTable::Types::Enemy);
+	enemyTable->Load();
+	tables.insert({ DataTable::Types::Enemy, enemyTable });
 }
 
 void DataTableManager::Release()

@@ -10,6 +10,7 @@ void Framework::Init(int width, int height, const std::string& name)
 
     window.create(sf::VideoMode(windowSize.x, windowSize.y), name);
 
+    DATATABLE_MANAGER.Init();
     SCENE_MANAGER.Init();
     InputManager::Init();
 }
@@ -63,4 +64,7 @@ void Framework::Do()
 void Framework::Release()
 {
     SCENE_MANAGER.Release();
+    TEXTURE_MANAGER.UnloadAll();
+    FONT_MANAGER.UnloadAll();
+    SOUND_BUFFER_MANAGER.UnloadAll();
 }

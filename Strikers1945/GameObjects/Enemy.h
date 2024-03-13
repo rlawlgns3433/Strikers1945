@@ -75,9 +75,6 @@ protected :
 	sf::Transform rot;
 	sf::Transform rotatePatternAngle;
 
-	/// <summary>
-	/// 레이저 테스트중
-	/// </summary>
 	sf::RectangleShape razerShape;
 	sf::Vector2f razerDirection = { 1.f , 1.f };
 
