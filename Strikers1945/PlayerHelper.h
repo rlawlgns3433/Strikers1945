@@ -19,8 +19,11 @@ protected :
 
 	float attackTimer = 0.f;
 	float attackInterval = 1.f;
+	
 	std::list<HelperBullet*> usingHelperBulletlist;
 	std::list<HelperBullet*> unusingHelperBulletlist;
+
+	sf::Vector2f offset;
 
 public :
 	PlayerHelper(const std::string& name = "playerhelper");
@@ -30,5 +33,6 @@ public :
 	void Reset() override;
 	void Update(float dt) override;
 	void Shoot();
+	void SetOffset(const sf::Vector2f& offset);
 };
 

@@ -10,11 +10,20 @@ PlayerHelper::PlayerHelper(const std::string& name)
 void PlayerHelper::Init()
 {
 	SpriteGo::Init();
-
 }
 
 void PlayerHelper::Reset()
 {
+	for (auto& bullet : usingHelperBulletlist)
+	{
+		bullet->SetActive(false);
+	}
+
+	for (auto& bullet : unusingHelperBulletlist)
+	{
+		bullet->SetActive(false);
+	}
+
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
 
@@ -25,6 +34,7 @@ void PlayerHelper::Reset()
 void PlayerHelper::Update(float dt)
 {
 	SpriteGo::Update(dt);
+	SetPosition(player->GetPosition() + offset);
 
 	attackTimer += dt;
 
@@ -74,4 +84,10 @@ void PlayerHelper::Shoot()
 		sceneGame->AddGameObject(bullet);
 	}
 
+}
+
+void PlayerHelper::SetOffset(const sf::Vector2f& offset)
+{
+	this->offset = offset;
+	SetPosition(player->GetPosition() + offset);
 }

@@ -30,10 +30,9 @@ void HelperBullet::Update(float dt)
 			isDeterminedTarget = true;
 	}
 	// 그 적이 죽지 않았을 때 추적
-	if(isDeterminedTarget && closestEnemy->GetActive() && closestEnemy->isDead())
+	if(isDeterminedTarget && closestEnemy->GetActive() && !closestEnemy->isDead())
 	{
 		Utils::MyMath::Normalize(direction = closestEnemy->GetPosition() - position);
-		Translate(direction * speed * dt);
 	}
 	else
 	{
@@ -46,16 +45,19 @@ void HelperBullet::Update(float dt)
 		SetActive(false);
 	}
 
-}
+	Translate(direction * speed * dt);
 
+}
+ 
 void HelperBullet::FixedUpdate(float dt)
 {
+	SpriteGo::FixedUpdate(dt);
 	// 적과 충돌하였다면 폭파
 	// 적에게 데미지를 입힘
 	if (closestEnemy == nullptr) return;
 
-	if (GetGlobalBounds().intersects(closestEnemy->GetGlobalBounds()) && 
-		Utils::MyMath::Distance(position, closestEnemy->GetPosition()))
+	if (GetActive() && GetGlobalBounds().intersects(closestEnemy->GetGlobalBounds()) &&
+		Utils::MyMath::Distance(position, closestEnemy->GetPosition()) < 40.f)
 	{
 		closestEnemy->OnDamage(damage);
 		SetActive(false);
@@ -78,8 +80,12 @@ Enemy* HelperBullet::FindClosestEnemy()
 		float curEnemyDist = Utils::MyMath::Distance(position, enemy->GetPosition());
 		if (enemyDist > curEnemyDist)
 		{
+			std::cout << enemyDist << " : " << curEnemyDist << std::endl;
+
 			closestEnemy.first = enemy;
 			closestEnemy.second = curEnemyDist;
+			enemyDist = curEnemyDist;
+			 
 		}
 	}
 	return closestEnemy.first;
