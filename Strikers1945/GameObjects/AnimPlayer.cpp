@@ -5,16 +5,17 @@
 #include "UiHUD.h"
 #include "Item.h"
 #include "PlayerHelper.h"
+#include "AnimBomb.h"
 
 AnimPlayer::AnimPlayer(const std::string& name)
 	: SpriteGo(name)
 {
+	windowSize = FRAMEWORK.GetWindowSize();
 }
 
 void AnimPlayer::Init()
 {
 	SpriteGo::Init();
-
 
 	animator.SetTarget(&sprite);
 	SetScale({ 2.f,2.f });
@@ -203,7 +204,7 @@ void AnimPlayer::UpdateGame(float dt)
 		}
 		else
 		{
-			if (invincibleTimer > 4.f)
+			if (invincibleTimer > 5.f)
 			{
 				isInvincible = false;
 				invincibleTimer = 0.f;
@@ -276,15 +277,6 @@ void AnimPlayer::UseBomb()
 	isBomb = true;
 	isInvincible = true;
 	hud->SetBombCount(--bombCount);
-
-	std::cout << animator.GetCurrentClipId() << std::endl;
-	// isActive가 true인 모든 적에게 데미지 
-	const std::list<Enemy*>& enemyList = sceneGame->GetEnemyList();
-
-	for(auto& enemy : enemyList)
-	{
-		enemy->OnDamage(1000);
-	}
 }
 
 
@@ -327,7 +319,17 @@ void AnimPlayer::DeadEvent()
 void AnimPlayer::BombEvent()
 {
 	isBomb = false;
-} 
+	if (bombAnimator == nullptr)
+	{
+		bombAnimator = new AnimBomb();
+		bombAnimator->Init();
+		bombAnimator->Reset();
+		sceneGame->AddGameObject(bombAnimator);
+	}
+	
+	bombAnimator->SetActive(true);
+	bombAnimator->Reset();
+}
 
 void AnimPlayer::AddPowerLevel(int add)
 {

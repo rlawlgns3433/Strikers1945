@@ -7,6 +7,7 @@ class Tile;
 class UiHUD;
 class Bullet;
 class PlayerHelper;
+class AnimBomb;
 
 class AnimPlayer : public SpriteGo
 {
@@ -35,10 +36,13 @@ protected:
 	AnimPlayer& operator=(const AnimPlayer&) = delete;
 	AnimPlayer& operator=(AnimPlayer&&) = delete;
 
+	sf::Vector2i windowSize;
+
 	Animator animator;
 	ClipInfo currentClipInfo;
 	SceneGame* sceneGame = nullptr;
 	UiHUD* hud = nullptr;
+	AnimBomb* bombAnimator = nullptr;
 
 	std::vector<ClipInfo> clipInfos;
 	std::vector<PlayerHelper*> playerHelpers;

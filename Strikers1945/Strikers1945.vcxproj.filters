@@ -126,6 +126,9 @@
     <ClCompile Include="HelperBullet.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="AnimBomb.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Defines.h">
@@ -246,6 +249,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="HelperBullet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimBomb.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

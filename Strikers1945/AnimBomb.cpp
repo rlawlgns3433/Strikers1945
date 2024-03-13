@@ -1,0 +1,49 @@
+#include "pch.h"
+#include "AnimBomb.h"
+#include "SceneGame.h"
+
+AnimBomb::AnimBomb(const std::string& name)
+	: SpriteGo(name)
+{
+}
+
+void AnimBomb::Init()
+{
+	SpriteGo::Init();
+	animator.SetTarget(&sprite);
+
+	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
+	std::function<void()> bombTerminateEvent = std::bind(&AnimBomb::BombTerminateEvent, this);
+	animator.AddEvent("animation/BombExplosion.csv", 15, bombTerminateEvent);
+
+	std::function<void()> bombKillEnemyEvent = std::bind(&AnimBomb::BombKillEnemyEvent, this);
+	animator.AddEvent("animation/BombExplosion.csv", 5, bombKillEnemyEvent);
+}
+
+void AnimBomb::Reset()
+{
+	SetOrigin(Origins::MC);
+	SetPosition({ 0,0 });
+	animator.Play("animation/BombExplosion.csv");
+}
+
+void AnimBomb::Update(float dt)
+{
+	SpriteGo::Update(dt);
+	animator.Update(dt);
+}
+
+void AnimBomb::BombTerminateEvent()
+{
+	SetActive(false);
+}
+
+void AnimBomb::BombKillEnemyEvent()
+{
+	const std::list<Enemy*>& enemyList = sceneGame->GetEnemyList();
+
+	for (auto& enemy : enemyList)
+	{
+		enemy->OnDamage(1000);
+	}
+}
