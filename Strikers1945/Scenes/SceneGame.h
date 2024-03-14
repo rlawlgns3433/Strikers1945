@@ -63,4 +63,6 @@ public :
 	void SetStatus(GameStatus newStatus);
 
 	const std::list<Enemy*>& GetEnemyList() const { return enemyList; }
+	const std::list<EnemyProjectile*>& GetUsingProjectileList() const { return usingProjectileList; }
+	std::list<EnemyProjectile*>& GetUnusingProjectileList() { return unusingProjectileList; }
 };

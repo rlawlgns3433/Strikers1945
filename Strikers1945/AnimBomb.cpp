@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AnimBomb.h"
 #include "SceneGame.h"
+#include "EnemyProjectile.h"
 
 AnimBomb::AnimBomb(const std::string& name)
 	: SpriteGo(name)
@@ -45,5 +46,14 @@ void AnimBomb::BombKillEnemyEvent()
 	for (auto& enemy : enemyList)
 	{
 		enemy->OnDamage(1000);
+	}
+
+	const std::list<EnemyProjectile*>& usingProjectileList = sceneGame->GetUsingProjectileList();
+	std::list<EnemyProjectile*>& unusingProjectileList = sceneGame->GetUnusingProjectileList();
+	
+	for (auto& projectile : usingProjectileList)
+	{
+		projectile->SetActive(false);
+		unusingProjectileList.push_back(projectile);
 	}
 }

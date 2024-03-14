@@ -27,5 +27,4 @@ void Razer::Update(float dt)
 	{
 		animator.Play("animation/Enemy/Razer.csv");
 	}
-	std::cout << (int)originPreset << std::endl;
 }

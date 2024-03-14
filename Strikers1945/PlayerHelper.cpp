@@ -83,7 +83,6 @@ void PlayerHelper::Shoot()
 		usingHelperBulletlist.push_back(bullet);
 		sceneGame->AddGameObject(bullet);
 	}
-
 }
 
 void PlayerHelper::SetOffset(const sf::Vector2f& offset)
