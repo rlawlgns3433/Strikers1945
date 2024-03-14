@@ -14,9 +14,6 @@ protected:
 	SceneEnding& operator=(const SceneEnding&) = delete;
 	SceneEnding& operator=(SceneEnding&&) = delete;
 
-	SceneGame* sceneGame = nullptr;
-	AnimPlayer* player = nullptr;
-	
 	std::vector<TextGo*> textRanking;
 	std::vector<std::pair<std::string, int>> ranking;
 	std::string saveName = "";
@@ -44,6 +41,5 @@ public:
 
 	std::vector<std::pair<std::string, int>>& GetScores();
 	void SortRanking();
-	void SaveHighScore();
 };
 

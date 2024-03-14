@@ -62,7 +62,7 @@ void SceneGame::Init()
     saveName = new TextGo();
     saveName->Init();
     saveName->Reset();
-    saveName->Set(font, "Save Name : ", 50, sf::Color::White);
+    saveName->Set(font, saveNameFormat, 50, sf::Color::White);
     saveName->SetOrigin(Origins::MC);
     saveName->SetPosition({ windowX * 0.5f, windowY * 0.5f });
     saveName->SetActive(false);
@@ -82,6 +82,8 @@ void SceneGame::Reset()
     background->Reset();
     textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
     countDown = 10;
+    nameInputInterval = 10.f;
+    saveName->SetText(saveNameFormat);
 }
 
 void SceneGame::Enter()
@@ -105,14 +107,14 @@ void SceneGame::Exit()
     for (auto& projectile : usingProjectileList)
     {
         if (projectile != nullptr)
-            RemoveGameObject(projectile);
+            projectile->SetActive(false);
     }
     usingProjectileList.clear();
 
     for (auto& item : ItemList)
     {
         if (item != nullptr)
-            RemoveGameObject(item);
+            item->SetActive(false);
     }
     ItemList.clear();
 
@@ -215,7 +217,7 @@ void SceneGame::UpdateGameover(float dt)
     if (countDown <= 0)
     {
         // 플레이어의 스코어가 3등 이내이면 이름 입력 3글자
-        if (ranking[2].second < player->GetScore())
+        if ((*(ranking.end() - 1)).second < player->GetScore())
         {
             fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
             saveName->SetSortLayer(1);
@@ -245,8 +247,8 @@ void SceneGame::UpdateGameover(float dt)
         {
             GetReward();
             SetStatus(GameStatus::GameOver);
-            SCENE_MANAGER.ChangeScene(SceneIDs::SceneEnding);
             Reset();
+            SCENE_MANAGER.ChangeScene(SceneIDs::SceneEnding);
         }
     }
 }
@@ -294,7 +296,7 @@ void SceneGame::GetReward()
     gold += player->GetScore() / 100;
 
     std::ofstream input;
-    input.open("gold.txt", std::ios::app);
+    input.open("gold.txt");
     if (input.is_open())
     {
         input << gold;

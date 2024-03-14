@@ -136,6 +136,7 @@ public :
 	void Shoot();
 	void ShootFrontOneTime();
 	void ShootFrontThreeTime();
+	// TODO : 모두 float dt를 매개변수로 받는 함수로 변경 (보스 적용 예정)
 	void SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed);
 	void TargetingShotPattern(int bulletsCount = 1);
 	void RazerGunPattern(float dt);

@@ -28,6 +28,7 @@ protected :
 	TextGo* saveName = nullptr;
 
 	std::vector<std::pair<std::string, int>> ranking;
+	std::string saveNameFormat = "Save Name : ";
 
 	sf::RectangleShape fadeWindow;
 	sf::Clock clock;
