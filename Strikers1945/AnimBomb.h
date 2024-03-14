@@ -15,6 +15,8 @@ protected :
 	SceneGame* sceneGame = nullptr;;
 	Animator animator;
 
+	std::string animationClipId = "animation/BombExplosion.csv";
+
 public:
 	AnimBomb(const std::string& name = "bomb");
 	~AnimBomb() override = default;

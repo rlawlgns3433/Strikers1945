@@ -26,8 +26,6 @@ void AnimPlayer::Init()
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	hud = new UiHUD();
-	hud->Init();
-	hud->Reset();
 	sceneGame->AddGameObject(hud, Layers::Ui);
 
 	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
@@ -130,7 +128,6 @@ void AnimPlayer::UpdateGame(float dt)
 {
 	std::cout << isInvincible << std::endl;
 	 
-
 	animator.Update(dt);
 	shootTimer += dt;
 

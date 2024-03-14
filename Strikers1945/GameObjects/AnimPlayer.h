@@ -66,7 +66,7 @@ protected:
 	int score = 0;
 	int lifes = 3;
 	int bombCount = 2;
-	int damage = 750;
+	int damage = 75;
 	int currentHelperCount = 0;
 
 	int maxPowerLevel = 4;

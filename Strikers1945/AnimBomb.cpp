@@ -15,17 +15,17 @@ void AnimBomb::Init()
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
 	std::function<void()> bombTerminateEvent = std::bind(&AnimBomb::BombTerminateEvent, this);
-	animator.AddEvent("animation/BombExplosion.csv", 15, bombTerminateEvent);
+	animator.AddEvent(animationClipId, 15, bombTerminateEvent);
 
 	std::function<void()> bombKillEnemyEvent = std::bind(&AnimBomb::BombKillEnemyEvent, this);
-	animator.AddEvent("animation/BombExplosion.csv", 5, bombKillEnemyEvent);
+	animator.AddEvent(animationClipId, 1, bombKillEnemyEvent);
 }
 
 void AnimBomb::Reset()
 {
 	SetOrigin(Origins::MC);
 	SetPosition({ 0,0 });
-	animator.Play("animation/BombExplosion.csv");
+	animator.Play(animationClipId);
 }
 
 void AnimBomb::Update(float dt)
