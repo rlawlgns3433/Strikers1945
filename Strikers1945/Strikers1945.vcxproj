@@ -136,7 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AnimBomb.cpp" />
+    <ClCompile Include="GameObjects\AnimBomb.cpp" />
     <ClCompile Include="DataTables\EnemyTable.cpp" />
     <ClCompile Include="GameObjects\AnimPlayer.cpp" />
     <ClCompile Include="GameObjects\Background.cpp" />
@@ -156,9 +156,10 @@
     <ClCompile Include="GameObjects\UiHUD.cpp" />
     <ClCompile Include="GameObjects\Item.cpp" />
     <ClCompile Include="DataTables\ItemTable.cpp" />
-    <ClCompile Include="HelperBullet.cpp" />
-    <ClCompile Include="PlayerHelper.cpp" />
-    <ClCompile Include="Razer.cpp" />
+    <ClCompile Include="GameObjects\HelperBullet.cpp" />
+    <ClCompile Include="GameObjects\PlayerHelper.cpp" />
+    <ClCompile Include="GameObjects\Razer.cpp" />
+    <ClCompile Include="PlayerTable.cpp" />
     <ClCompile Include="Scenes\SceneDev1.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="Utils\MyMath.cpp" />
@@ -180,7 +181,7 @@
     <ClCompile Include="Utils\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimBomb.h" />
+    <ClInclude Include="GameObjects\AnimBomb.h" />
     <ClInclude Include="DataTables\EnemyTable.h" />
     <ClInclude Include="GameObjects\Background.h" />
     <ClInclude Include="GameObjects\Animator.h" />
@@ -201,10 +202,11 @@
     <ClInclude Include="GameObjects\UiHUD.h" />
     <ClInclude Include="GameObjects\Item.h" />
     <ClInclude Include="DataTables\ItemTable.h" />
-    <ClInclude Include="HelperBullet.h" />
-    <ClInclude Include="PlayerHelper.h" />
+    <ClInclude Include="GameObjects\HelperBullet.h" />
+    <ClInclude Include="GameObjects\PlayerHelper.h" />
+    <ClInclude Include="PlayerTable.h" />
     <ClInclude Include="rapidcsv.h" />
-    <ClInclude Include="Razer.h" />
+    <ClInclude Include="GameObjects\Razer.h" />
     <ClInclude Include="Scenes\SceneDev1.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />
     <ClInclude Include="Utils\MyMath.h" />

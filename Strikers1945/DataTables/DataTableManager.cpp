@@ -19,6 +19,10 @@ void DataTableManager::Init()
 	DataTable* itemTable = new ItemTable(DataTable::Types::Item);
 	itemTable->Load();
 	tables.insert({ DataTable::Types::Item, itemTable });
+
+	DataTable* playerTable = new PlayerTable(DataTable::Types::Player);
+	playerTable->Load();
+	tables.insert({ DataTable::Types::Player, playerTable });
 }
 
 void DataTableManager::Release()

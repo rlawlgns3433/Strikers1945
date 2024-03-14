@@ -30,7 +30,7 @@ void SceneGame::Init()
     fadeWindow = sf::RectangleShape((sf::Vector2f)(FRAMEWORK.GetWindowSize()));
     fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
 
-    player = new AnimPlayer();
+    player = new AnimPlayer(AnimPlayer::Type::F_4);
     AddGameObject(player);
 
     enemySpawner = new EnemySpawner();
@@ -201,6 +201,7 @@ void SceneGame::UpdateGameover(float dt)
 
     if (countDown <= 0)
     {
+        SaveHighScore();
         SCENE_MANAGER.ChangeScene(SceneIDs::SceneTitle);
         Reset();
     }
@@ -242,4 +243,45 @@ void SceneGame::SetStatus(GameStatus newStatus)
         FRAMEWORK.SetTimeScale(0.f);
         break;
     }
+}
+
+
+void SceneGame::SaveHighScore()
+{
+    std::ifstream file("highScore.txt", std::ios_base::app);
+
+    if (!file.is_open()) {
+        std::cerr << "파일을 열 수 없습니다." << std::endl;
+        return;
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    file.close();
+
+    std::vector<std::string> lines;
+    std::string line;
+
+    std::ofstream input;
+    input.open("highScore.txt", std::ios::app);
+    if (input.is_open())
+    {
+        input << player->GetScore() << '\n' /*<< playTimer*/;
+    }
+
+    input.close();
+}
+
+int SceneGame::GetHighScore()
+{
+    std::ifstream output;
+    output.open("highScore.txt");
+
+    if (output.is_open())
+    {
+        output >> hiScore;
+    }
+    output.close();
+
+    return hiScore;
 }

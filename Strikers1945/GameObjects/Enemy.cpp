@@ -183,7 +183,6 @@ void Enemy::UpdateGame(float dt)
 	}
 
 
-	std::cout << player->GetIsInvincible() << std::endl;
 	// 플레이어 충돌
 	if (isAlive && GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
 		Utils::MyMath::Distance(player->GetPosition(), position) < 40 && !player->GetIsInvincible())

@@ -6,8 +6,9 @@
 #include "Item.h"
 #include "PlayerHelper.h"
 #include "AnimBomb.h"
+#include "PlayerTable.h"
 
-AnimPlayer::AnimPlayer(const std::string& name)
+AnimPlayer::AnimPlayer(Type playerType, const std::string& name)
 	: SpriteGo(name)
 {
 	windowSize = FRAMEWORK.GetWindowSize();
@@ -16,23 +17,23 @@ AnimPlayer::AnimPlayer(const std::string& name)
 void AnimPlayer::Init()
 {
 	SpriteGo::Init();
-
 	animator.SetTarget(&sprite);
-	SetScale({ 2.f,2.f });
+	const PlayerData& data = PLAYER_TABLE->Get(playerType);
 
-	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", "animation/Player/Bomb.csv", false, false });
-	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", "animation/Player/Bomb.csv", true, false });
-	clipInfos.push_back({ "animation/Player/Idle.csv", "animation/Player/Move.csv", "animation/Player/Dead.csv", "animation/Player/Bomb.csv", false, true });
+	SetScale({ 2.f,2.f });
+	clipInfos.push_back({ data.animationIdleClipId, data.animationMoveClipId, data.animationDeadClipId, data.animationBombClipId, false, false });
+	clipInfos.push_back({ data.animationIdleClipId, data.animationMoveClipId, data.animationDeadClipId, data.animationBombClipId, true, false });
+	clipInfos.push_back({ data.animationIdleClipId, data.animationMoveClipId, data.animationDeadClipId, data.animationBombClipId, false, true });
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	hud = new UiHUD();
 	sceneGame->AddGameObject(hud, Layers::Ui);
 
 	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
-	animator.AddEvent("animation/Player/Dead.csv", 10, deadEvent);
+	animator.AddEvent(data.animationDeadClipId, 10, deadEvent);
 	 
 	std::function<void()> bombEvent = std::bind(&AnimPlayer::BombEvent, this);
-	animator.AddEvent("animation/Player/Bomb.csv", 46, bombEvent);
+	animator.AddEvent(data.animationBombClipId, 46, bombEvent);
 
 	playerHelpersOffset =
 	{
@@ -46,7 +47,7 @@ void AnimPlayer::Init()
 void AnimPlayer::Reset()
 {
 	SetPosition({ 0, 450.f });
-	animator.Play("animation/Player/Idle.csv");
+	animator.Play("animation/Player/F-4/Idle.csv");
 
 	for (auto& bullet : unusingBulletlist)
 	{
@@ -126,8 +127,6 @@ void AnimPlayer::UpdateAwake(float dt)
 
 void AnimPlayer::UpdateGame(float dt)
 {
-	std::cout << isInvincible << std::endl;
-	 
 	animator.Update(dt);
 	shootTimer += dt;
 

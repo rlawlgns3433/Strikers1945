@@ -3,6 +3,7 @@
 #include "DataTable.h"
 #include "EnemyTable.h"
 #include "ItemTable.h"
+#include "PlayerTable.h"
 
 class DataTableManager : public Singleton<DataTableManager>
 {
@@ -40,3 +41,4 @@ inline T* DataTableManager::Get(DataTable::Types type)
 //#define STRING_TABLE (DATATABLE_MANAGER.Get<StringTable>(DataTable::Types::String))
 #define ENEMY_TABLE (DATATABLE_MANAGER.Get<EnemyTable>(DataTable::Types::Enemy))
 #define ITEM_TABLE (DATATABLE_MANAGER.Get<ItemTable>(DataTable::Types::Item))
+#define PLAYER_TABLE (DATATABLE_MANAGER.Get<PlayerTable>(DataTable::Types::Player))

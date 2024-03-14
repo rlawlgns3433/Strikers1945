@@ -111,7 +111,7 @@
     <ClCompile Include="GameObjects\AnimPlayer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Razer.cpp">
+    <ClCompile Include="GameObjects\Razer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DataTables\EnemyTable.cpp">
@@ -120,13 +120,16 @@
     <ClCompile Include="DataTables\ItemTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerHelper.cpp">
+    <ClCompile Include="GameObjects\PlayerHelper.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="HelperBullet.cpp">
+    <ClCompile Include="GameObjects\HelperBullet.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="AnimBomb.cpp">
+    <ClCompile Include="GameObjects\AnimBomb.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -236,7 +239,7 @@
     <ClInclude Include="GameObjects\Item.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Razer.h">
+    <ClInclude Include="GameObjects\Razer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DataTables\EnemyTable.h">
@@ -245,13 +248,16 @@
     <ClInclude Include="DataTables\ItemTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerHelper.h">
+    <ClInclude Include="GameObjects\PlayerHelper.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="HelperBullet.h">
+    <ClInclude Include="GameObjects\HelperBullet.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="AnimBomb.h">
+    <ClInclude Include="GameObjects\AnimBomb.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

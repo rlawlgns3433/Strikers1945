@@ -30,6 +30,8 @@ protected :
 	sf::Clock clock;
 
 	int countDown = 10;
+	int hiScore;
+
 
 	float countDownTimer = 0.f;
 	float countDownInterval = 1.f;
@@ -64,6 +66,9 @@ public :
 
 	GameStatus GetStatus() const { return this->status; }
 	void SetStatus(GameStatus newStatus);
+
+	int GetHighScore();
+	void SaveHighScore();
 
 	const std::list<Enemy*>& GetEnemyList() const { return enemyList; }
 	const std::list<EnemyProjectile*>& GetUsingProjectileList() const { return usingProjectileList; }

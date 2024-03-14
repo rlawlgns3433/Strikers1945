@@ -6,7 +6,8 @@ public :
 	{
 		String, 
 		Enemy,
-		Item
+		Item,
+		Player
 	};
 	static const int TotalTypes = 2;
 

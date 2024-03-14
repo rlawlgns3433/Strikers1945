@@ -12,6 +12,13 @@ class AnimBomb;
 class AnimPlayer : public SpriteGo
 {
 public:
+
+	enum class Type
+	{
+		F_4,
+		F_117
+	};
+
 	struct ClipInfo
 	{
 		std::string idle;
@@ -43,6 +50,7 @@ protected:
 	SceneGame* sceneGame = nullptr;
 	UiHUD* hud = nullptr;
 	AnimBomb* bombAnimator = nullptr;
+	Type playerType;
 
 	std::vector<ClipInfo> clipInfos;
 	std::vector<PlayerHelper*> playerHelpers;
@@ -67,7 +75,8 @@ protected:
 	int lifes = 3;
 	int bombCount = 2;
 	int damage = 75;
-	int currentHelperCount = 0;
+	int maxHelperCount = 4;
+	int currentHelperCount = 1;
 
 	int maxPowerLevel = 4;
 	int powerLevel = 1;
@@ -78,7 +87,7 @@ protected:
 	bool isCheated = false;
 
 public:
-	AnimPlayer(const std::string& name = "player");
+	AnimPlayer(Type playerType, const std::string& name = "player");
 	~AnimPlayer() override = default;
 
 	void Init() override;
@@ -130,4 +139,7 @@ public:
 	inline int GetHelperCount() const { return currentHelperCount; }
 	void AddHelperCount(int add);
 	void SetHelperCount(int currentHelperCount);
+
+	int GetHighScore();
+	void SaveHighScore();
 };
