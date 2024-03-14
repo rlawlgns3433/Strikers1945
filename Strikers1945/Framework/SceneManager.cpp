@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "SceneGame.h"
 #include "SceneTitle.h"
+#include "SceneEnding.h"
 
 SceneManager::~SceneManager()
 {
@@ -16,6 +17,7 @@ void SceneManager::Init()
 
 	scenes.push_back(new SceneTitle(SceneIDs::SceneTitle));
 	scenes.push_back(new SceneGame(SceneIDs::SceneGame));
+	scenes.push_back(new SceneEnding(SceneIDs::SceneEnding));
 
 	for (auto scene : scenes)
 	{
@@ -77,6 +79,11 @@ bool SceneManager::Update(float dt)
 	return true;
 }
 
+void SceneManager::UpdateEvent(const sf::Event& event)
+{
+	scenes[(int)currentScene]->UpdateEvent(event);
+}
+
 void SceneManager::LateUpdate(float dt)
 {
 	scenes[(int)currentScene]->LateUpdate(dt);
@@ -90,4 +97,9 @@ void SceneManager::FixeUpdate(float dt)
 void SceneManager::Draw(sf::RenderWindow& window)
 {
 	scenes[(int)currentScene]->Draw(window);
+}
+
+void SceneManager::ClearBuffer()
+{
+	textInputBuffer.clear();
 }

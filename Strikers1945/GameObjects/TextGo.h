@@ -36,6 +36,8 @@ public:
 	void SetFlipX(bool flip)				  override;
 	void SetFlipY(bool flip)				  override;
 
+	void AddText(char character);
+
 	virtual void Draw(sf::RenderWindow& window);
 
 	sf::FloatRect GetLocalBounds() override;

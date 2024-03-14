@@ -25,21 +25,26 @@ protected :
 	Background* background = nullptr;
 	SpriteGo* pauseWindow = nullptr;
 	TextGo* textCountDown = nullptr;
+	TextGo* saveName = nullptr;
+
+	std::vector<std::pair<std::string, int>> ranking;
 
 	sf::RectangleShape fadeWindow;
 	sf::Clock clock;
+	sf::Font font;
 
 	int countDown = 10;
 	int hiScore;
+	int gold;
 
-
+	float nameInputInterval = 10.f;
 	float countDownTimer = 0.f;
 	float countDownInterval = 1.f;
 	float windowX = 0.f;
 	float windowY = 0.f;
 	float alpha;
 
-
+	bool isNewRecord;
 public :
 	SceneGame(SceneIDs id);
 	~SceneGame() override = default;
@@ -67,8 +72,13 @@ public :
 	GameStatus GetStatus() const { return this->status; }
 	void SetStatus(GameStatus newStatus);
 
+	void GetReward();
+
+	std::vector<std::pair<std::string, int>>& GetScores();
+	int GetGold();
 	int GetHighScore();
 	void SaveHighScore();
+	void SortRanking();
 
 	const std::list<Enemy*>& GetEnemyList() const { return enemyList; }
 	const std::list<EnemyProjectile*>& GetUsingProjectileList() const { return usingProjectileList; }

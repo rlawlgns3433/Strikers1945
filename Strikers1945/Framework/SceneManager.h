@@ -8,6 +8,7 @@ enum class SceneIDs
 	None = -1,
 	SceneTitle,
 	SceneGame,
+	SceneEnding,
 	COUNT,
 };
 
@@ -23,7 +24,7 @@ protected:
 	SceneManager& operator=(const SceneManager&) = delete;
 	SceneManager& operator=(SceneManager&&)		 = delete;
 
-	std::vector<Scene*> scenes;
+	std::vector<Scene*> scenes; 
 	SceneIDs startScene = SceneIDs::SceneTitle;
 	SceneIDs currentScene = startScene;
 	SceneIDs nextScene = SceneIDs::None;
@@ -31,6 +32,8 @@ protected:
 	std::vector<std::string> TextureResourceNames = { };
 	std::vector<std::string> FontResourceNames = { /*"fonts/DS-DIGI.ttf"*/};
 	std::vector<std::string> SoundResourceNames = {};
+
+	std::string textInputBuffer = "";
 
 	unsigned lives = 3;
 	unsigned score = 0;
@@ -49,9 +52,15 @@ public:
 	void LoadAllResources();
 	void ChangeScene(SceneIDs id);
 	bool Update(float dt);
+	void UpdateEvent(const sf::Event& event);
 	void LateUpdate(float dt);
 	void FixeUpdate(float dt);
 	void Draw(sf::RenderWindow& window);
+
+
+	std::string& GetBuffer() { return textInputBuffer; }
+	void ClearBuffer();
+
 };
 
 #define SCENE_MANAGER (Singleton<SceneManager>::Instance())

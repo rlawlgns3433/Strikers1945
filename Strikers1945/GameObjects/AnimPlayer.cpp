@@ -66,7 +66,7 @@ void AnimPlayer::Reset()
 	isCheated = false;
 	powerLevel = 1;
 	hp = maxHp;
-	lifes = 3;
+	lifes = 1;
 	bombCount = 2;
 	damage = 75;
 	score = 0;

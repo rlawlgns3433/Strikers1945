@@ -35,6 +35,7 @@ void Framework::Do()
             if (event.type == sf::Event::Closed)
                 window.close();
 
+            SCENE_MANAGER.UpdateEvent(event);
             InputManager::UpdateEvent(event); // 키 입력 이벤트 처리
         }
 

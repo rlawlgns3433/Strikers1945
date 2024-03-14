@@ -81,6 +81,35 @@ void Scene::Update(float dt)
 	}
 }
 
+void Scene::UpdateEvent(const sf::Event& event)
+{
+	switch (event.type)
+	{
+	case sf::Event::TextEntered :
+		for (GameObject* obj : gameObjects)
+		{
+			if (obj->IsFocused())
+			{
+				if (event.text.unicode < 128)
+				{
+					dynamic_cast<TextGo*>(obj)->AddText(static_cast<char>(event.text.unicode));
+				}
+			}
+		}
+
+		for (GameObject* obj : uiGameObjects)
+		{
+			if (obj->IsFocused())
+			{
+				if (event.text.unicode < 128)
+				{
+					dynamic_cast<TextGo*>(obj)->AddText(static_cast<char>(event.text.unicode));
+				}
+			}
+		}
+	}
+}
+
 void Scene::LateUpdate(float dt)
 {
 	for (GameObject* obj : gameObjects)
