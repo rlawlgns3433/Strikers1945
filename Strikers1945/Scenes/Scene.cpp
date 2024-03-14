@@ -48,6 +48,20 @@ void Scene::Enter()
 	}
 }
 
+void Scene::Exit()
+{
+	for (GameObject* obj : removeGameObjects)
+	{
+		if (obj == nullptr) continue;
+		gameObjects.remove(obj);
+		uiGameObjects.remove(obj);
+
+		delete obj;
+		obj = nullptr;
+	}
+	removeGameObjects.clear();
+}
+
 void Scene::Update(float dt)
 {
 	for (GameObject* obj : gameObjects)
@@ -63,6 +77,35 @@ void Scene::Update(float dt)
 		if (obj->GetActive())
 		{
 			obj->Update(dt);
+		}
+	}
+}
+
+void Scene::UpdateEvent(const sf::Event& event)
+{
+	switch (event.type)
+	{
+	case sf::Event::TextEntered :
+		for (GameObject* obj : gameObjects)
+		{
+			if (obj->IsFocused())
+			{
+				if (event.text.unicode < 128)
+				{
+					dynamic_cast<TextGo*>(obj)->AddText(static_cast<char>(event.text.unicode));
+				}
+			}
+		}
+
+		for (GameObject* obj : uiGameObjects)
+		{
+			if (obj->IsFocused())
+			{
+				if (event.text.unicode < 128)
+				{
+					dynamic_cast<TextGo*>(obj)->AddText(static_cast<char>(event.text.unicode));
+				}
+			}
 		}
 	}
 }

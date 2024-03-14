@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "SceneGame.h"
 #include "SceneTitle.h"
+#include "SceneEnding.h"
 
 SceneManager::~SceneManager()
 {
@@ -16,6 +17,7 @@ void SceneManager::Init()
 
 	scenes.push_back(new SceneTitle(SceneIDs::SceneTitle));
 	scenes.push_back(new SceneGame(SceneIDs::SceneGame));
+	scenes.push_back(new SceneEnding(SceneIDs::SceneEnding));
 
 	for (auto scene : scenes)
 	{
@@ -57,14 +59,29 @@ void SceneManager::LoadAllResources()
 
 void SceneManager::ChangeScene(SceneIDs id)
 {
-	scenes[(int)currentScene]->Exit();
-	currentScene = id;
-	scenes[(int)currentScene]->Enter();
+	nextScene = id;
 }
 
-void SceneManager::Update(float dt)
+bool SceneManager::Update(float dt)
 {
 	scenes[(int)currentScene]->Update(dt);
+
+	if (nextScene != SceneIDs::None)
+	{
+		scenes[(int)currentScene]->Exit();
+		currentScene = nextScene;
+		scenes[(int)currentScene]->Enter();
+
+		nextScene = SceneIDs::None;
+		return false;
+	}
+
+	return true;
+}
+
+void SceneManager::UpdateEvent(const sf::Event& event)
+{
+	scenes[(int)currentScene]->UpdateEvent(event);
 }
 
 void SceneManager::LateUpdate(float dt)
@@ -80,4 +97,9 @@ void SceneManager::FixeUpdate(float dt)
 void SceneManager::Draw(sf::RenderWindow& window)
 {
 	scenes[(int)currentScene]->Draw(window);
+}
+
+void SceneManager::ClearBuffer()
+{
+	textInputBuffer.clear();
 }

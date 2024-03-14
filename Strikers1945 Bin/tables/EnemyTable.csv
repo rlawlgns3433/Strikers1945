@@ -1,0 +1,6 @@
+ID,NAME,ANIMATIONMOVECLIPID,ANIMATIONDEADCLIPID,MAXHP,SPEED,SCORE,ATTACKINTERVAL,"SHOOTTYPE (OneTime : 0, ThreeTime : 1, MidBoss : 2, Boss : 3)"
+0,Regular1,animation/Enemy/enemy1/Idle.csv,animation/Enemy/Dead.csv,200,150,100,0.5,0
+1,Regular2,animation/Enemy/enemy2/Idle.csv,animation/Enemy/Dead.csv,300,170,200,0.5,0
+2,Regular3,animation/Enemy/enemy3/Idle.csv,animation/Enemy/Dead.csv,300,180,300,0.5,0
+3,MidBoss,animation/Enemy/enemyMidBoss/Idle.csv,animation/Enemy/enemyMidBoss/Dead.csv,3000,50,800,0.3,2
+4,Boss,animation/Enemy/enemyBoss/Idle.csv,animation/Enemy/enemyBoss/Dead.csv,10000,50,1000,0.1,3

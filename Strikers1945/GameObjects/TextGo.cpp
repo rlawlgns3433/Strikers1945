@@ -122,6 +122,12 @@ void TextGo::SetFlipY(bool flip)
 	SetScale(scale);
 }
 
+void TextGo::AddText(char character)
+{
+	text.setString(text.getString() + character);
+	SetOrigin(originPreset);
+}
+
 void TextGo::SetTextSize(const size_t& textSize)
 {
 	this->text.setCharacterSize(textSize);

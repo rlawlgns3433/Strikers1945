@@ -6,6 +6,7 @@
 #include "UiHUD.h"
 #include "Item.h"
 #include "Background.h"
+#include "Razer.h"
 
 class Enemy : public SpriteGo
 {
@@ -64,26 +65,25 @@ protected :
 	Item::Types itemType;
 	Animator animator;
 
-	typedef void (Enemy::* FunctionPointer)(float);
-	std::vector<FunctionPointer> funcPointers = 
-	{
-		&Enemy::MoveStraight,
-		&Enemy::MoveOnCircle,
-		&Enemy::MoveSin,
-		&Enemy::MoveReturn,
-	};
+	std::vector<std::function<void(float)>> regularEnemyMoveFuncs;
+	std::vector<std::function<void(float)>> bossMoveFuncs;
 
 	std::vector<sf::Vector2f> midBossDirections;
-	std::string animationClipId;
+	std::string animationMoveClipId;
+	std::string animationDeadClipId;
 
+	sf::Clock clock;
 	sf::Transform rot;
-	sf::Vector2f right = { 1.f, 0.f };
+	sf::Transform rotatePatternAngle;
 
+	sf::RectangleShape razerShape;
+	sf::Vector2f razerDirection = { 1.f , 1.f };
+
+	sf::Vector2f right = { 1.f, 0.f };
 	sf::Vector2f direction = {0.f, 1.f};
-	sf::Vector2f center;
-	sf::Vector2f newVector;
 	sf::Vector2f direction1 = {0,1};
 	sf::Vector2f bossMovingDirection;
+	sf::Vector2f rotateProjectileDirection = {0.f, 1.f};
 
 	float rotateTimer = 0.f;
 	float startAngle = -90.f;
@@ -99,7 +99,11 @@ protected :
 
 	float bossMovingChangeTimer = 0.f;
 	float bossMovingChangeInterval = 3;
+	float rotatePatternTimer = 0.f;
+	float rotatePatternInterval = 3.f;
+	bool isRotatePattern = false;
 
+	int storedFuncIdx;
 	int maxHp = 100;
 	int hp = maxHp;
 	int damage = 10;
@@ -109,10 +113,8 @@ protected :
 	bool isAlive = true;
 	bool iscenter = true;
 
-	bool isRotating = false;
+	bool isMoving = false;
 	bool isPlaying = false;
-
-
 
 	// 테스트중
 	float shotTimer = 0.0f; // 타이머, 0.1초마다 리셋됩니다.
@@ -134,15 +136,17 @@ public :
 	void Shoot();
 	void ShootFrontOneTime();
 	void ShootFrontThreeTime();
-	void BossPattern();
 	void SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed);
-	void TargetingShotPattern(int bulletsCount);
+	void TargetingShotPattern(int bulletsCount = 1);
+	void RazerGunPattern(float dt);
+	void RotateBossPattern(float dt);
 
 	void MoveStraight(float dt);
 	void MoveOnCircle(float dt);
 	void MoveSin(float dt);
 	void MoveReturn(float dt);
 	void MoveRandom(float dt);
+	void MoveTowardPlayer(float dt);
 
 	void OnDamage(float damage);
 	void OnDie();
@@ -150,5 +154,7 @@ public :
 	void SetDead(bool isDead) { this->isAlive = !isDead; }
 	bool isDead() const { return !isAlive; }
 	void DeadEvent();
+	void MidBossDeadEvent();
+	void BossDeadEvent();
 
 };

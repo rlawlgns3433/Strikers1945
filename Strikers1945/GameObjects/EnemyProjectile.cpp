@@ -11,9 +11,8 @@ EnemyProjectile::EnemyProjectile(const std::string& name)
 void EnemyProjectile::Init()
 {
 	SpriteGo::Init();
-
 	SetTexture("graphics/Strikers1945/assets/bullet.png");
-	SetScale({ 0.5f, 0.5f });
+	SetScale({ 0.5f, 0.5f });	
 	SetOrigin(Origins::BC);
 }
 
@@ -32,22 +31,21 @@ void EnemyProjectile::Update(float dt)
 	if (abs(position.y) > 500.f || abs(position.x) > 320.f)
 	{
 		SetActive(false);
-		//sceneGame->RemoveGameObject(this);
 	}
 }
 
 void EnemyProjectile::FixedUpdate(float dt)
 {
 	if (Utils::MyMath::Distance(player->GetPosition(), position) >= 25 || !GetActive()) return ;
-	if (!player->IsDead() && GetGlobalBounds().intersects(player->GetGlobalBounds()))
+	if (!player->GetIsInvincible() && GetGlobalBounds().intersects(player->GetGlobalBounds()))
 	{
 		player->OnDie();
 		SetActive(false);
-		//sceneGame->RemoveGameObject(this);
 	}
 }
 
 void EnemyProjectile::SetDirection(const sf::Vector2f direction)
 {
 	this->direction = direction;
+	Utils::MyMath::Normalize(this->direction);
 }

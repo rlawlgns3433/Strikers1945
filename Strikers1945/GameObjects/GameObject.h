@@ -19,6 +19,7 @@ protected:
 	bool isActive = true;
 	bool isFlipX = false;
 	bool isFlipY = false;
+	bool isFocused = false;
 
 	int sortLayer = 0; // 다른 레이어 간 순서
 	int sortOrder = 0; // 동일 레이어 간 순서
@@ -76,6 +77,9 @@ public:
 
 	virtual sf::FloatRect GetLocalBounds() { return sf::FloatRect(); }
 	virtual sf::FloatRect GetGlobalBounds() { return sf::FloatRect(position, { 0.f,0.f }); }
+
+	virtual void SetFocused(bool focuse) { this->isFocused = focuse; }
+	virtual bool IsFocused() { return this->isFocused; }
 
 	bool operator>(const GameObject& rhs) const;
 	bool operator<(const GameObject& rhs) const;

@@ -4,7 +4,10 @@ class DataTable
 public :
 	enum class Types // Data TableÀÇ °³¼ö
 	{
-		String,
+		String, 
+		Enemy,
+		Item,
+		Player
 	};
 	static const int TotalTypes = 2;
 

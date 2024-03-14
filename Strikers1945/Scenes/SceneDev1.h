@@ -5,7 +5,7 @@ class TextGo;
 
 class SceneDev1 : public Scene
 {
-protected:
+
 	SpriteGo* spriteGoBackground;
 	TextGo* textIntro;
 	TextGo* textTitle;

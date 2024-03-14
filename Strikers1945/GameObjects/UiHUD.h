@@ -16,20 +16,22 @@ protected:
 	UiHUD& operator=(const UiHUD&) = delete;
 	UiHUD& operator=(UiHUD&&) = delete;
 	
+	std::vector<SpriteGo*> spriteLifes;
+	std::vector<SpriteGo*> spriteBombs;
+
 	// 나중에 이미지로 변경 필요
 	std::string scoreFormat = "Score : ";
-	std::string lifesFormat = "Lifes : ";
-	std::string bombCountFormat = "Bombs : ";
 
 	sf::Vector2f referenceResolution = { 960.f, 540.f };
 	sf::Vector2f resolution = referenceResolution;
-	sf::Vector2i windowSize = FRAMEWORK.GetWindowSize();
+	sf::Vector2i windowSize;
 
 	SceneGame* sceneGame = nullptr;
 	AnimPlayer* player = nullptr;
+	SpriteGo* spriteLife = nullptr;
+	SpriteGo* spriteBomb = nullptr;
+
 	TextGo textScore;
-	TextGo textBombCount;
-	TextGo textLifes;
 
 	int score = 0;
 	int bombCount = 0;

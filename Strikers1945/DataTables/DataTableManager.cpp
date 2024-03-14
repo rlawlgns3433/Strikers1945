@@ -12,11 +12,17 @@ void DataTableManager::Init()
 {
 	Release();
 	
-	// String Table ·Îµå
-	DataTable* table = new StringTable(DataTable::Types::String);
-	table->Load();
-	tables.insert({ DataTable::Types::String, table});
+	DataTable* enemyTable = new EnemyTable(DataTable::Types::Enemy);
+	enemyTable->Load();
+	tables.insert({ DataTable::Types::Enemy, enemyTable });
 
+	DataTable* itemTable = new ItemTable(DataTable::Types::Item);
+	itemTable->Load();
+	tables.insert({ DataTable::Types::Item, itemTable });
+
+	DataTable* playerTable = new PlayerTable(DataTable::Types::Player);
+	playerTable->Load();
+	tables.insert({ DataTable::Types::Player, playerTable });
 }
 
 void DataTableManager::Release()

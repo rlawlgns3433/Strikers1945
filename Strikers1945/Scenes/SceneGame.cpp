@@ -21,13 +21,21 @@ SceneGame::SceneGame(SceneIDs id)
 
 void SceneGame::Init()
 {
+    font = *FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf");
+
     worldView.setSize(windowX, windowY);
     worldView.setCenter(0, 0);
     worldView.setViewport(sf::FloatRect(0.f, 0.1f, 1.f, 0.8f));
     uiView.setSize(windowX, windowY);
     uiView.setCenter(windowX * 0.5f, windowY * 0.5f);
 
-    player = new AnimPlayer();
+    ranking = GetScores();
+    gold = GetGold();
+
+    fadeWindow = sf::RectangleShape((sf::Vector2f)(FRAMEWORK.GetWindowSize()));
+    fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
+
+    player = new AnimPlayer(AnimPlayer::Type::F_4);
     AddGameObject(player);
 
     enemySpawner = new EnemySpawner();
@@ -50,6 +58,16 @@ void SceneGame::Init()
     textCountDown->SetActive(false);
     AddGameObject(textCountDown, Layers::Ui);
 
+    /////////////////////////////////////////////////
+    saveName = new TextGo();
+    saveName->Init();
+    saveName->Reset();
+    saveName->Set(font, "Save Name : ", 50, sf::Color::White);
+    saveName->SetOrigin(Origins::MC);
+    saveName->SetPosition({ windowX * 0.5f, windowY * 0.5f });
+    saveName->SetActive(false);
+    AddGameObject(saveName, Layers::Ui);
+
     Scene::Init(); // 모든 게임 오브젝트 Init()
 }
 
@@ -60,6 +78,23 @@ void SceneGame::Release()
 
 void SceneGame::Reset()
 {
+    player->Reset();
+    background->Reset();
+    textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
+    countDown = 10;
+}
+
+void SceneGame::Enter()
+{
+	Scene::Enter();
+    status = GameStatus::Game;
+    player->SetActive(true);
+}
+
+void SceneGame::Exit()
+{
+	FRAMEWORK.SetTimeScale(1.f);
+
     for (auto& enemy : enemyList)
     {
         if (enemy != nullptr)
@@ -81,22 +116,7 @@ void SceneGame::Reset()
     }
     ItemList.clear();
 
-    player->Reset();
-    background->Reset();
-    textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
-    countDown = 10;
-}
-
-void SceneGame::Enter()
-{
-	Scene::Enter();
-    status = GameStatus::Game;
-    player->SetActive(true);
-}
-
-void SceneGame::Exit()
-{
-	FRAMEWORK.SetTimeScale(1.f);
+    Scene::Exit();
 
 }
 
@@ -174,22 +194,61 @@ void SceneGame::UpdateGame(float dt)
 
 void SceneGame::UpdateGameover(float dt)
 {
-    textCountDown->SetActive(true);
-    
-    if (clock.getElapsedTime().asSeconds() > 1.f)
+
+    if (InputManager::GetKeyDown(sf::Keyboard::Space) && countDown > 0)
     {
         textCountDown->SetText(std::to_string(--countDown));
-        std::cout << clock.getElapsedTime().asSeconds() << std::endl;
-        std::cout << countDown << std::endl;
+        alpha = ((10 - countDown) / 10.f) * 255.f;
+        fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
+        clock.restart();
+    }
+
+    textCountDown->SetActive(true);
+    if (clock.getElapsedTime().asSeconds() > 1.f && countDown > 0)
+    {
+        textCountDown->SetText(std::to_string(--countDown));
+        alpha = ((10 - countDown) / 10.f) * 255.f;
+        fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
         clock.restart();
     }
 
     if (countDown <= 0)
     {
-        SCENE_MANAGER.ChangeScene(SceneIDs::SceneTitle);
-        Reset();
-    }
+        // 플레이어의 스코어가 3등 이내이면 이름 입력 3글자
+        if (ranking[2].second < player->GetScore())
+        {
+            fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
+            saveName->SetSortLayer(1);
+            ResortGameObject(saveName);
+            saveName->SetActive(true);
+            isNewRecord = true;
+            if (clock.getElapsedTime().asSeconds() <= nameInputInterval)
+            {
+                saveName->SetFocused(true);
 
+                if (saveName->GetText().size() >= 15)
+                {
+                    std::cout << saveName->GetText() << std::endl;
+                    nameInputInterval = 0.f;
+                }
+            }
+            else
+            {
+                SaveHighScore();
+                saveName->SetFocused(false);
+                saveName->SetActive(false);
+                isNewRecord = false;
+            }
+        }
+
+        if (!isNewRecord)
+        {
+            GetReward();
+            SetStatus(GameStatus::GameOver);
+            SCENE_MANAGER.ChangeScene(SceneIDs::SceneEnding);
+            Reset();
+        }
+    }
 }
 
 void SceneGame::UpdatePause(float dt)
@@ -204,6 +263,7 @@ void SceneGame::UpdatePause(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+    window.draw(fadeWindow);
 }
 
 void SceneGame::SetStatus(GameStatus newStatus)
@@ -227,4 +287,104 @@ void SceneGame::SetStatus(GameStatus newStatus)
         FRAMEWORK.SetTimeScale(0.f);
         break;
     }
+}
+
+void SceneGame::GetReward()
+{
+    gold += player->GetScore() / 100;
+
+    std::ofstream input;
+    input.open("gold.txt", std::ios::app);
+    if (input.is_open())
+    {
+        input << gold;
+    }
+}
+
+void SceneGame::SaveHighScore()
+{
+    std::ifstream file("highScore.txt", std::ios_base::app);
+
+    if (!file.is_open()) {
+        std::cerr << "파일을 열 수 없습니다." << std::endl;
+        return;
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    file.close();
+
+    std::vector<std::string> lines;
+    std::string line;
+
+    std::ofstream input;
+    input.open("highScore.txt", std::ios::app);
+    if (input.is_open())
+    {
+        input << saveName->GetText().substr(12, 15) <<  player->GetScore() << '\n' /*<< playTimer*/;
+    }
+
+    input.close();
+}
+
+std::vector<std::pair<std::string, int>>& SceneGame::GetScores()
+{
+    std::ifstream file("highScore.txt");
+
+    if (!file.is_open()) {
+        std::cerr << "파일을 열 수 없습니다." << std::endl;
+    }
+
+    std::string rank;
+    int i = 0;
+    while (file >> rank)
+    {
+        std::string name = rank.substr(0, 3);
+        int score = std::stoi(rank.substr(3));
+
+        ranking.push_back(std::make_pair(name, score));
+        ++i;
+    }
+    file.close();
+
+    SortRanking();
+
+    return ranking;
+}
+
+int SceneGame::GetGold()
+{
+    std::ifstream output;
+    output.open("gold.txt", std::ios::app);
+
+    if (output.is_open())
+    {
+        output >> gold;
+    }
+    output.close();
+
+    return gold;
+}
+
+int SceneGame::GetHighScore()
+{
+    std::ifstream output;
+    output.open("highScore.txt", std::ios::app);
+
+    if (output.is_open())
+    {
+        output >> hiScore;
+    }
+    output.close();
+
+    return hiScore;
+}
+
+void SceneGame::SortRanking()
+{
+    std::sort(ranking.begin(), ranking.end(),
+        [](std::pair<std::string, int> lhs, std::pair<std::string, int> rhs)
+        {
+            return lhs.second > rhs.second;
+        });
 }

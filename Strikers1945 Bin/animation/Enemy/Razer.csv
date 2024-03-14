@@ -1,0 +1,10 @@
+ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
+Razer,10,2,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/lazer.png,18,8,170,316
+graphics/lazer.png,188,8,170,316
+graphics/lazer.png,358,8,170,316
+graphics/lazer.png,540,8,170,316
+graphics/lazer.png,730,8,170,316
+graphics/lazer.png,924,8,170,316

@@ -29,6 +29,4 @@ public :
 	void Reset() override;;
 	void Update(float dt) override;
 	void FixedUpdate(float dt);
-
-	void Fire(const sf::Vector2f& pos, int damage);
 };

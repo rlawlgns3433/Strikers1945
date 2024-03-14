@@ -6,23 +6,33 @@ class SceneGame;
 class Tile;
 class UiHUD;
 class Bullet;
+class PlayerHelper;
+class AnimBomb;
 
 class AnimPlayer : public SpriteGo
 {
 public:
+
+	enum class Type
+	{
+		F_4,
+		F_117
+	};
+
 	struct ClipInfo
 	{
 		std::string idle;
 		std::string move;
 		std::string dead;
+		std::string bomb;
 		bool isMove = false;
 		bool isDead = false;
 
 		ClipInfo()
 		{
 		}
-		ClipInfo(const std::string& idle, const std::string& move, const std::string& dead, bool isMove, bool isDead)
-			: idle(idle), move(move), dead(dead), isMove(isMove), isDead(isDead)
+		ClipInfo(const std::string& idle, const std::string& move, const std::string& dead, const std::string& bomb, bool isMove, bool isDead)
+			: idle(idle), move(move), dead(dead), bomb(bomb), isMove(isMove), isDead(isDead)
 		{
 		}
 	};
@@ -33,12 +43,18 @@ protected:
 	AnimPlayer& operator=(const AnimPlayer&) = delete;
 	AnimPlayer& operator=(AnimPlayer&&) = delete;
 
+	sf::Vector2i windowSize;
+
 	Animator animator;
 	ClipInfo currentClipInfo;
 	SceneGame* sceneGame = nullptr;
 	UiHUD* hud = nullptr;
+	AnimBomb* bombAnimator = nullptr;
+	Type playerType;
 
 	std::vector<ClipInfo> clipInfos;
+	std::vector<PlayerHelper*> playerHelpers;
+	std::vector<sf::Vector2f> playerHelpersOffset;
 	std::list<Bullet*> usingBulletlist;
 	std::list<Bullet*> unusingBulletlist;
 
@@ -59,17 +75,19 @@ protected:
 	int lifes = 3;
 	int bombCount = 2;
 	int damage = 75;
+	int maxHelperCount = 4;
+	int currentHelperCount = 1;
 
 	int maxPowerLevel = 4;
 	int powerLevel = 1;
 
 	bool isDead = false;
 	bool isInvincible = false;
-
+	bool isBomb = false;
 	bool isCheated = false;
 
 public:
-	AnimPlayer(const std::string& name = "player");
+	AnimPlayer(Type playerType, const std::string& name = "player");
 	~AnimPlayer() override = default;
 
 	void Init() override;
@@ -82,38 +100,46 @@ public:
 	void UpdatePause(float dt);
 	void Draw(sf::RenderWindow& window) override;
 
+	void Shoot();
+	void UseBomb();
+	void OnDie();
+	void DeadEvent();
+	void BombEvent();
+
 	sf::Vector2f GetVelocity() const { return velocity; }
 	void SetVelocity(const sf::Vector2f& velocity) { this->velocity = velocity; }
 
-	void Shoot();
-	void OnDie();
-	void DeadEvent();
+	inline bool IsDead() const { return isDead; }
+	inline bool GetIsInvincible() const { return isInvincible; }
+	inline void SetInvincible(bool invincible) { isInvincible = invincible; }
 
-	bool IsDead() const { return isDead; }
-	bool GetIsInvincible() const { return isInvincible; }
-	void SetInvincible(bool invincible) { isInvincible = invincible; }
+	inline int GetScore() const { return score; }
+	inline void AddScore(int add) { score += add; };
+	inline void SetScore(int score) { this->score = score; }
 
-	int GetScore() const { return score; }
-	void AddScore(int add) { score += add; };
-	void SetScore(int score) { this->score = score; }
+	inline int GetLife() const { return lifes; }
+	inline void AddLife(int add) { lifes += add; };
+	inline void SetLife(int life) { this->lifes = life; }
 
-	int GetLife() const { return lifes; }
-	void AddLife(int add) { lifes += add; };
-	void SetLife(int life) { this->lifes = life; }
-	
-	int GetBombItem() const { return bombCount; }
-	void AddBombItem(int add) { bombCount += add; };
-	void SetBombItem(int bombCount) { this->bombCount = bombCount; }
+	inline int GetBombItem() const { return bombCount; }
+	inline void AddBombItem(int add) { bombCount += add; };
+	inline void SetBombItem(int bombCount) { this->bombCount = bombCount; }
 
-	int GetDamage() const { return damage; }
-	void AddDamage(int add) { damage += add; }
-	void SetDamage(int damage) { this->damage = damage; }
+	inline int GetDamage() const { return damage; }
+	inline void AddDamage(int add) { damage += add; }
+	inline void SetDamage(int damage) { this->damage = damage; }
 
-	int GetPowerLevel() const { return powerLevel; }
+	inline int GetPowerLevel() const { return powerLevel; }
 	void AddPowerLevel(int add);
-	void SetPowerLevel(int powerLevel);
+	inline void SetPowerLevel(int powerLevel);
 
-	bool GetIsCheated() const { return isCheated; }
+	inline bool GetIsCheated() const { return isCheated; }
 	void SetCheatMode();
 
+	inline int GetHelperCount() const { return currentHelperCount; }
+	void AddHelperCount(int add);
+	void SetHelperCount(int currentHelperCount);
+
+	int GetHighScore();
+	void SaveHighScore();
 };
