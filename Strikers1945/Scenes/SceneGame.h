@@ -26,6 +26,7 @@ protected :
 	SpriteGo* pauseWindow = nullptr;
 	TextGo* textCountDown = nullptr;
 
+	sf::RectangleShape fadeWindow;
 	sf::Clock clock;
 
 	int countDown = 10;
@@ -34,6 +35,8 @@ protected :
 	float countDownInterval = 1.f;
 	float windowX = 0.f;
 	float windowY = 0.f;
+	float alpha;
+
 
 public :
 	SceneGame(SceneIDs id);

@@ -27,6 +27,9 @@ void SceneGame::Init()
     uiView.setSize(windowX, windowY);
     uiView.setCenter(windowX * 0.5f, windowY * 0.5f);
 
+    fadeWindow = sf::RectangleShape((sf::Vector2f)(FRAMEWORK.GetWindowSize()));
+    fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
+
     player = new AnimPlayer();
     AddGameObject(player);
 
@@ -60,8 +63,6 @@ void SceneGame::Release()
 
 void SceneGame::Reset()
 {
-
-
     player->Reset();
     background->Reset();
     textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
@@ -181,12 +182,11 @@ void SceneGame::UpdateGame(float dt)
 
 void SceneGame::UpdateGameover(float dt)
 {
-
     if (InputManager::GetKeyDown(sf::Keyboard::Space))
     {
         textCountDown->SetText(std::to_string(--countDown));
-        std::cout << clock.getElapsedTime().asSeconds() << std::endl;
-        std::cout << countDown << std::endl;
+		alpha = ((10 - countDown) / 10.f) * 255.f;
+        fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
         clock.restart();
     }
 
@@ -194,8 +194,8 @@ void SceneGame::UpdateGameover(float dt)
     if (clock.getElapsedTime().asSeconds() > 1.f)
     {
         textCountDown->SetText(std::to_string(--countDown));
-        std::cout << clock.getElapsedTime().asSeconds() << std::endl;
-        std::cout << countDown << std::endl;
+        alpha = ((10 - countDown) / 10.f) * 255.f;
+        fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
         clock.restart();
     }
 
@@ -218,6 +218,7 @@ void SceneGame::UpdatePause(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+    window.draw(fadeWindow);
 }
 
 void SceneGame::SetStatus(GameStatus newStatus)
