@@ -66,25 +66,22 @@ void AnimPlayer::Reset()
 	isCheated = false;
 	powerLevel = 1;
 	hp = maxHp;
-	lifes = 1;
+	lifes = 3;
 	bombCount = 2;
-	damage = 75;
+	damage = 150;
 	score = 0;
 	currentHelperCount = powerLevel;
 
 	for (int i = 0; i < 4; ++i)
 	{
-		// 플레이어 헬퍼 4개 생성
 		PlayerHelper* helper = new PlayerHelper();
 		helper->Init();
 		helper->Reset();
 		helper->SetPosition(position + playerHelpersOffset[i]);
 		helper->SetOffset(playerHelpersOffset[i]);
 		
-		// 플레이어 헬퍼 4개 모두 비활성화
 		helper->SetActive(false);
 		playerHelpers.push_back(helper);
-		// 플레이어 헬퍼 카운트에 따라 SetActive(true)
 		sceneGame->AddGameObject(helper);
 	}
 
@@ -365,7 +362,7 @@ void AnimPlayer::SetPowerLevel(int powerLevel)
 	{
 		powerLevel = maxPowerLevel;
 	}
-	damage = 100 + 50 * (powerLevel - 1);
+	damage += 75 * (powerLevel - 1);
 
 	currentHelperCount = powerLevel;
 	if (currentHelperCount < 0)
@@ -385,6 +382,8 @@ void AnimPlayer::SetPowerLevel(int powerLevel)
 	{
 		playerHelpers[i]->SetActive(false);
 	}
+
+	std::cout << damage << std::endl;
 }
 
 void AnimPlayer::SetCheatMode()

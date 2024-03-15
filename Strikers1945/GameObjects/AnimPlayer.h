@@ -74,7 +74,7 @@ protected:
 	int score = 0;
 	int lifes = 3;
 	int bombCount = 2;
-	int damage = 75;
+	int damage = 150;
 	int maxHelperCount = 4;
 	int currentHelperCount = 1;
 

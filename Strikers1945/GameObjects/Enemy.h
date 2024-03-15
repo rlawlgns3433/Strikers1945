@@ -45,7 +45,7 @@ public :
 		Boss,
 	};
 
-	static const int totalTypes = 5;
+	static const int totalTypes = 7;
 	static Enemy* Create(Types enemyType);
 
 protected :
@@ -65,8 +65,11 @@ protected :
 	Item::Types itemType;
 	Animator animator;
 
+
 	std::vector<std::function<void(float)>> regularEnemyMoveFuncs;
 	std::vector<std::function<void(float)>> bossMoveFuncs;
+
+	std::vector<std::function<void()>> bossAttackFuncs;
 
 	std::vector<sf::Vector2f> midBossDirections;
 	std::string animationMoveClipId;
@@ -104,6 +107,7 @@ protected :
 	bool isRotatePattern = false;
 
 	int storedFuncIdx;
+	int bossAttackFuncIdx;
 	int maxHp = 100;
 	int hp = maxHp;
 	int damage = 10;
@@ -136,8 +140,7 @@ public :
 	void Shoot();
 	void ShootFrontOneTime();
 	void ShootFrontThreeTime();
-	// TODO : 모두 float dt를 매개변수로 받는 함수로 변경 (보스 적용 예정)
-	void SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed);
+	void SpreadShotPattern(int bulletsCount = 10, float spreadAngle = 180.0f, float projectileSpeed = 300.0f);
 	void TargetingShotPattern(int bulletsCount = 1);
 	void RazerGunPattern(float dt);
 	void RotateBossPattern(float dt);

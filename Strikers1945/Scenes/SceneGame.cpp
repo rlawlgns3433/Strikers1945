@@ -217,7 +217,7 @@ void SceneGame::UpdateGameover(float dt)
     if (countDown <= 0)
     {
         // 플레이어의 스코어가 3등 이내이면 이름 입력 3글자
-        if ((*(ranking.end() - 1)).second < player->GetScore())
+        if (ranking.size() < 2 || (*(ranking.begin() + 2)).second < player->GetScore())
         {
             fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
             saveName->SetSortLayer(1);

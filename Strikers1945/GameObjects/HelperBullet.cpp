@@ -53,7 +53,7 @@ void HelperBullet::FixedUpdate(float dt)
 	SpriteGo::FixedUpdate(dt);
 	// 적과 충돌하였다면 폭파
 	// 적에게 데미지를 입힘
-	if (closestEnemy == nullptr) return;
+	if (closestEnemy == nullptr) return; 
 
 	if (GetActive() && GetGlobalBounds().intersects(closestEnemy->GetGlobalBounds()) &&
 		Utils::MyMath::Distance(position, closestEnemy->GetPosition()) < 40.f)

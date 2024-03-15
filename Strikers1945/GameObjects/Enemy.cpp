@@ -33,29 +33,37 @@ void Enemy::Init()
 	hud = dynamic_cast<UiHUD*>(sceneGame->FindGameObject("hud"));
 	background = dynamic_cast<Background*>(sceneGame->FindGameObject("background"));
 
-	std::function<void()> deadEvent = std::bind(&Enemy::DeadEvent, this);
-	animator.AddEvent("animation/Enemy/Dead.csv", 9, deadEvent);
-	std::function<void()> midBossDeadEvent = std::bind(&Enemy::MidBossDeadEvent, this);
-	animator.AddEvent("animation/Enemy/enemyMidBoss/Dead.csv", 14, midBossDeadEvent);
-	std::function<void()> bossDeadEvent = std::bind(&Enemy::BossDeadEvent, this);
-	animator.AddEvent("animation/Enemy/enemyBoss/Dead.csv", 15, bossDeadEvent);
-
 	switch (type)
 	{
 	case Enemy::Types::Regular1:
 	case Enemy::Types::Regular2:
 	case Enemy::Types::Regular3:
+	{
+		std::function<void()> deadEvent = std::bind(&Enemy::DeadEvent, this);
+		animator.AddEvent("animation/Enemy/Dead.csv", 9, deadEvent);
 		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveStraight, this, std::placeholders::_1));
 		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveOnCircle, this, std::placeholders::_1));
 		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveSin, this, std::placeholders::_1));
 		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveReturn, this, std::placeholders::_1));
 		storedFuncIdx = Utils::Random::RandomRange(0, regularEnemyMoveFuncs.size() - 1);
+	}
 		break;
 	case Enemy::Types::MidBoss:
+	{
+		std::function<void()> midBossDeadEvent = std::bind(&Enemy::MidBossDeadEvent, this);
+		animator.AddEvent("animation/Enemy/enemyMidBoss/Dead.csv", 14, midBossDeadEvent);
+	}
 		break;
 	case Enemy::Types::Boss:
+	{
+		std::function<void()> bossDeadEvent = std::bind(&Enemy::BossDeadEvent, this);
+		animator.AddEvent("animation/Enemy/enemyBoss/Dead.csv", 15, bossDeadEvent);
 		bossMoveFuncs.push_back(std::bind(&Enemy::MoveRandom, this, std::placeholders::_1));
 		bossMoveFuncs.push_back(std::bind(&Enemy::MoveTowardPlayer, this, std::placeholders::_1));
+		bossAttackFuncs.push_back([this]() { this->ShootFrontThreeTime(); });
+		bossAttackFuncs.push_back([this]() { this->SpreadShotPattern(); });
+		bossAttackFuncs.push_back([this]() { this->TargetingShotPattern(); });
+	}
 		break;
 	case Enemy::Types::Speacial:
 		break;
@@ -109,10 +117,12 @@ void Enemy::Shoot()
 		break;
 	case Enemy::ShootTypes::MidBoss:
 		TargetingShotPattern();
-		SpreadShotPattern(5, 180, 500);
+		SpreadShotPattern(5, 180, 300);
+		break;
 	case Enemy::ShootTypes::Boss:
-		ShootFrontThreeTime();
-		SpreadShotPattern(15, 360, 1000);
+		bossAttackFuncIdx = Utils::Random::RandomRange(0, bossAttackFuncs.size() - 1);
+		bossAttackFuncs[bossAttackFuncIdx]();
+		break;
 	}
 }
 
@@ -168,8 +178,10 @@ void Enemy::UpdateGame(float dt)
 				}
 			}
 
-			//RotateBossPattern(dt);
-			RazerGunPattern(dt);
+			if (hp < maxHp * 0.5f)
+			{
+				RazerGunPattern(dt);
+			}
 		}
 		else MoveStraight(dt);
 	}
@@ -191,7 +203,7 @@ void Enemy::UpdateGame(float dt)
 		attackTimer = 0.f;
 	}
 
-	if (isAlive && razerShape.getGlobalBounds().intersects(player->GetGlobalBounds()) && Utils::MyMath::Distance(player->GetPosition(), razerShape.getPosition()) < 40)
+	if (isAlive && razerShape.getGlobalBounds().intersects(player->GetGlobalBounds()) && !player->GetIsInvincible())
 	{
 		player->OnDie();
 	}
@@ -579,20 +591,25 @@ void Enemy::MoveRandom(float dt)
 			(position.y < -FRAMEWORK.GetWindowSize().y * 0.5f && bossMovingDirection.y < 0));
 	}
 
-	Translate(bossMovingDirection * speed * dt);
+	sf::Vector2f newPos = position + bossMovingDirection * speed * dt;
+
+	newPos.x = std::max(newPos.x, -FRAMEWORK.GetWindowSize().x * 0.5f);
+	newPos.x = std::min(newPos.x, FRAMEWORK.GetWindowSize().x * 0.5f);
+	newPos.y = std::max(newPos.y, -FRAMEWORK.GetWindowSize().y * 0.5f);
+	newPos.y = std::min(newPos.y, FRAMEWORK.GetWindowSize().y * 0.5f);
+
+	SetPosition(newPos);
 }
 
 void Enemy::MoveTowardPlayer(float dt)
 {
-	bossMovingChangeTimer += dt;
 
-	if ((position.x < -FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x < 0) || (position.x > FRAMEWORK.GetWindowSize().x * 0.5f && bossMovingDirection.x > 0) ||
-		(position.y < -FRAMEWORK.GetWindowSize().y * 0.5f && bossMovingDirection.y < 0)) return;
+	bossMovingChangeTimer += dt;
 
 	if (bossMovingChangeTimer > bossMovingChangeInterval)
 	{
-		bossMovingChangeTimer = 0.f; // 타이머 리셋
-		isMoving = true; // 움직임 시작
+		bossMovingChangeTimer = 0.f;
+		isMoving = true;
 
 		storedFuncIdx = Utils::Random::RandomRange(0, bossMoveFuncs.size() - 1);
 
@@ -601,9 +618,12 @@ void Enemy::MoveTowardPlayer(float dt)
 		speed = Utils::Random::RandomRange(150.f, 250.f);
 	}
 
-	if (isMoving)
-	{
-		Translate(direction * speed * dt);
-	}
+	sf::Vector2f newPos = position + direction * speed * dt;
 
+	newPos.x = std::max(newPos.x, -FRAMEWORK.GetWindowSize().x * 0.5f);
+	newPos.x = std::min(newPos.x, FRAMEWORK.GetWindowSize().x * 0.5f);
+	newPos.y = std::max(newPos.y, -FRAMEWORK.GetWindowSize().y * 0.5f);
+	newPos.y = std::min(newPos.y, FRAMEWORK.GetWindowSize().y * 0.5f);
+
+	SetPosition(newPos);
 }

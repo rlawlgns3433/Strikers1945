@@ -46,7 +46,7 @@ void Bullet::FixedUpdate(float dt)
 
 		if (GetGlobalBounds().intersects(enemy->GetGlobalBounds()))
 		{
-			enemy->OnDamage(player->GetDamage() * 10);
+			enemy->OnDamage(player->GetDamage());
 			SetActive(false);
 		}
 	}
