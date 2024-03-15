@@ -6,19 +6,18 @@
 #include "Item.h"
 #include "PlayerHelper.h"
 #include "AnimBomb.h"
-#include "PlayerTable.h"
 
-AnimPlayer::AnimPlayer(Type playerType, const std::string& name)
+AnimPlayer::AnimPlayer(PlayerType playerType, const std::string& name)
 	: SpriteGo(name)
 {
 	windowSize = FRAMEWORK.GetWindowSize();
+	data = PLAYER_TABLE->Get(playerType);
 }
 
 void AnimPlayer::Init()
 {
 	SpriteGo::Init();
 	animator.SetTarget(&sprite);
-	const PlayerData& data = PLAYER_TABLE->Get(playerType);
 
 	SetScale({ 2.f,2.f });
 	clipInfos.push_back({ data.animationIdleClipId, data.animationMoveClipId, data.animationDeadClipId, data.animationBombClipId, false, false });
@@ -47,7 +46,7 @@ void AnimPlayer::Init()
 void AnimPlayer::Reset()
 {
 	SetPosition({ 0, 450.f });
-	animator.Play("animation/Player/F-4/Idle.csv");
+	animator.Play(data.animationIdleClipId);
 
 	for (auto& bullet : unusingBulletlist)
 	{
@@ -64,25 +63,22 @@ void AnimPlayer::Reset()
 	isDead = false;
 	isInvincible = true;
 	isCheated = false;
-	powerLevel = 1;
-	hp = maxHp;
-	lifes = 3;
-	bombCount = 2;
-	damage = 150;
-	score = 0;
+	powerLevel = data.initialpowerLevel;
+	lifes = data.lifes;
+	bombCount = data.bombCount;
+	damage = data.damage;
+	score = data.score;
 	currentHelperCount = powerLevel;
 
 	for (int i = 0; i < 4; ++i)
 	{
-		PlayerHelper* helper = new PlayerHelper();
-		helper->Init();
-		helper->Reset();
-		helper->SetPosition(position + playerHelpersOffset[i]);
-		helper->SetOffset(playerHelpersOffset[i]);
-		
-		helper->SetActive(false);
-		playerHelpers.push_back(helper);
-		sceneGame->AddGameObject(helper);
+		playerHelpers.push_back(new PlayerHelper());
+		playerHelpers[i]->Init();
+		playerHelpers[i]->Reset();
+		playerHelpers[i]->SetPosition(position + playerHelpersOffset[i]);
+		playerHelpers[i]->SetOffset(playerHelpersOffset[i]);
+		playerHelpers[i]->SetActive(false);
+		sceneGame->AddGameObject(playerHelpers[i]);
 	}
 
 	playerHelpers[0]->SetActive(true);
@@ -100,30 +96,6 @@ void AnimPlayer::Release()
 void AnimPlayer::Update(float dt)
 {
 	SpriteGo::Update(dt);
-
-	switch (sceneGame->GetStatus())
-	{
-	case GameStatus::Awake:
-		UpdateAwake(dt);
-		break;
-	case GameStatus::Game:
-		UpdateGame(dt);
-		break;
-	case GameStatus::GameOver:
-		UpdateGameover(dt);
-		break;
-	case GameStatus::Pause:
-		UpdatePause(dt);
-		break;
-	}
-}
-
-void AnimPlayer::UpdateAwake(float dt)
-{
-}
-
-void AnimPlayer::UpdateGame(float dt)
-{
 	animator.Update(dt);
 	shootTimer += dt;
 
@@ -168,14 +140,14 @@ void AnimPlayer::UpdateGame(float dt)
 		currentClipInfo = clipInfos[0];
 	}
 
-	const std::string& clipId = isDead ? currentClipInfo.dead : isBomb ? currentClipInfo.bomb : (direction.x != 0.f || direction.y != 0.f) ?
-		currentClipInfo.move : currentClipInfo.idle;
+	const std::string& clipId = isDead ? currentClipInfo.dead :
+		isBomb ? currentClipInfo.bomb :
+		(direction.x != 0.f || direction.y != 0.f) ? currentClipInfo.move : currentClipInfo.idle;
 
 	if (animator.GetCurrentClipId() != clipId)
 	{
 		animator.Play(clipId);
 	}
-		// 플레이어 맵 이탈 체크
 	if (position.x < -270) position.x = -270.f;
 	if (position.x > 270) position.x = 270.f;
 	if (position.y < -480) position.y = -480.f;
@@ -187,7 +159,7 @@ void AnimPlayer::UpdateGame(float dt)
 
 		if (!isBomb)
 		{
-			if (invincibleTimer > invincibleInterval) 
+			if (invincibleTimer > invincibleInterval)
 
 			{
 				isInvincible = false;
@@ -212,7 +184,7 @@ void AnimPlayer::UpdateGame(float dt)
 		auto bullet = *it;
 		if (!bullet->GetActive())
 		{
-			it = usingBulletlist.erase(it);	
+			it = usingBulletlist.erase(it);
 			unusingBulletlist.push_back(bullet);
 		}
 		else
@@ -220,20 +192,12 @@ void AnimPlayer::UpdateGame(float dt)
 			++it;
 		}
 	}
-}
 
-void AnimPlayer::UpdateGameover(float dt)
-{
-}
-
-void AnimPlayer::UpdatePause(float dt)
-{
 }
 
 void AnimPlayer::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
-	window.draw(shape);
 }
 
 void AnimPlayer::Shoot()
@@ -262,7 +226,6 @@ void AnimPlayer::Shoot()
 		usingBulletlist.push_back(bullet);
 		sceneGame->AddGameObject(bullet);
 	}
-
 }
 
 void AnimPlayer::UseBomb()
@@ -277,7 +240,6 @@ void AnimPlayer::UseBomb()
 
 void AnimPlayer::OnDie()
 {
-	// 죽었을 때 애니메이션 재생
 	isDead = true;
 
 	if (powerLevel > 1)
@@ -297,8 +259,6 @@ void AnimPlayer::OnDie()
 void AnimPlayer::DeadEvent()
 {
 	hud->SetLifes(--lifes);
-	// 애니메이션 끝날 때 이곳을 호출
-	// 플레이어 사망 프레임이 종료되었을 때 실행
 	if (lifes <= 0)
 	{
 		SetActive(false);
@@ -336,24 +296,7 @@ void AnimPlayer::AddPowerLevel(int add)
 	}
 	damage = 100 + 50 * (powerLevel - 1);
 
-	currentHelperCount += add;
-	if (currentHelperCount < 0)
-	{
-		currentHelperCount = 0;
-	}
-	else if (currentHelperCount > 4)
-	{
-		currentHelperCount = 4;
-	}
-
-	for (int i = 0; i < currentHelperCount; ++i)
-	{
-		playerHelpers[i]->SetActive(true);
-	}
-	for (int i = currentHelperCount; i < 4; ++i)
-	{
-		playerHelpers[i]->SetActive(false);
-	}
+	SetHelperCount(powerLevel);
 }
 
 void AnimPlayer::SetPowerLevel(int powerLevel)
@@ -367,8 +310,6 @@ void AnimPlayer::SetPowerLevel(int powerLevel)
 	damage += 75 * (powerLevel - 1);
 
 	SetHelperCount(powerLevel);
-
-	std::cout << damage << std::endl;
 }
 
 void AnimPlayer::SetCheatMode()

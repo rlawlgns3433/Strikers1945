@@ -38,7 +38,6 @@ inline T* DataTableManager::Get(DataTable::Types type)
 }
 
 #define DATATABLE_MANAGER (DataTableManager::Instance())
-//#define STRING_TABLE (DATATABLE_MANAGER.Get<StringTable>(DataTable::Types::String))
 #define ENEMY_TABLE (DATATABLE_MANAGER.Get<EnemyTable>(DataTable::Types::Enemy))
 #define ITEM_TABLE (DATATABLE_MANAGER.Get<ItemTable>(DataTable::Types::Item))
 #define PLAYER_TABLE (DATATABLE_MANAGER.Get<PlayerTable>(DataTable::Types::Player))

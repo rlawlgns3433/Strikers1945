@@ -15,7 +15,7 @@ protected :
 public :
 	static T& Instance()
 	{
-		static T instance; // static 지역 변수 : 함수 당 하나의 지역 변수를 갖는다.
+		static T instance;
 
 		return instance;
 	}

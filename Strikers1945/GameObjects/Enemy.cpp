@@ -61,15 +61,13 @@ void Enemy::Init()
 		bossMoveFuncs.push_back(std::bind(&Enemy::MoveRandom, this, std::placeholders::_1));
 		bossMoveFuncs.push_back(std::bind(&Enemy::MoveTowardPlayer, this, std::placeholders::_1));
 		bossAttackFuncs.push_back([this]() { this->ShootFrontThreeTime(); });
-		bossAttackFuncs.push_back([this]() { this->SpreadShotPattern(); });
-		bossAttackFuncs.push_back([this]() { this->TargetingShotPattern(); });
+		bossAttackFuncs.push_back(std::bind(&Enemy::SpreadShotPattern, this, 10, 180, 300));
+		bossAttackFuncs.push_back(std::bind(&Enemy::TargetingShotPattern, this, 1));
 	}
 		break;
 	case Enemy::Types::Speacial:
 		break;
 	case Enemy::Types::Gound:
-		break;
-	default:
 		break;
 	}
 }
@@ -87,65 +85,14 @@ void Enemy::Reset()
 void Enemy::Update(float dt)
 {
 	SpriteGo::Update(dt);
-
-	switch (sceneGame->GetStatus())
-	{
-	case GameStatus::Awake:
-		UpdateAwake(dt);
-		break;
-	case GameStatus::Game:
-		UpdateGame(dt);
-		break;
-	case GameStatus::GameOver:
-		UpdateGameover(dt);
-		break;
-	case GameStatus::Pause:
-		UpdatePause(dt);
-		break;
-	}
-}
-
-void Enemy::Shoot()
-{
-
-	switch (shootType)
-	{
-	case Enemy::ShootTypes::OneTime:
-		if (player->GetIsBomb()) return;
-		TargetingShotPattern();
-		break;
-	case Enemy::ShootTypes::ThreeTime:
-		if (player->GetIsBomb()) return;
-		ShootFrontThreeTime();
-		break;
-	case Enemy::ShootTypes::MidBoss:
-		if (player->GetIsBomb()) return;
-		TargetingShotPattern();
-		SpreadShotPattern(5, 180, 300);
-		break;
-	case Enemy::ShootTypes::Boss:
-		bossAttackFuncIdx = Utils::Random::RandomRange(0, bossAttackFuncs.size() - 1);
-		bossAttackFuncs[bossAttackFuncIdx]();
-		break;
-	}
-}
-
-void Enemy::UpdateAwake(float dt)
-{
-}
-
-void Enemy::UpdateGame(float dt)
-{
 	animator.Update(dt);
+	continuousAttackTimer += dt;
+	attackTimer += dt;
 
 	if (!isAlive && animator.GetCurrentClipId() != animationDeadClipId)
 	{
 		animator.Play(animationDeadClipId);
 	}
-	continuousAttackTimer += dt;
-	attackTimer += dt;
-
-	// Enemy 이동 테스트 중
 
 	switch (type)
 	{
@@ -194,25 +141,22 @@ void Enemy::UpdateGame(float dt)
 		break;
 	case Enemy::Types::Gound:
 		break;
-	default:
-		break;
 	}
 
-
-	// 플레이어 충돌
 	if (isAlive && GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
-		Utils::MyMath::Distance(player->GetPosition(), position) < 40 && !player->GetIsInvincible())
+		Utils::MyMath::Distance(player->GetPosition(), position) < 40 && 
+		!player->GetIsInvincible())
 	{
 		player->OnDie();
 		attackTimer = 0.f;
 	}
 
-	if (isAlive && razerShape.getGlobalBounds().intersects(player->GetGlobalBounds()) && !player->GetIsInvincible())
+	if (isAlive && razerShape.getGlobalBounds().intersects(player->GetGlobalBounds()) &&
+		!player->GetIsInvincible())
 	{
 		player->OnDie();
 	}
 
-	// 발사체 발사
 	if (isAlive && continuousAttackTimer > continuousAttackInterval)
 	{
 		if (continuousAttackCount > 0)
@@ -231,7 +175,6 @@ void Enemy::UpdateGame(float dt)
 		}
 	}
 
-	// 맵 아래로 충분히  나가게 된다면 오브젝트 삭제
 	if (position.y > 500.f || (speed < 50 && position.y < -600.f))
 	{
 		if (type == Enemy::Types::Boss) return;
@@ -244,12 +187,28 @@ void Enemy::UpdateGame(float dt)
 	}
 }
 
-void Enemy::UpdateGameover(float dt)
+void Enemy::Shoot()
 {
-}
-
-void Enemy::UpdatePause(float dt)
-{
+	switch (shootType)
+	{
+	case Enemy::ShootTypes::OneTime:
+		if (player->GetIsBomb()) return;
+		TargetingShotPattern();
+		break;
+	case Enemy::ShootTypes::ThreeTime:
+		if (player->GetIsBomb()) return;
+		ShootFrontThreeTime();
+		break;
+	case Enemy::ShootTypes::MidBoss:
+		if (player->GetIsBomb()) return;
+		TargetingShotPattern();
+		SpreadShotPattern(5, 180, 300);
+		break;
+	case Enemy::ShootTypes::Boss:
+		bossAttackFuncIdx = Utils::Random::RandomRange(0, bossAttackFuncs.size() - 1);
+		bossAttackFuncs[bossAttackFuncIdx]();
+		break;
+	}
 }
 
 void Enemy::Draw(sf::RenderWindow& window)
@@ -333,7 +292,8 @@ void Enemy::ShootFrontThreeTime()
 		Utils::MyMath::AngleWithDirectionOffsets(direction, directions[1], directions[2]);
 		directions[0] = direction;
 
-		for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < 3; ++i) 
+		{
 			--projectileCount;
 
 			EnemyProjectile* projectile = nullptr;
@@ -408,7 +368,6 @@ void Enemy::SpreadShotPattern(int bulletsCount, float spreadAngle, float project
 		sceneGame->usingProjectileList.push_back(projectile);
 		sceneGame->AddGameObject(projectile);
 	}
-
 }
 
 void Enemy::TargetingShotPattern(int bulletsCount)
@@ -451,7 +410,6 @@ void Enemy::RazerGunPattern(float dt)
 	razerShape.setRotation(Utils::MyMath::Angle(razerDirection));
 }
 
-// 일정 시간(0.05초)마다 특정 각도로 발사
 void Enemy::RotateBossPattern(float dt)
 {
 	if (clock.getElapsedTime().asSeconds() >= 0.03f)
@@ -532,7 +490,6 @@ void Enemy::MoveSin(float dt)
 
 		direction1.x = sin(angle * period) * amplitude;
 
-		// 이동 적용
 		sf::Vector2f newVec = direction + direction1;
 		Utils::MyMath::GetNormal(newVec);
 
@@ -577,7 +534,6 @@ void Enemy::MoveReturn(float dt)
 		Translate(direction * speed * dt);
 	}
 }
-
 
 void Enemy::MoveRandom(float dt)
 {

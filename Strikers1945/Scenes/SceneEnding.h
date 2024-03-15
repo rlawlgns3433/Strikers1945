@@ -33,10 +33,6 @@ public:
 	void Enter() override;
 	void Exit() override;
 	void Update(float dt) override;
-	void UpdateAwake(float dt);
-	void UpdateGame(float dt);
-	void UpdateGameover(float dt);
-	void UpdatePause(float dt);
 	void SetStatus(GameStatus newStatus);
 
 	std::vector<std::pair<std::string, int>>& GetScores();

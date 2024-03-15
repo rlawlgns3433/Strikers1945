@@ -16,11 +16,13 @@ void PlayerHelper::Reset()
 {
 	for (auto& bullet : usingHelperBulletlist)
 	{
+		bullet->Reset();
 		bullet->SetActive(false);
 	}
 
 	for (auto& bullet : unusingHelperBulletlist)
 	{
+		bullet->Reset();
 		bullet->SetActive(false);
 	}
 
@@ -34,13 +36,11 @@ void PlayerHelper::Reset()
 void PlayerHelper::Update(float dt)
 {
 	SpriteGo::Update(dt);
-	SetPosition(player->GetPosition() + offset);
-
 	attackTimer += dt;
 
+	SetPosition(player->GetPosition() + offset);
 	Shoot();
 
-	// 재사용 구간
 	auto it = usingHelperBulletlist.begin();
 	while (it != usingHelperBulletlist.end())
 	{

@@ -35,7 +35,7 @@ void SceneGame::Init()
     fadeWindow = sf::RectangleShape((sf::Vector2f)(FRAMEWORK.GetWindowSize()));
     fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
 
-    player = new AnimPlayer(AnimPlayer::Type::F_4);
+    player = new AnimPlayer(PlayerType::F_4);
     AddGameObject(player);
 
     enemySpawner = new EnemySpawner();
@@ -58,7 +58,6 @@ void SceneGame::Init()
     textCountDown->SetActive(false);
     AddGameObject(textCountDown, Layers::Ui);
 
-    /////////////////////////////////////////////////
     saveName = new TextGo();
     saveName->Init();
     saveName->Reset();
@@ -68,7 +67,7 @@ void SceneGame::Init()
     saveName->SetActive(false);
     AddGameObject(saveName, Layers::Ui);
 
-    Scene::Init(); // 모든 게임 오브젝트 Init()
+    Scene::Init();
 }
 
 void SceneGame::Release()
@@ -83,6 +82,8 @@ void SceneGame::Reset()
     textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
     countDown = 10;
     nameInputInterval = 10.f;
+    alpha = 0.f;
+    fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
     saveName->SetText(saveNameFormat);
 }
 
@@ -118,8 +119,8 @@ void SceneGame::Exit()
     }
     ItemList.clear();
 
-    Scene::Exit();
 
+    Scene::Exit();
 }
 
 void SceneGame::Update(float dt)
@@ -196,7 +197,6 @@ void SceneGame::UpdateGame(float dt)
 
 void SceneGame::UpdateGameover(float dt)
 {
-
     if (InputManager::GetKeyDown(sf::Keyboard::Space) && countDown > 0)
     {
         textCountDown->SetText(std::to_string(--countDown));
@@ -216,7 +216,6 @@ void SceneGame::UpdateGameover(float dt)
 
     if (countDown <= 0)
     {
-        // 플레이어의 스코어가 3등 이내이면 이름 입력 3글자
         if (ranking.size() < 2 || (*(ranking.begin() + 2)).second < player->GetScore())
         {
             fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));

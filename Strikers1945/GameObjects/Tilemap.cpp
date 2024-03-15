@@ -38,7 +38,7 @@ void Tilemap::Set(const sf::Vector2i& count, const sf::Vector2f& size)
 
 	va.clear();
 	va.setPrimitiveType(sf::Quads);
-	va.resize(count.x * count.y * 4); // 셀의 개수 * 정점의 개수
+	va.resize(count.x * count.y * 4);
 	
 	sf::Vector2f posOffsets[4] =
 	{
@@ -48,7 +48,7 @@ void Tilemap::Set(const sf::Vector2i& count, const sf::Vector2f& size)
 		{ 0, size.y }
 	};
 
-	sf::Vector2f textureCoord0[4] = // 현재는 하드코딩 -> 변경 필요 (각 타일의 크기로)
+	sf::Vector2f textureCoord0[4] =
 	{
 		{ 0, 0 },
 		{ cellSize.x, 0 },
@@ -60,7 +60,7 @@ void Tilemap::Set(const sf::Vector2i& count, const sf::Vector2f& size)
 	{
 		for (int col = 0; col < count.x; ++col)
 		{
-			//int textureIndex = Utils::Random::RandomRange(0, 3);
+			int textureIndex = Utils::Random::RandomRange(0, 3);
 
 			int quadIndex = row * count.x + col;
 			sf::Vector2f quadPos(size.x * col, size.y * row);
@@ -71,58 +71,58 @@ void Tilemap::Set(const sf::Vector2i& count, const sf::Vector2f& size)
 
 				va[vertexIndex].position = quadPos + posOffsets[vertex];
 				va[vertexIndex].texCoords = textureCoord0[vertex];
-				//va[vertexIndex].texCoords.y += textureIndex * cellSize.y;
+				va[vertexIndex].texCoords.y += textureIndex * cellSize.y;
 			}
 		}
 	}
 
-	//this->cellCount = count;
-	//this->cellSize = size;
+	this->cellCount = count;
+	this->cellSize = size;
 
-	//va.clear();
-	//va.setPrimitiveType(sf::Quads);
-	//va.resize(count.x * count.y * 4); // 셀의 개수 * 정점의 개수
+	va.clear();
+	va.setPrimitiveType(sf::Quads);
+	va.resize(count.x * count.y * 4); 
 
-	//sf::Vector2f posOffsets[4] =
-	//{
-	//	{ 0, 0 },
-	//	{ size.x, 0 },
-	//	{ size.x, size.y },
-	//	{ 0, size.y }
-	//};
+	sf::Vector2f posOffsets[4] =
+	{
+		{ 0, 0 },
+		{ size.x, 0 },
+		{ size.x, size.y },
+		{ 0, size.y }
+	};
 
-	//sf::Vector2f textureCoord0[4] = // 현재는 하드코딩 -> 변경 필요 (각 타일의 크기로)
-	//{
-	//	{ 0, 0 },
-	//	{ cellSize.x, 0 },
-	//	{ cellSize.x, cellSize.y },
-	//	{ 0, cellSize.y }
-	//};
+	sf::Vector2f textureCoord0[4] =
+	{
+		{ 0, 0 },
+		{ cellSize.x, 0 },
+		{ cellSize.x, cellSize.y },
+		{ 0, cellSize.y }
+	};
 
-	//for (int row = 0; row < count.y; ++row)
-	//{
-	//	for (int col = 0; col < count.x; ++col)
-	//	{
-	//		int textureIndex = Utils::Random::RandomRange(0, 3);
+	for (int row = 0; row < count.y; ++row)
+	{
+		for (int col = 0; col < count.x; ++col)
+		{
+			int textureIndex = Utils::Random::RandomRange(0, 3);
 
-	//		if (row == 0 || row == count.y - 1 || col == 0 || col == count.x - 1)
-	//		{
-	//			textureIndex = 3;
-	//		}
+			if (row == 0 || row == count.y - 1 || col == 0 || col == count.x - 1)
+			{
+				textureIndex = 3;
+			}
 
-	//		int quadIndex = row * count.x + col;
-	//		sf::Vector2f quadPos(size.x * col, size.y * row);
+			int quadIndex = row * count.x + col;
+			sf::Vector2f quadPos(size.x * col, size.y * row);
 
-	//		for (int vertex = 0; vertex < 4; ++vertex)
-	//		{
-	//			int vertexIndex = (quadIndex * 4) + vertex;
+			for (int vertex = 0; vertex < 4; ++vertex)
+			{
+				int vertexIndex = (quadIndex * 4) + vertex;
 
-	//			va[vertexIndex].position = quadPos + posOffsets[vertex];
-	//			va[vertexIndex].texCoords = textureCoord0[vertex];
-	//			va[vertexIndex].texCoords.y += textureIndex * cellSize.y;
-	//		}
-	//	}
-	//}
+				va[vertexIndex].position = quadPos + posOffsets[vertex];
+				va[vertexIndex].texCoords = textureCoord0[vertex];
+				va[vertexIndex].texCoords.y += textureIndex * cellSize.y;
+			}
+		}
+	}
 }
 
 void Tilemap::Translate(const sf::Vector2f& delta)
@@ -216,7 +216,7 @@ void Tilemap::SetSpriteSheedId(const std::string& id)
 
 sf::FloatRect Tilemap::GetLocalBounds()
 {
-	sf::FloatRect bounds = va.getBounds(); // 정점기준 바운드
+	sf::FloatRect bounds = va.getBounds();
 	bounds.left = origin.x;
 	bounds.top = origin.y;
 

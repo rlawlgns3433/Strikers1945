@@ -1,6 +1,7 @@
 #pragma once
 #include "SpriteGo.h"
 #include "Animator.h"
+#include "PlayerTable.h"
 
 class SceneGame;
 class Tile;
@@ -12,13 +13,6 @@ class AnimBomb;
 class AnimPlayer : public SpriteGo
 {
 public:
-
-	enum class Type
-	{
-		F_4,
-		F_117
-	};
-
 	struct ClipInfo
 	{
 		std::string idle;
@@ -50,7 +44,8 @@ protected:
 	SceneGame* sceneGame = nullptr;
 	UiHUD* hud = nullptr;
 	AnimBomb* bombAnimator = nullptr;
-	Type playerType;
+	PlayerType playerType;
+	PlayerData data;
 
 	std::vector<ClipInfo> clipInfos;
 	std::vector<PlayerHelper*> playerHelpers;
@@ -58,9 +53,7 @@ protected:
 	std::list<Bullet*> usingBulletlist;
 	std::list<Bullet*> unusingBulletlist;
 
-	sf::Vector2f velocity;
 	sf::Vector2f direction;
-	sf::RectangleShape shape;
 
 	float speed = 500.f;
 	float shootInterval = 0.08f;
@@ -69,8 +62,6 @@ protected:
 	float invincibleTimer = 0.f;
 	float invincibleInterval = 2.f;
 
-	int maxHp = 200;
-	int hp = maxHp;
 	int score = 0;
 	int lifes = 3;
 	int bombCount = 2;
@@ -87,17 +78,13 @@ protected:
 	bool isCheated = false;
 
 public:
-	AnimPlayer(Type playerType, const std::string& name = "player");
+	AnimPlayer(PlayerType playerType, const std::string& name = "player");
 	~AnimPlayer() override = default;
 
 	void Init() override;
 	void Reset() override;
 	void Release() override;
 	void Update(float dt) override;
-	void UpdateAwake(float dt);
-	void UpdateGame(float dt);
-	void UpdateGameover(float dt);
-	void UpdatePause(float dt);
 	void Draw(sf::RenderWindow& window) override;
 
 	void Shoot();
@@ -105,9 +92,6 @@ public:
 	void OnDie();
 	void DeadEvent();
 	void BombEvent();
-
-	sf::Vector2f GetVelocity() const { return velocity; }
-	void SetVelocity(const sf::Vector2f& velocity) { this->velocity = velocity; }
 
 	inline bool IsDead() const { return isDead; }
 	inline bool GetIsInvincible() const { return isInvincible; }
@@ -142,5 +126,4 @@ public:
 	void SetHelperCount(int currentHelperCount);
 
 	int GetHighScore();
-	void SaveHighScore();
 };

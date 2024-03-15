@@ -30,7 +30,7 @@ protected:
 	SceneIDs nextScene = SceneIDs::None;
 
 	std::vector<std::string> TextureResourceNames = { };
-	std::vector<std::string> FontResourceNames = { /*"fonts/DS-DIGI.ttf"*/};
+	std::vector<std::string> FontResourceNames = {};
 	std::vector<std::string> SoundResourceNames = {};
 
 	std::string textInputBuffer = "";
@@ -43,8 +43,8 @@ public:
 	SceneManager() = default;
 	virtual ~SceneManager();
 	
-	void Init(); // 의도한 시점에 생성 또는 소멸시킬 수 있도록 함수를 정의
-	void Release(); // 의도한 시점에 생성 또는 소멸시킬 수 있도록 함수를 정의
+	void Init();
+	void Release();
 
 	Scene* GetCurrentScene() { return scenes[(int)currentScene]; }
 	Scene* GetScene(SceneIDs id) { return scenes[(int)id]; }

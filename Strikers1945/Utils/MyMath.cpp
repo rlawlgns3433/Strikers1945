@@ -22,7 +22,7 @@ namespace Utils
 			vector /= magnitude;
 		}
 	}
-	// 벡터를 벡터의 길이로 나누어 1로 정규화 시킴
+
 	sf::Vector2f MyMath::GetNormal(const sf::Vector2f& vector)
 	{
 		float magnitude = Magnitude(vector);

@@ -33,7 +33,7 @@ public:
 
 	virtual void Init();
 	virtual void Release();
-	virtual void Enter(); // Scene ¿‘¿Â Ω√
+	virtual void Enter();
 	virtual void Exit();
 	virtual void Update(float dt);
 	virtual void UpdateEvent(const sf::Event& event);

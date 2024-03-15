@@ -38,7 +38,6 @@ void SceneEnding::Release()
 
 void SceneEnding::Enter()
 {
-    // TODO : 두 번째부터 최고 점수 이상
 	Scene::Enter();
     ranking = GetScores();
     for (int i = 0; i < 3; ++i)
@@ -68,7 +67,6 @@ void SceneEnding::Exit()
 
     textRanking.clear();
     ranking.clear();
-
 	Scene::Exit();
 }
 
@@ -77,38 +75,10 @@ void SceneEnding::Update(float dt)
     Scene::Update(dt);
     SetStatus(status);
 
-    switch (status)
-    {
-    case GameStatus::Awake:
-        UpdateAwake(dt);
-        break;
-    case GameStatus::Game:
-        UpdateGame(dt);
-        break;
-    case GameStatus::GameOver:
-        UpdateGameover(dt);
-        break;
-    case GameStatus::Pause:
-        UpdatePause(dt);
-        break;
-    default:
-        break;
-    }
-}
-
-void SceneEnding::UpdateAwake(float dt)
-{
-}
-
-void SceneEnding::UpdateGame(float dt)
-{
     if ((*(ranking.end() - 1)).second < playerScore)
     {
-        // 최고 기록을 갱신
         if (clock.getElapsedTime().asSeconds() > nameInputInterval)
         {
-            //textRanking[2]->SetFocused(true);
-
             (*(ranking.end() - 1)).first = (*(textRanking.end() - 1))->GetText();
             if ((*(ranking.end() - 1)).first.size() >= 3)
             {
@@ -125,14 +95,6 @@ void SceneEnding::UpdateGame(float dt)
     {
         SCENE_MANAGER.ChangeScene(SceneIDs::SceneTitle);
     }
-}
-
-void SceneEnding::UpdateGameover(float dt)
-{
-}
-
-void SceneEnding::UpdatePause(float dt)
-{
 }
 
 void SceneEnding::SetStatus(GameStatus newStatus)

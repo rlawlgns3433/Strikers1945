@@ -11,7 +11,6 @@ struct AnimationFrame
 {
 	std::string textureId;
 	sf::IntRect textureCoord;
-	// 필요한 부분 더 추가하기
 
 	AnimationFrame(const std::string& id, const sf::IntRect& coord)
 		: textureId(id), textureCoord(coord)
@@ -47,8 +46,6 @@ struct AnimationEvent
 	std::function<void()> action;
 };
 
-// 클립의 id를 들고 있다가 재생 (리소스 매니저를 이용)
-// 클립의 컨테이너를 들고 있다가 사용
 class Animator
 {
 private:
@@ -63,14 +60,14 @@ protected:
 	std::queue<std::string> queue;
 	std::list<AnimationEvent> eventList;
 
-	sf::Sprite* target = nullptr; // SpriteGo의 sprite를 가져와서 저장
+	sf::Sprite* target = nullptr;
 
 	float speed = 1.f;
 	float clipDuration = 0.f;
-	float accumTime = 0.f; // 누적 시간
+	float accumTime = 0.f;
 
 	int totalFrame = 0;
-	int currentFrame = -1; // 전체 프레임 중 현재 어떤 프레임을 재생하고 있는가
+	int currentFrame = -1;
 	int addFrame = 1;
 
 	bool isPlaying = false;
@@ -84,9 +81,7 @@ public:
 	void PlayQueue(const std::string& clipId);
 	void Stop();
 
-	//void AddClip(const AnimationClip& clip);
 	const std::string& GetCurrentClipId() { return this->currentClip->id; }
-
 
 	sf::Sprite* GetTarget() const { return this->target; }
 	void SetTarget(sf::Sprite* target) { this->target = target; }

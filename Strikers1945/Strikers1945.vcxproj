@@ -159,8 +159,8 @@
     <ClCompile Include="GameObjects\HelperBullet.cpp" />
     <ClCompile Include="GameObjects\PlayerHelper.cpp" />
     <ClCompile Include="GameObjects\Razer.cpp" />
-    <ClCompile Include="PlayerTable.cpp" />
-    <ClCompile Include="SceneEnding.cpp" />
+    <ClCompile Include="DataTables\PlayerTable.cpp" />
+    <ClCompile Include="Scenes\SceneEnding.cpp" />
     <ClCompile Include="Scenes\SceneDev1.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="Utils\MyMath.cpp" />
@@ -205,10 +205,10 @@
     <ClInclude Include="DataTables\ItemTable.h" />
     <ClInclude Include="GameObjects\HelperBullet.h" />
     <ClInclude Include="GameObjects\PlayerHelper.h" />
-    <ClInclude Include="PlayerTable.h" />
+    <ClInclude Include="DataTables\PlayerTable.h" />
     <ClInclude Include="rapidcsv.h" />
     <ClInclude Include="GameObjects\Razer.h" />
-    <ClInclude Include="SceneEnding.h" />
+    <ClInclude Include="Scenes\SceneEnding.h" />
     <ClInclude Include="Scenes\SceneDev1.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />
     <ClInclude Include="Utils\MyMath.h" />

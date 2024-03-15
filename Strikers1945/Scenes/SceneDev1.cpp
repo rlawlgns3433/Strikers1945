@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "SceneDev1.h"
 #include "AniTest.h"
-//#include "AniTest2.h"
 
 SceneDev1::SceneDev1(SceneIDs id)
 	: Scene(id)
@@ -22,7 +21,6 @@ void SceneDev1::Init()
 	uiView.setCenter(windowX * 0.5f, windowY * 0.5f);
 
 	AddGameObject(new AniTest());
-	//AddGameObject(new AniTest2());
 	Scene::Init();
 }
 

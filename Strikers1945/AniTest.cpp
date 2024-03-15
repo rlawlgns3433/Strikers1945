@@ -20,10 +20,10 @@ void AniTest::Reset()
 
 	animator.ClearEvenet();
 
-	std::function<void()> funcInstance = std::bind(&AniTest::TestInstance, this); // 다시 설명 필요 
+	std::function<void()> funcInstance = std::bind(&AniTest::TestInstance, this);  
 	animator.AddEvent("animations/Jump.csv", 5, funcInstance);
 
-	std::function<void()> funcStatic = std::bind(&AniTest::TestStatic); // 다시 설명 필요 
+	std::function<void()> funcStatic = std::bind(&AniTest::TestStatic);
 	animator.AddEvent("animations/Idle.csv", 5, funcStatic);
 }
 
@@ -59,8 +59,6 @@ void AniTest::Update(float dt)
 	{
 		SetFlipX(h < 0);
 	}
-
-	// ==================================== 애니메이션 전환
 
 	if (animator.GetCurrentClipId() == "animations/Idle.csv")
 	{

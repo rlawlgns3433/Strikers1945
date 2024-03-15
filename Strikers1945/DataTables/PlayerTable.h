@@ -1,10 +1,9 @@
 #pragma once
 #include "DataTable.h"
-#include "AnimPlayer.h"
 
 struct PlayerData
 {
-	AnimPlayer::Type id;
+	PlayerType id;
 
 	std::string nameId;
 
@@ -39,7 +38,7 @@ protected:
 	PlayerTable& operator=(const PlayerTable&) = delete;
 	PlayerTable& operator=(PlayerTable&&) = delete;
 
-	std::unordered_map <AnimPlayer::Type, PlayerData> table;
+	std::unordered_map <PlayerType, PlayerData> table;
 
 public:
 	PlayerTable(Types type);
@@ -48,5 +47,5 @@ public:
 	bool Load() override;
 	void Release() override;
 
-	const PlayerData Get(AnimPlayer::Type id);
+	const PlayerData Get(PlayerType id);
 };

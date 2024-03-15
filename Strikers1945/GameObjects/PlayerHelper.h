@@ -35,4 +35,3 @@ public :
 	void Shoot();
 	void SetOffset(const sf::Vector2f& offset);
 };
-

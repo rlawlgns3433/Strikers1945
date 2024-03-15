@@ -5,10 +5,10 @@ namespace Utils
 	class MyMath
 	{
 	public:
-		static float Magnitude(sf::Vector2f vector); // ±Ê¿Ã
-		static float SqrMagnitude(const sf::Vector2f vector); // ±Ê¿Ã ¡¶∞ˆ±Ÿ
-		static void Normalize(sf::Vector2f& vector); // ø¯∫ª ∫§≈Õ¿« ±Ê¿Ã∏¶ 1∑Œ πŸ≤€ ∫§≈Õ
-		static sf::Vector2f GetNormal(const sf::Vector2f& vector);// ∫§≈Õ¿« ±Ê¿Ã∏¶ 1∑Œ πŸ≤€ ∫§≈Õ
+		static float Magnitude(sf::Vector2f vector);
+		static float SqrMagnitude(const sf::Vector2f vector);
+		static void Normalize(sf::Vector2f& vector); 
+		static sf::Vector2f GetNormal(const sf::Vector2f& vector);
 		static float Distance(const sf::Vector2f& src, const sf::Vector2f& dst);
 		static float Angle(const sf::Vector2f look);
 		static float Rad2Deg(float radian);

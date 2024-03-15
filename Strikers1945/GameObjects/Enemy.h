@@ -120,10 +120,6 @@ protected :
 	bool isMoving = false;
 	bool isPlaying = false;
 
-	// 테스트중
-	float shotTimer = 0.0f; // 타이머, 0.1초마다 리셋됩니다.
-	float currentAngle = 0.0f; // 현재 발사 각도, 초기값은 0도 입니다.
-
 public :
 	Enemy(const std::string& name = "enemy");
 	~Enemy() override					= default;
@@ -131,10 +127,7 @@ public :
 	void Init();
 	void Reset();
 	void Update(float dt);
-	void UpdateAwake(float dt);
 	void UpdateGame(float dt);
-	void UpdateGameover(float dt);
-	void UpdatePause(float dt);
 	void Draw(sf::RenderWindow& window);
 
 	void Shoot();

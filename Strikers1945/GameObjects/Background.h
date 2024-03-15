@@ -9,9 +9,9 @@ public :
 	enum GamePhase
 	{
 		None,
-		CommonEnemyPhase, // 잡몹 나오는 단계
-		MidBossPhase,     // 세미 보스 나오는 단계
-		BossPhase          // 보스 나오는 단계
+		CommonEnemyPhase,
+		MidBossPhase,    
+		BossPhase        
 	};
 
 

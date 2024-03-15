@@ -11,7 +11,6 @@ UiHUD::UiHUD(const std::string& name)
 
 void UiHUD::Init()
 {
-	//점수, 라이프 수, 폭탄 수, 일시 정지
 	GameObject::Init();
 	textScore.Init();
 

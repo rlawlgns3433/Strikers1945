@@ -2,7 +2,7 @@
 #include "Singleton.h"
 
 template <typename T>
-class ResourceManager : public Singleton<ResourceManager<T>> // 템플릿 클래스
+class ResourceManager : public Singleton<ResourceManager<T>> 
 {
 protected:
 	std::unordered_map<std::string, T*> resourceMap;
@@ -21,7 +21,7 @@ public:
 		UnloadAll();
 	}
 
-	bool Load(const std::string& filePath) // 리소스 업로드
+	bool Load(const std::string& filePath)
 	{
 		if (resourceMap.find(filePath) != resourceMap.end())
 		{
@@ -60,7 +60,7 @@ public:
 		resourceMap.erase(it);
 		return true;
 	}
-	T* GetResource(const std::string& filePath, bool load = true) // 리소스 찾기
+	T* GetResource(const std::string& filePath, bool load = true)
 	{
 		auto it = resourceMap.find(filePath);
 
@@ -79,7 +79,7 @@ public:
 };
 
 template <typename T>
-T ResourceManager<T>::Empty;  // 정적 변수 초기화
+T ResourceManager<T>::Empty; 
 
 #define FONT_MANAGER (Singleton<ResourceManager<sf::Font>>::Instance())
 #define TEXTURE_MANAGER (Singleton<ResourceManager<sf::Texture>>::Instance())
