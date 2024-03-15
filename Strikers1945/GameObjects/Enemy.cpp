@@ -78,7 +78,7 @@ void Enemy::Reset()
 	SetOrigin(Origins::MC);
 	Utils::Origin::SetOrigin(razerShape, Origins::TC);
 
-	maxHp *= (background->GetPhase() + 1);
+	maxHp *= background->GetPhase();
 	hp = maxHp;
 }
 

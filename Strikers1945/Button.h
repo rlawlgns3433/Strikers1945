@@ -30,6 +30,7 @@ public:
 
 	void SetButton(sf::Vector2f size, sf::Vector2f position, sf::Color color, Origins origin);
 	void SetButtonText(const sf::Font& font, const std::string& label, size_t labelSize, sf::Color labelColor, sf::Vector2f position, Origins origin);
+	void SetButtonColor(sf::Color color);
 
 	sf::FloatRect GetLocalBounds() override;
 	sf::FloatRect GetGlobalBounds() override;

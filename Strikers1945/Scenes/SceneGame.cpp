@@ -206,6 +206,8 @@ void SceneGame::UpdateGame(float dt)
 
 void SceneGame::UpdateGameover(float dt)
 {
+    textCountDown->SetActive(true);
+
     if (InputManager::GetKeyDown(sf::Keyboard::Space) && countDown > 0)
     {
         textCountDown->SetText(std::to_string(--countDown));
@@ -214,7 +216,6 @@ void SceneGame::UpdateGameover(float dt)
         clock.restart();
     }
 
-    textCountDown->SetActive(true);
     if (clock.getElapsedTime().asSeconds() > 1.f && countDown > 0)
     {
         textCountDown->SetText(std::to_string(--countDown));
@@ -258,6 +259,26 @@ void SceneGame::UpdateGameover(float dt)
             Reset();
             SCENE_MANAGER.ChangeScene(SceneIDs::SceneEnding);
         }
+    }
+    else
+    {
+        if (InputManager::GetKeyDown(sf::Keyboard::Num5) || InputManager::GetKeyDown(sf::Keyboard::Numpad5))
+        {
+            isCoinInserted = true;
+        }
+    }
+
+    if (isCoinInserted)
+    {
+        player->Reset();
+        countDown = 10;
+        nameInputInterval = 10.f;
+        alpha = 0.f;
+        fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
+        saveName->SetText(saveNameFormat);
+        clock.restart();
+        isCoinInserted = false;
+        SetStatus(GameStatus::Game);
     }
 }
 

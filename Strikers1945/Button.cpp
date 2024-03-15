@@ -65,6 +65,11 @@ void Button::SetButtonText(const sf::Font& font, const std::string& label, size_
 	Utils::Origin::SetOrigin(buttonText, origin);
 }
 
+void Button::SetButtonColor(sf::Color color)
+{
+	shape.setFillColor(color);
+}
+
 sf::FloatRect Button::GetLocalBounds()
 {
 	return shape.getLocalBounds();

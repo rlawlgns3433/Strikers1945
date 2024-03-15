@@ -49,6 +49,8 @@ protected :
 	float alpha;
 
 	bool isNewRecord;
+	bool isCoinInserted = false;
+
 public :
 	SceneGame(SceneIDs id);
 	~SceneGame() override = default;
@@ -83,7 +85,6 @@ public :
 	int GetHighScore();
 	void SaveHighScore();
 	void SortRanking();
-	void SetExtraStat();
 
 	const std::list<Enemy*>& GetEnemyList() const { return enemyList; }
 	const std::list<EnemyProjectile*>& GetUsingProjectileList() const { return usingProjectileList; }

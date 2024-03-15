@@ -63,6 +63,7 @@ void AnimPlayer::Reset()
 	isDead = false;
 	isInvincible = true;
 	isCheated = false;
+	isActive = true;
 	powerLevel = data.initialpowerLevel;
 	lifes = data.lifes;
 	bombCount = data.bombCount;

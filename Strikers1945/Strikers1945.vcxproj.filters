@@ -135,7 +135,7 @@
     <ClCompile Include="Scenes\SceneEnding.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SceneUpgrade.cpp">
+    <ClCompile Include="Scenes\SceneUpgrade.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
@@ -272,7 +272,7 @@
     <ClInclude Include="Scenes\SceneEnding.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SceneUpgrade.h">
+    <ClInclude Include="Scenes\SceneUpgrade.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">

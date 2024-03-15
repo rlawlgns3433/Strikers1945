@@ -19,16 +19,24 @@ protected:
 	Button* startGameButton = nullptr;
 
 	TextGo goldDisplay;
+	SpriteGo* myFlight = nullptr;
 
 	sf::Vector2f windowSize;
 	sf::Sprite fighterSprite;
 	sf::Font font;
 
+	sf::Color buttonColor = sf::Color(127, 127, 127, 255);
+	sf::Color buttonColorFocused = sf::Color(127, 127, 127, 200);
+	sf::Color buttonColorPressed = sf::Color(127, 127, 127, 127);
 
-	int currentGold = 0;
+	float alpha;
+
+	long long currentGold = 0;
 	int extraPowerLevel = 0;
 	int extraLifes = 0;
 	int extraBombs = 0;
+
+	bool isButtonPressed = false;
 
 public:
 	SceneUpgrade(SceneIDs id);
