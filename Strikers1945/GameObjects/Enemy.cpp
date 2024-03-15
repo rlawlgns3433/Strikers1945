@@ -107,15 +107,19 @@ void Enemy::Update(float dt)
 
 void Enemy::Shoot()
 {
+
 	switch (shootType)
 	{
 	case Enemy::ShootTypes::OneTime:
+		if (player->GetIsBomb()) return;
 		TargetingShotPattern();
 		break;
 	case Enemy::ShootTypes::ThreeTime:
+		if (player->GetIsBomb()) return;
 		ShootFrontThreeTime();
 		break;
 	case Enemy::ShootTypes::MidBoss:
+		if (player->GetIsBomb()) return;
 		TargetingShotPattern();
 		SpreadShotPattern(5, 180, 300);
 		break;

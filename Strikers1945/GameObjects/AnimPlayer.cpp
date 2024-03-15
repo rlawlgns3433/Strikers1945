@@ -127,12 +127,12 @@ void AnimPlayer::UpdateGame(float dt)
 	animator.Update(dt);
 	shootTimer += dt;
 
-	if (InputManager::GetKey(sf::Keyboard::LControl) && !isDead)
+	if (InputManager::GetKey(sf::Keyboard::LControl))
 	{
 		Shoot();
 	}
 
-	if (InputManager::GetKeyDown(sf::Keyboard::LShift) && !isDead)
+	if (InputManager::GetKeyDown(sf::Keyboard::LShift))
 	{
 		UseBomb();
 	}
@@ -238,6 +238,8 @@ void AnimPlayer::Draw(sf::RenderWindow& window)
 
 void AnimPlayer::Shoot()
 {
+	if (isBomb || isDead) return;
+
 	if (shootTimer >= shootInterval)
 	{
 		shootTimer = 0.f;
@@ -265,7 +267,7 @@ void AnimPlayer::Shoot()
 
 void AnimPlayer::UseBomb()
 {
-	if (bombCount <= 0) return;
+	if (isDead || bombCount <= 0) return;
 
 	isBomb = true;
 	isInvincible = true;
@@ -280,13 +282,13 @@ void AnimPlayer::OnDie()
 
 	if (powerLevel > 1)
 	{
-		powerLevel = 1;
-		currentHelperCount = 1;
+		SetPowerLevel(1);
+		SetHelperCount(1);
 
 		Item* item = Item::Create(Item::Types::PowerUp);
 		item->Init();
 		item->Reset();
-		item->SetPosition(position + sf::Vector2f(-50.f, -50.f));
+		item->SetPosition(position + sf::Vector2f(Utils::Random::GetRandomVector2(-100.f, -70.f)));
 		sceneGame->ItemList.push_back(item);
 		sceneGame->AddGameObject(item);
 	}
@@ -364,24 +366,7 @@ void AnimPlayer::SetPowerLevel(int powerLevel)
 	}
 	damage += 75 * (powerLevel - 1);
 
-	currentHelperCount = powerLevel;
-	if (currentHelperCount < 0)
-	{
-		currentHelperCount = 0;
-	}
-	else if (currentHelperCount > 4)
-	{
-		currentHelperCount = 4;
-	}
-
-	for (int i = 0; i < currentHelperCount; ++i)
-	{
-		playerHelpers[i]->SetActive(true);
-	}
-	for (int i = currentHelperCount; i < 4; ++i)
-	{
-		playerHelpers[i]->SetActive(false);
-	}
+	SetHelperCount(powerLevel);
 
 	std::cout << damage << std::endl;
 }
@@ -430,6 +415,7 @@ void AnimPlayer::AddHelperCount(int add)
 void AnimPlayer::SetHelperCount(int currentHelperCount)
 {
 	this->currentHelperCount = currentHelperCount;
+
 	if (this->currentHelperCount < 0)
 	{
 		this->currentHelperCount = 0;

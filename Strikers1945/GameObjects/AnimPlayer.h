@@ -133,6 +133,7 @@ public:
 	void AddPowerLevel(int add);
 	inline void SetPowerLevel(int powerLevel);
 
+	inline bool GetIsBomb() const { return isBomb; }
 	inline bool GetIsCheated() const { return isCheated; }
 	void SetCheatMode();
 
