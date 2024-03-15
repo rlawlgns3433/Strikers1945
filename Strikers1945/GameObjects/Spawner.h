@@ -26,7 +26,7 @@ protected :
 	int spawnCountMin;
 	int spawnCountMax;
 
-	float radius = 250.f;			// 생성 반경
+	float radius = 250.f;
 	virtual GameObject* Create() = 0;
 
 public :

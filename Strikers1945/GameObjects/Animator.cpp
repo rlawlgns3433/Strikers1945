@@ -84,7 +84,6 @@ void Animator::Play(const std::string& clipId, bool clearQueue)
 	addFrame = 1;
 	isPlaying = true;
 	accumTime = 0.f;
-	//currentClip = &clips[clipId];
 	currentClip = ANIMATION_CLIP_MANAGER.GetResource(clipId);
 	currentFrame = 0;
 	totalFrame = currentClip->GetTotalFrame();
@@ -101,7 +100,7 @@ void Animator::Stop()
 {
 	isPlaying = false;
 }
-// AnimationFrame에 텍스처를 지정
+
 void Animator::SetFrame(const AnimationFrame& frame)
 {
 	target->setTexture(frame.GetTexture());
@@ -121,10 +120,6 @@ void Animator::ClearEvenet()
 bool AnimationClip::loadFromFile(const std::string& filePath)
 {
 	rapidcsv::Document doc(filePath);
-	// 파일 경로 없을 때 예외 처리 필요
-	// 가져오기 실패 했을 경우 예외처리 필요
-
-	//id = doc.GetCell<std::string>(0, 0);
 	id = filePath;
 	fps = doc.GetCell<int>(1, 0);
 	loopType = static_cast<AnimationLoopType>(doc.GetCell<int>(2, 0));

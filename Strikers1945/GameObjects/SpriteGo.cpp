@@ -43,7 +43,6 @@ void SpriteGo::SetRotation(float rot)
 
 void SpriteGo::SetOrigin(Origins preset)
 {
-
 	if (preset == Origins::CUSTOM)
 	{
 		preset == Origins::TL;

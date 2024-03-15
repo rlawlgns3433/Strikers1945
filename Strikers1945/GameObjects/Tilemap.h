@@ -7,7 +7,7 @@ protected :
 	sf::Texture* texture;
 
 	sf::Transform transform;
-	sf::Vector2i cellCount = { 6, 8 }; // ¸ã Å©±â
+	sf::Vector2i cellCount = { 6, 8 };
 	sf::Vector2f cellSize;
 
 	std::string spriteSheetId;

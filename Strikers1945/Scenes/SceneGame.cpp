@@ -11,6 +11,7 @@
 #include "SpriteGo.h"
 #include "TextGo.h"
 #include "Item.h"
+#include "SceneUpgrade.h"
 
 SceneGame::SceneGame(SceneIDs id) 
     : Scene(id)
@@ -35,7 +36,7 @@ void SceneGame::Init()
     fadeWindow = sf::RectangleShape((sf::Vector2f)(FRAMEWORK.GetWindowSize()));
     fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
 
-    player = new AnimPlayer(AnimPlayer::Type::F_4);
+    player = new AnimPlayer(PlayerType::F_4);
     AddGameObject(player);
 
     enemySpawner = new EnemySpawner();
@@ -58,17 +59,16 @@ void SceneGame::Init()
     textCountDown->SetActive(false);
     AddGameObject(textCountDown, Layers::Ui);
 
-    /////////////////////////////////////////////////
     saveName = new TextGo();
     saveName->Init();
     saveName->Reset();
-    saveName->Set(font, "Save Name : ", 50, sf::Color::White);
+    saveName->Set(font, saveNameFormat, 50, sf::Color::White);
     saveName->SetOrigin(Origins::MC);
     saveName->SetPosition({ windowX * 0.5f, windowY * 0.5f });
     saveName->SetActive(false);
     AddGameObject(saveName, Layers::Ui);
 
-    Scene::Init(); // 모든 게임 오브젝트 Init()
+    Scene::Init();
 }
 
 void SceneGame::Release()
@@ -82,13 +82,25 @@ void SceneGame::Reset()
     background->Reset();
     textCountDown->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), std::to_string(countDown), 100, sf::Color::Red);
     countDown = 10;
+    nameInputInterval = 10.f;
+    alpha = 0.f;
+    fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
+    saveName->SetText(saveNameFormat);
 }
 
 void SceneGame::Enter()
 {
 	Scene::Enter();
     status = GameStatus::Game;
+    sceneUpgrade = dynamic_cast<SceneUpgrade*>(SCENE_MANAGER.GetScene(SceneIDs::SceneUpgrade));
+
+    for (auto e : sceneUpgrade->GetExtraStat())
+    {
+        std::cout << e << std::endl;
+    }
+
     player->SetActive(true);
+    player->SetExtraStat(sceneUpgrade->GetExtraStat());
 }
 
 void SceneGame::Exit()
@@ -105,19 +117,19 @@ void SceneGame::Exit()
     for (auto& projectile : usingProjectileList)
     {
         if (projectile != nullptr)
-            RemoveGameObject(projectile);
+            projectile->SetActive(false);
     }
     usingProjectileList.clear();
 
     for (auto& item : ItemList)
     {
         if (item != nullptr)
-            RemoveGameObject(item);
+            item->SetActive(false);
     }
     ItemList.clear();
 
-    Scene::Exit();
 
+    Scene::Exit();
 }
 
 void SceneGame::Update(float dt)
@@ -194,6 +206,7 @@ void SceneGame::UpdateGame(float dt)
 
 void SceneGame::UpdateGameover(float dt)
 {
+    textCountDown->SetActive(true);
 
     if (InputManager::GetKeyDown(sf::Keyboard::Space) && countDown > 0)
     {
@@ -203,7 +216,6 @@ void SceneGame::UpdateGameover(float dt)
         clock.restart();
     }
 
-    textCountDown->SetActive(true);
     if (clock.getElapsedTime().asSeconds() > 1.f && countDown > 0)
     {
         textCountDown->SetText(std::to_string(--countDown));
@@ -214,8 +226,7 @@ void SceneGame::UpdateGameover(float dt)
 
     if (countDown <= 0)
     {
-        // 플레이어의 스코어가 3등 이내이면 이름 입력 3글자
-        if (ranking[2].second < player->GetScore())
+        if (ranking.size() < 2 || (*(ranking.begin() + 2)).second < player->GetScore())
         {
             fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
             saveName->SetSortLayer(1);
@@ -245,9 +256,29 @@ void SceneGame::UpdateGameover(float dt)
         {
             GetReward();
             SetStatus(GameStatus::GameOver);
-            SCENE_MANAGER.ChangeScene(SceneIDs::SceneEnding);
             Reset();
+            SCENE_MANAGER.ChangeScene(SceneIDs::SceneEnding);
         }
+    }
+    else
+    {
+        if (InputManager::GetKeyDown(sf::Keyboard::Num5) || InputManager::GetKeyDown(sf::Keyboard::Numpad5))
+        {
+            isCoinInserted = true;
+        }
+    }
+
+    if (isCoinInserted)
+    {
+        player->Reset();
+        countDown = 10;
+        nameInputInterval = 10.f;
+        alpha = 0.f;
+        fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
+        saveName->SetText(saveNameFormat);
+        clock.restart();
+        isCoinInserted = false;
+        SetStatus(GameStatus::Game);
     }
 }
 
@@ -294,7 +325,7 @@ void SceneGame::GetReward()
     gold += player->GetScore() / 100;
 
     std::ofstream input;
-    input.open("gold.txt", std::ios::app);
+    input.open("gold.txt");
     if (input.is_open())
     {
         input << gold;

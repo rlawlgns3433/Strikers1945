@@ -37,11 +37,6 @@ void Spawner::Update(float dt)
 
 	timer += dt;
 
-	if (background->GetPhase() == Background::GamePhase::BossPhase)
-	{
-
-	}
-
 	if (timer > interval)
 	{
 		timer = 0.f;

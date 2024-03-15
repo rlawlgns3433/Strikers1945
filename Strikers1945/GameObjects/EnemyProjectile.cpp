@@ -18,7 +18,7 @@ void EnemyProjectile::Init()
 
 void EnemyProjectile::Reset()
 {
-	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
+	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
 }
 

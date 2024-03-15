@@ -11,6 +11,7 @@ class Enemy;
 class EnemyProjectile;
 class SpriteGo;
 class TextGo;
+class SceneUpgrade;
 
 class SceneGame : public Scene
 {
@@ -27,7 +28,10 @@ protected :
 	TextGo* textCountDown = nullptr;
 	TextGo* saveName = nullptr;
 
+	SceneUpgrade* sceneUpgrade = nullptr;
+
 	std::vector<std::pair<std::string, int>> ranking;
+	std::string saveNameFormat = "Save Name : ";
 
 	sf::RectangleShape fadeWindow;
 	sf::Clock clock;
@@ -45,6 +49,8 @@ protected :
 	float alpha;
 
 	bool isNewRecord;
+	bool isCoinInserted = false;
+
 public :
 	SceneGame(SceneIDs id);
 	~SceneGame() override = default;

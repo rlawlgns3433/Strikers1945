@@ -18,7 +18,7 @@ protected:
 	sf::Vector2f direction = { 0, 1 };
 
 	float time = 0.f;
-	float speed = 500.f;
+	float speed = 300.f;
 
 public:
 	EnemyProjectile(const std::string& name = "enemyProjectile");

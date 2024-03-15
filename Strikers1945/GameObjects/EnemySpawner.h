@@ -14,7 +14,7 @@ protected :
 	SceneGame* sceneGame = nullptr;
 
 	std::vector<Enemy::Types> enemyTypes;
-	Background::GamePhase currentPhase = Background::GamePhase::CommonEnemyPhase;
+	Background::GamePhase currentPhase = Background::GamePhase::None;
 
 public :
 	static int enemyCount;

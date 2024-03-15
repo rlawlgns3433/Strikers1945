@@ -44,8 +44,7 @@ void SoundManager::Update(float dt)
 		if ((*it)->getStatus() != sf::SoundSource::Stopped)
 		{
 			waitingSFX.push_back(*it);
-			it = playingSFX.erase(it); // erase는 삭제한 원소의 위치 다음 iterator가 반환된다.
-									   // 그렇기 때문에 이 부분에서는 iterator가 수정되면 안 된다.
+			it = playingSFX.erase(it);
 		}
 		else
 		{
@@ -118,7 +117,7 @@ void SoundManager::PlaySfx(const sf::SoundBuffer& buffer, bool loop)
 
 	if (waitingSFX.empty())
 	{
-		sound = playingSFX.front(); // play 중인 sfx를 중지하고 재사용하기 때문에 플레이 되는 것처럼 보임. (해결 필요)
+		sound = playingSFX.front();
 		playingSFX.pop_front();
 		sound->stop();
 	}

@@ -32,7 +32,7 @@ public:
 	float fixedUpdateTime = 1.f / 50.f;
 
 public:
-	sf::RenderWindow& GetWindow() { return window; } // 조심할 필요가 있음
+	sf::RenderWindow& GetWindow() { return window; }
 	const sf::Vector2i& GetWindowSize() const { return windowSize; }
 
 	float GetRealTime()			const { return realTime.asSeconds(); }

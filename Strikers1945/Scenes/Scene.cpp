@@ -192,7 +192,7 @@ void Scene::Draw(sf::RenderWindow& window)
 		}
 	}
 
-	window.setView(saveView); // 이전 상태의 뷰로 돌려주기
+	window.setView(saveView);
 }
 
 GameObject* Scene::FindGameObject(const std::string& name, Layers layer)
@@ -294,7 +294,7 @@ GameObject* Scene::AddGameObject(GameObject* obj, Layers layer)
 				}
 				++it;
 			}
-			gameObjects.push_back(obj);				// 리스트에 아무것도 없어서 순회를 안 하면 추가
+			gameObjects.push_back(obj);
 			return obj;
 		}
 	}
@@ -313,7 +313,7 @@ GameObject* Scene::AddGameObject(GameObject* obj, Layers layer)
 				}
 				++it;
 			}
-			uiGameObjects.push_back(obj);				// 리스트에 아무것도 없어서 순회를 안 하면 추가
+			uiGameObjects.push_back(obj);
 			return obj;
 		}
 	}
@@ -338,7 +338,7 @@ GameObject* Scene::AddGameObject(const std::string& name, Layers layer)
 				}
 				++it;
 			}
-			gameObjects.push_back(obj);				// 리스트에 아무것도 없어서 순회를 안 하면 추가
+			gameObjects.push_back(obj);	
 			return obj;
 		}
 	}
@@ -357,7 +357,7 @@ GameObject* Scene::AddGameObject(const std::string& name, Layers layer)
 				}
 				++it;
 			}
-			uiGameObjects.push_back(obj);				// 리스트에 아무것도 없어서 순회를 안 하면 추가
+			uiGameObjects.push_back(obj);
 			return obj;
 		}
 	}

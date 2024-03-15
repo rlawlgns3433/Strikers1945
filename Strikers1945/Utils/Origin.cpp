@@ -6,8 +6,8 @@ namespace Utils
 	sf::Vector2f Origin::SetOrigin(sf::Transformable& obj, Origins originPreset, const sf::FloatRect& rect)
 	{
 		sf::Vector2f newOrigin(rect.width, rect.height);
-		newOrigin.x *= ((int)originPreset % 3) * 0.5f; // 0 1 2 => 0 0.5 1
-		newOrigin.y *= ((int)originPreset / 3) * 0.5f; // 0 1 2 => 0 0.5 1
+		newOrigin.x *= ((int)originPreset % 3) * 0.5f;
+		newOrigin.y *= ((int)originPreset / 3) * 0.5f;
 		obj.setOrigin(newOrigin);
 
 		return newOrigin;

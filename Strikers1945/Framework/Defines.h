@@ -22,14 +22,6 @@ enum class Sides
 	COUNT
 };
 
-enum class PlayerSelectCharacter
-{
-	None = -1,
-	WoodCutter,
-	YoungWoodCutter,
-	COUNT,
-};
-
 enum class PlayerState
 {
 	NOTSET = -1,
@@ -57,4 +49,10 @@ enum class Languages
 {
 	Korean,
 	English,
+};
+
+enum class PlayerType
+{
+	F_4,
+	F_117
 };

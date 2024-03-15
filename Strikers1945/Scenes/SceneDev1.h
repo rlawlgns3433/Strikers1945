@@ -22,7 +22,6 @@ public:
 	SceneDev1& operator=(const SceneDev1&) = delete;
 	SceneDev1& operator=(SceneDev1&&) = delete;
 
-	// SceneTitle을(를) 통해 상속됨
 	void Init() override;
 	void Release() override;
 	void Enter() override;

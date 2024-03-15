@@ -40,13 +40,17 @@ void SceneEnding::Enter()
 {
 	Scene::Enter();
     ranking = GetScores();
+    for (int i = 0; i < 3; ++i)
+    {
+        std::cout << (*(ranking.begin() + i)).first << " : " << (*(ranking.begin() + i)).second << std::endl;
+    }
 
     for (int i = 0; i < 3; ++i)
     {
         textRanking.push_back(new TextGo("textranking"));
         textRanking[i]->Init();
         textRanking[i]->Reset();
-        textRanking[i]->Set(font, ranking[i].first + "\t" + std::to_string(ranking[i].second), 40, sf::Color::White);
+        textRanking[i]->Set(font, (*(ranking.begin()+i)).first + "\t" + std::to_string((*(ranking.begin() + i)).second), 40, sf::Color::White);
         textRanking[i]->SetOrigin(Origins::MC);
         textRanking[i]->SetPosition({ 0, i * 100.f });
 
@@ -56,6 +60,13 @@ void SceneEnding::Enter()
 
 void SceneEnding::Exit()
 {
+    for (auto text : textRanking)
+    {
+        RemoveGameObject(text);
+    }
+
+    textRanking.clear();
+    ranking.clear();
 	Scene::Exit();
 }
 
@@ -64,58 +75,26 @@ void SceneEnding::Update(float dt)
     Scene::Update(dt);
     SetStatus(status);
 
-    switch (status)
+    if ((*(ranking.end() - 1)).second < playerScore)
     {
-    case GameStatus::Awake:
-        UpdateAwake(dt);
-        break;
-    case GameStatus::Game:
-        UpdateGame(dt);
-        break;
-    case GameStatus::GameOver:
-        UpdateGameover(dt);
-        break;
-    case GameStatus::Pause:
-        UpdatePause(dt);
-        break;
-    default:
-        break;
-    }
-}
-
-void SceneEnding::UpdateAwake(float dt)
-{
-}
-
-void SceneEnding::UpdateGame(float dt)
-{
-    if (ranking[2].second < playerScore)
-    {
-        // 최고 기록을 갱신
         if (clock.getElapsedTime().asSeconds() > nameInputInterval)
         {
-            textRanking[2]->SetFocused(true);
-
-            ranking[2].first = textRanking[2]->GetText();
-            if (ranking[2].first.size() >= 3)
+            (*(ranking.end() - 1)).first = (*(textRanking.end() - 1))->GetText();
+            if ((*(ranking.end() - 1)).first.size() >= 3)
             {
                 nameInputInterval = 0.f;
 
-                textRanking[2]->SetFocused(false);
-                ranking[2].second = playerScore;
-                SaveHighScore();
+                (*(textRanking.end() - 1))->SetFocused(false);
+                (*(ranking.end() - 1)).second = playerScore;
                 SortRanking();
             }
         }
     }
-}
 
-void SceneEnding::UpdateGameover(float dt)
-{
-}
-
-void SceneEnding::UpdatePause(float dt)
-{
+    if (InputManager::GetKeyDown(sf::Keyboard::Enter))
+    {
+        SCENE_MANAGER.ChangeScene(SceneIDs::SceneTitle);
+    }
 }
 
 void SceneEnding::SetStatus(GameStatus newStatus)
@@ -173,27 +152,4 @@ void SceneEnding::SortRanking()
         {
             return lhs.second > rhs.second;
         });
-}
-
-void SceneEnding::SaveHighScore()
-{
-    std::ifstream file("highScore.txt", std::ios_base::app);
-
-    if (!file.is_open()) {
-        std::cerr << "파일을 열 수 없습니다." << std::endl;
-        return;
-    }
-
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-
-    std::ofstream input;
-    input.open("highScore.txt", std::ios::app);
-    if (input.is_open())
-    {
-        input << ranking[2].first << player->GetScore() << '\n';
-    }
-
-    input.close();
 }

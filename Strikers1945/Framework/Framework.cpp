@@ -54,7 +54,6 @@ void Framework::Do()
             }
         }
         
-
         // Draw
         window.clear();
         SCENE_MANAGER.Draw(window);

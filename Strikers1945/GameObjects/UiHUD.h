@@ -19,7 +19,6 @@ protected:
 	std::vector<SpriteGo*> spriteLifes;
 	std::vector<SpriteGo*> spriteBombs;
 
-	// 나중에 이미지로 변경 필요
 	std::string scoreFormat = "Score : ";
 
 	sf::Vector2f referenceResolution = { 960.f, 540.f };

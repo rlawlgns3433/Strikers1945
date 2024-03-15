@@ -2,14 +2,13 @@
 class DataTable
 {
 public :
-	enum class Types // Data TableÀÇ °³¼ö
+	enum class Types 
 	{
-		String, 
 		Enemy,
 		Item,
 		Player
 	};
-	static const int TotalTypes = 2;
+	static const int TotalTypes = 3;
 
 private :
 	Types type;

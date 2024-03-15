@@ -37,16 +37,16 @@ void EnemySpawner::Update(float dt)
 {
 	Spawner::Update(dt);
 
-	if (background->GetPhase() == currentPhase /*&& currentPhase != Background::CommonEnemyPhase*/) return;
+	if (background->GetPhase() == currentPhase) return;
 
 	switch (background->GetPhase())
 	{
 	case Background::CommonEnemyPhase:
-		spawnCount = 3;
+		spawnCount = 5;
 		ResetCommonEnemyPhase();
 		break;
 	case Background::MidBossPhase:
-		spawnCount = 2;
+		spawnCount = 6;
 		ResetMidBoosPhase();
 		break;
 	case Background::BossPhase:
@@ -86,7 +86,6 @@ void EnemySpawner::ResetCommonEnemyPhase()
 void EnemySpawner::ResetMidBoosPhase()
 {
 	ResetCommonEnemyPhase();
-	enemyTypes.push_back(Enemy::Types::MidBoss);
 	enemyTypes.push_back(Enemy::Types::MidBoss);
 }
 

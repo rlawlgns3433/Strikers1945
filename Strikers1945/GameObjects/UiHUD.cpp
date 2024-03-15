@@ -11,7 +11,6 @@ UiHUD::UiHUD(const std::string& name)
 
 void UiHUD::Init()
 {
-	//점수, 라이프 수, 폭탄 수, 일시 정지
 	GameObject::Init();
 	textScore.Init();
 
@@ -126,7 +125,15 @@ void UiHUD::AddLifes(int add)
 
 void UiHUD::SetLifes(int lifes)
 {
-	this->lifes = lifes;
+	if (lifes > 10)
+	{
+		this->lifes = 10;
+	}
+	else
+	{
+		this->lifes = lifes;
+	}
+
 	for (int i = 0; i < this->lifes; ++i)
 	{
 		spriteLifes[i]->SetActive(true);
@@ -155,7 +162,14 @@ void UiHUD::AddBombCount(int add)
 
 void UiHUD::SetBombCount(int bombCount)
 {
-	this->bombCount = bombCount;
+	if (bombCount > 10)
+	{
+		this->bombCount = 10;
+	}
+	else
+	{
+		this->bombCount = bombCount;
+	}
 
 	for (int i = 0; i < this->bombCount; ++i)
 	{

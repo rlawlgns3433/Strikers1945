@@ -15,7 +15,7 @@ bool PlayerTable::Load()
 	for (int i = 0; i < doc.GetRowCount(); ++i)
 	{
 		auto row = doc.GetRow<std::string>(i);
-		AnimPlayer::Type id = (AnimPlayer::Type)std::stoi(row[0]);
+		PlayerType id = (PlayerType)std::stoi(row[0]);
 
 		if (table.find(id) != table.end())
 		{
@@ -52,7 +52,7 @@ void PlayerTable::Release()
 	table.clear();
 }
 
-const PlayerData PlayerTable::Get(AnimPlayer::Type id)
+const PlayerData PlayerTable::Get(PlayerType id)
 {
 	auto find = table.find(id);
 

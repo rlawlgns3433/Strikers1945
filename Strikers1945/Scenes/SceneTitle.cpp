@@ -11,10 +11,6 @@ SceneTitle::SceneTitle(SceneIDs id)
 	windowY = FRAMEWORK.GetWindowSize().y;
 }
 
-SceneTitle::~SceneTitle()
-{
-}
-
 void SceneTitle::Init()
 {
 	worldView.setSize(windowX, windowY);
@@ -51,6 +47,8 @@ void SceneTitle::Enter()
 void SceneTitle::Exit()
 {
 	FRAMEWORK.SetTimeScale(1.f);
+
+	Scene::Exit();
 }
 
 void SceneTitle::Update(float dt)
@@ -62,8 +60,7 @@ void SceneTitle::Update(float dt)
 
 	if (InputManager::GetKeyDown(sf::Keyboard::Enter))
 	{
-
-		SCENE_MANAGER.ChangeScene(SceneIDs::SceneGame);
+		SCENE_MANAGER.ChangeScene(SceneIDs::SceneUpgrade);
 		std::cout << "SCENETITLE" << std::endl;
 	}
 }
