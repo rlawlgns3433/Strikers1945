@@ -83,21 +83,21 @@ void Tilemap::Set(const sf::Vector2i& count, const sf::Vector2f& size)
 	va.setPrimitiveType(sf::Quads);
 	va.resize(count.x * count.y * 4); 
 
-	sf::Vector2f posOffsets[4] =
-	{
-		{ 0, 0 },
-		{ size.x, 0 },
-		{ size.x, size.y },
-		{ 0, size.y }
-	};
+	//sf::Vector2f posOffsets[4] =
+	//{
+	//	{ 0, 0 },
+	//	{ size.x, 0 },
+	//	{ size.x, size.y },
+	//	{ 0, size.y }
+	//};
 
-	sf::Vector2f textureCoord0[4] =
-	{
-		{ 0, 0 },
-		{ cellSize.x, 0 },
-		{ cellSize.x, cellSize.y },
-		{ 0, cellSize.y }
-	};
+	//sf::Vector2f textureCoord0[4] =
+	//{
+	//	{ 0, 0 },
+	//	{ cellSize.x, 0 },
+	//	{ cellSize.x, cellSize.y },
+	//	{ 0, cellSize.y }
+	//};
 
 	for (int row = 0; row < count.y; ++row)
 	{

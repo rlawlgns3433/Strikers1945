@@ -6,6 +6,11 @@ class TextGo;
 class SceneTitle : public Scene
 {
 protected:
+	SceneTitle(const SceneTitle&) = delete;
+	SceneTitle(SceneTitle&&) = delete;
+	SceneTitle& operator=(const SceneTitle&) = delete;
+	SceneTitle& operator=(SceneTitle&&) = delete;
+
 	SpriteGo* opening = nullptr;
 	TextGo* textIntro = nullptr;
 
@@ -17,12 +22,7 @@ protected:
 
 public:
 	SceneTitle(SceneIDs id);
-	virtual ~SceneTitle();
-
-	SceneTitle(const SceneTitle&) = delete;
-	SceneTitle(SceneTitle&&) = delete;
-	SceneTitle& operator=(const SceneTitle&) = delete;
-	SceneTitle& operator=(SceneTitle&&) = delete;
+	~SceneTitle() override = default;
 
 	void Init() override;
 	void Release() override;

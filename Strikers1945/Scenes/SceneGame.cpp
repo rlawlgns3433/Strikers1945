@@ -11,6 +11,7 @@
 #include "SpriteGo.h"
 #include "TextGo.h"
 #include "Item.h"
+#include "SceneUpgrade.h"
 
 SceneGame::SceneGame(SceneIDs id) 
     : Scene(id)
@@ -91,7 +92,15 @@ void SceneGame::Enter()
 {
 	Scene::Enter();
     status = GameStatus::Game;
+    sceneUpgrade = dynamic_cast<SceneUpgrade*>(SCENE_MANAGER.GetScene(SceneIDs::SceneUpgrade));
+
+    for (auto e : sceneUpgrade->GetExtraStat())
+    {
+        std::cout << e << std::endl;
+    }
+
     player->SetActive(true);
+    player->SetExtraStat(sceneUpgrade->GetExtraStat());
 }
 
 void SceneGame::Exit()

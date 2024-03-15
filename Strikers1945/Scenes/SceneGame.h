@@ -11,6 +11,7 @@ class Enemy;
 class EnemyProjectile;
 class SpriteGo;
 class TextGo;
+class SceneUpgrade;
 
 class SceneGame : public Scene
 {
@@ -26,6 +27,8 @@ protected :
 	SpriteGo* pauseWindow = nullptr;
 	TextGo* textCountDown = nullptr;
 	TextGo* saveName = nullptr;
+
+	SceneUpgrade* sceneUpgrade = nullptr;
 
 	std::vector<std::pair<std::string, int>> ranking;
 	std::string saveNameFormat = "Save Name : ";
@@ -80,6 +83,7 @@ public :
 	int GetHighScore();
 	void SaveHighScore();
 	void SortRanking();
+	void SetExtraStat();
 
 	const std::list<Enemy*>& GetEnemyList() const { return enemyList; }
 	const std::list<EnemyProjectile*>& GetUsingProjectileList() const { return usingProjectileList; }

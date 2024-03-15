@@ -7,6 +7,7 @@ enum class SceneIDs
 {
 	None = -1,
 	SceneTitle,
+	SceneUpgrade,
 	SceneGame,
 	SceneEnding,
 	COUNT,

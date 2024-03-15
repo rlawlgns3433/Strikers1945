@@ -126,4 +126,5 @@ public:
 	void SetHelperCount(int currentHelperCount);
 
 	int GetHighScore();
+	void SetExtraStat(std::vector<int> extraStats);
 };

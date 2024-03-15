@@ -331,6 +331,18 @@ void AnimPlayer::SetCheatMode()
 	isCheated = !isCheated;
 }
 
+void AnimPlayer::SetExtraStat(std::vector<int> extraStats)
+{
+	powerLevel += extraStats[0];
+	lifes += extraStats[1];
+	bombCount += extraStats[2];
+
+	SetPowerLevel(powerLevel);
+	 
+	hud->SetLifes(lifes);
+	hud->SetBombCount(bombCount);
+}
+
 void AnimPlayer::AddHelperCount(int add)
 {
 	currentHelperCount += add;
