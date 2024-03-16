@@ -60,6 +60,14 @@ void SceneGame::Init()
     textCountDown->SetActive(false);
     AddGameObject(textCountDown, Layers::Ui);
 
+    textInsertCoin = new TextGo("insertcoin");
+    textInsertCoin->Set(*FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf"), "Insert coin to continue", 50, sf::Color::Red);
+    textInsertCoin->SetPosition({ windowX * 0.5f, windowY * 0.65f });
+    textInsertCoin->SetOrigin(Origins::MC);
+    textInsertCoin->SetActive(false);
+    AddGameObject(textInsertCoin, Layers::Ui);
+
+
     saveName = new InputField();
     saveName->Init();
     saveName->Reset();
@@ -68,6 +76,9 @@ void SceneGame::Init()
     saveName->SetPosition({ windowX * 0.5f, windowY * 0.5f });
     saveName->SetActive(false);
     AddGameObject(saveName, Layers::Ui);
+
+    hud = new UiHUD();
+    AddGameObject(hud, Layers::Ui);
 
     Scene::Init();
 }
@@ -86,7 +97,13 @@ void SceneGame::Reset()
     nameInputInterval = 10.f;
     alpha = 0.f;
     fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
+    textCountDown->SetActive(false);
+    textInsertCoin->SetActive(false);
     saveName->SetText(saveNameFormat);
+
+    hud->SetScore(player->GetScore());
+    hud->SetBombCount(player->GetBombItem());
+    hud->SetLifes(player->GetLife());
 }
 
 void SceneGame::Enter()
@@ -208,6 +225,7 @@ void SceneGame::UpdateGame(float dt)
 void SceneGame::UpdateGameover(float dt)
 {
     textCountDown->SetActive(true);
+    textInsertCoin->SetActive(true);
 
     if (InputManager::GetKeyDown(sf::Keyboard::Space) && countDown > 0)
     {
@@ -230,13 +248,13 @@ void SceneGame::UpdateGameover(float dt)
         if (ranking.size() < 3 || (*(ranking.begin() + 2)).second < player->GetScore())
         {
             fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
-            //saveName->SetSortLayer(1);
-            //ResortGameObject(saveName);
             saveName->SetActive(true);
             isNewRecord = true;
             if (clock.getElapsedTime().asSeconds() <= nameInputInterval)
             {
                 saveName->SetFocused(true);
+                textInsertCoin->SetActive(false);
+                textCountDown->SetActive(false);
 
                 if (saveName->GetText().size() >= 15)
                 {
@@ -279,13 +297,18 @@ void SceneGame::UpdateGameover(float dt)
 
     if (isCoinInserted)
     {
+        currentScore = player->GetScore();
         player->Reset();
+        player->SetScore(currentScore);
+        hud->SetScore(player->GetScore());
         countDown = 10;
         nameInputInterval = 10.f;
         alpha = 0.f;
         fadeWindow.setFillColor(sf::Color(0, 0, 0, alpha));
         saveName->SetText(saveNameFormat);
         clock.restart();
+        textInsertCoin->SetActive(false);
+        textCountDown->SetActive(false);
         isCoinInserted = false;
         SetStatus(GameStatus::Game);
     }
