@@ -16,6 +16,7 @@ protected :
 
 	float speed = 1000.f;
 	float damage = 50.f;
+	float angle = 0.f;
 	bool isDeterminedTarget = false;
 
 public:

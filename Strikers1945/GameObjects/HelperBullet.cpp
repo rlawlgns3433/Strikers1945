@@ -15,6 +15,7 @@ void HelperBullet::Reset()
 {
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
 	isDeterminedTarget = false;
+	angle = Utils::MyMath::Angle(direction);
 	SetTexture("graphics/Strikers1945/helperBullet.png");
 	SetOrigin(Origins::BC);
 }
@@ -38,6 +39,9 @@ void HelperBullet::Update(float dt)
 		 && !closestEnemy->isDead())
 	{
 		Utils::MyMath::Normalize(direction = closestEnemy->GetPosition() - position);
+
+		angle = Utils::MyMath::Angle(direction);
+		SetRotation(angle + 90);
 	}
 	else
 	{
