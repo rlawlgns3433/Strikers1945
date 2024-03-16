@@ -1,10 +1,13 @@
 ID,FPS,"LOOPTYPE(0 : Single, 1: Loop, 2 : PingPong)",,
-Razer,10,2,,
+Razer,2,1,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/lazer.png,18,8,170,316
-graphics/lazer.png,188,8,170,316
-graphics/lazer.png,358,8,170,316
-graphics/lazer.png,540,8,170,316
-graphics/lazer.png,730,8,170,316
-graphics/lazer.png,924,8,170,316
+graphics/Strikers1945/assets/razer.png,0,200,32,100
+graphics/Strikers1945/assets/razer.png,32,130,32,170
+graphics/Strikers1945/assets/razer.png,64,80,32,220
+graphics/Strikers1945/assets/razer.png,96,0,32,300
+graphics/Strikers1945/assets/razer.png,128,0,32,300
+graphics/Strikers1945/assets/razer.png,160,0,32,300
+graphics/Strikers1945/assets/razer.png,192,0,32,300
+graphics/Strikers1945/assets/razer.png,224,0,32,300
+graphics/Strikers1945/assets/razer.png,256,0,32,300

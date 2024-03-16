@@ -1,12 +1,13 @@
 #pragma once
 #include "SpriteGo.h"
 #include "Animator.h"
-#include "SceneGame.h"
-#include "AnimPlayer.h"
-#include "UiHUD.h"
 #include "Item.h"
-#include "Background.h"
-#include "Razer.h"
+
+class SceneGame;
+class AnimPlayer;
+class Background;
+class UiHUD;
+class Razer;
 
 class Enemy : public SpriteGo
 {
@@ -39,8 +40,7 @@ public :
 
 	enum class ShootTypes
 	{
-		OneTime,
-		ThreeTime,
+		Regular,
 		MidBoss,
 		Boss,
 	};
@@ -62,13 +62,14 @@ protected :
 	Background* background = nullptr;
 	UiHUD* hud = nullptr;
 	Item* item = nullptr;
+	Razer* bossRazer = nullptr;
 	Item::Types itemType;
 	Animator animator;
-
 
 	std::vector<std::function<void(float)>> regularEnemyMoveFuncs;
 	std::vector<std::function<void(float)>> bossMoveFuncs;
 
+	std::vector<std::function<void()>> regularAttackFuncs;
 	std::vector<std::function<void()>> bossAttackFuncs;
 
 	std::vector<sf::Vector2f> midBossDirections;
@@ -108,6 +109,7 @@ protected :
 
 	int storedFuncIdx;
 	int bossAttackFuncIdx;
+	int regularAttackFuncIdx;
 	int maxHp = 100;
 	int hp = maxHp;
 	int damage = 10;

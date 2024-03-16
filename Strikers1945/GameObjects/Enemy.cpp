@@ -2,6 +2,11 @@
 #include "Enemy.h"
 #include "EnemyProjectile.h"
 #include "EnemyTable.h"
+#include "Razer.h"
+#include "SceneGame.h"
+#include "AnimPlayer.h"
+#include "Background.h"
+#include "UiHUD.h"
 #include "rapidcsv.h"
 
 Enemy* Enemy::Create(Types enemyType)
@@ -27,8 +32,9 @@ Enemy::Enemy(const std::string& name)
 void Enemy::Init()
 {
 	SpriteGo::Init();
+
 	animator.SetTarget(&sprite);
-	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
+	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
 	player = dynamic_cast<AnimPlayer*>(sceneGame->FindGameObject("player"));
 	hud = dynamic_cast<UiHUD*>(sceneGame->FindGameObject("hud"));
 	background = dynamic_cast<Background*>(sceneGame->FindGameObject("background"));
@@ -45,6 +51,10 @@ void Enemy::Init()
 		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveOnCircle, this, std::placeholders::_1));
 		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveSin, this, std::placeholders::_1));
 		regularEnemyMoveFuncs.push_back(std::bind(&Enemy::MoveReturn, this, std::placeholders::_1));
+
+		regularAttackFuncs.push_back(std::bind(&Enemy::ShootFrontOneTime, this));
+		regularAttackFuncs.push_back(std::bind(&Enemy::ShootFrontThreeTime, this));
+		regularAttackFuncs.push_back(std::bind(&Enemy::TargetingShotPattern, this, 1));
 		storedFuncIdx = Utils::Random::RandomRange(0, regularEnemyMoveFuncs.size() - 1);
 	}
 		break;
@@ -63,6 +73,14 @@ void Enemy::Init()
 		bossAttackFuncs.push_back([this]() { this->ShootFrontThreeTime(); });
 		bossAttackFuncs.push_back(std::bind(&Enemy::SpreadShotPattern, this, 10, 180, 300));
 		bossAttackFuncs.push_back(std::bind(&Enemy::TargetingShotPattern, this, 1));
+
+		bossRazer = new Razer();
+		bossRazer->Init();
+		bossRazer->Reset();
+		bossRazer->SetActive(false);
+		bossRazer->SetPosition(position);
+		 
+		sceneGame->AddGameObject(bossRazer);
 	}
 		break;
 	case Enemy::Types::Speacial:
@@ -129,8 +147,9 @@ void Enemy::Update(float dt)
 				}
 			}
 
-			if (hp < maxHp * 0.5f)
+			if (hp < maxHp * 0.99f)
 			{
+				bossRazer->SetActive(true);
 				RazerGunPattern(dt);
 			}
 		}
@@ -151,7 +170,7 @@ void Enemy::Update(float dt)
 		attackTimer = 0.f;
 	}
 
-	if (isAlive && razerShape.getGlobalBounds().intersects(player->GetGlobalBounds()) &&
+	if (isAlive && bossRazer->GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
 		!player->GetIsInvincible())
 	{
 		player->OnDie();
@@ -191,13 +210,10 @@ void Enemy::Shoot()
 {
 	switch (shootType)
 	{
-	case Enemy::ShootTypes::OneTime:
+	case Enemy::ShootTypes::Regular :
 		if (player->GetIsBomb()) return;
-		TargetingShotPattern();
-		break;
-	case Enemy::ShootTypes::ThreeTime:
-		if (player->GetIsBomb()) return;
-		ShootFrontThreeTime();
+		regularAttackFuncIdx = Utils::Random::RandomRange(0, regularAttackFuncs.size() - 1);
+		regularAttackFuncs[regularAttackFuncIdx]();
 		break;
 	case Enemy::ShootTypes::MidBoss:
 		if (player->GetIsBomb()) return;
@@ -214,7 +230,6 @@ void Enemy::Shoot()
 void Enemy::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
-	window.draw(razerShape);
 }
 
 void Enemy::OnDamage(float damage)
@@ -399,15 +414,12 @@ void Enemy::TargetingShotPattern(int bulletsCount)
 
 void Enemy::RazerGunPattern(float dt)
 {
-	razerShape.setFillColor(sf::Color::White);
-	razerShape.setSize({ 30.f, 300.f });
-	Utils::Origin::SetOrigin(razerShape, Origins::TC);
-	razerShape.setPosition(position);
-
+	bossRazer->SetPosition(position);
+	bossRazer->SetOrigin(Origins::BC);
 	sf::Transform tr;
 	tr.rotate(60 * dt);
 	razerDirection = tr * razerDirection;
-	razerShape.setRotation(Utils::MyMath::Angle(razerDirection));
+	bossRazer->SetRotation(Utils::MyMath::Angle(razerDirection));
 }
 
 void Enemy::RotateBossPattern(float dt)

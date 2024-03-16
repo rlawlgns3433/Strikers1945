@@ -11,6 +11,7 @@ void Razer::Init()
 {
 	SpriteGo::Init();
 	animator.SetTarget(&sprite);
+
 }
 
 void Razer::Reset()

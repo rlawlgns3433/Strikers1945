@@ -11,6 +11,7 @@
 #include "SpriteGo.h"
 #include "TextGo.h"
 #include "Item.h"
+#include "InputField.h"
 #include "SceneUpgrade.h"
 
 SceneGame::SceneGame(SceneIDs id) 
@@ -59,7 +60,7 @@ void SceneGame::Init()
     textCountDown->SetActive(false);
     AddGameObject(textCountDown, Layers::Ui);
 
-    saveName = new TextGo();
+    saveName = new InputField();
     saveName->Init();
     saveName->Reset();
     saveName->Set(font, saveNameFormat, 50, sf::Color::White);
@@ -226,11 +227,11 @@ void SceneGame::UpdateGameover(float dt)
 
     if (countDown <= 0)
     {
-        if (ranking.size() < 2 || (*(ranking.begin() + 2)).second < player->GetScore())
+        if (ranking.size() < 3 || (*(ranking.begin() + 2)).second < player->GetScore())
         {
             fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
-            saveName->SetSortLayer(1);
-            ResortGameObject(saveName);
+            //saveName->SetSortLayer(1);
+            //ResortGameObject(saveName);
             saveName->SetActive(true);
             isNewRecord = true;
             if (clock.getElapsedTime().asSeconds() <= nameInputInterval)
@@ -245,6 +246,14 @@ void SceneGame::UpdateGameover(float dt)
             }
             else
             {
+                if (saveName->GetText().size() < 15)
+                {
+                    for (int i = saveName->GetText().size(); i < 15; ++i)
+                    {
+                        saveName->SetText(saveName->GetText().append("A"));
+                    }
+                }
+
                 SaveHighScore();
                 saveName->SetFocused(false);
                 saveName->SetActive(false);
@@ -352,7 +361,7 @@ void SceneGame::SaveHighScore()
     input.open("highScore.txt", std::ios::app);
     if (input.is_open())
     {
-        input << saveName->GetText().substr(12, 15) <<  player->GetScore() << '\n' /*<< playTimer*/;
+        input << saveName->GetText().substr(12, 15) <<  player->GetScore() << '\n';
     }
 
     input.close();
@@ -360,7 +369,7 @@ void SceneGame::SaveHighScore()
 
 std::vector<std::pair<std::string, int>>& SceneGame::GetScores()
 {
-    std::ifstream file("highScore.txt");
+    std::ifstream file("highScore.txt", std::ios::in | std::ios::out | std::ios::app);
 
     if (!file.is_open()) {
         std::cerr << "파일을 열 수 없습니다." << std::endl;
@@ -368,7 +377,7 @@ std::vector<std::pair<std::string, int>>& SceneGame::GetScores()
 
     std::string rank;
     int i = 0;
-    while (file >> rank)
+    while (std::getline(file, rank))
     {
         std::string name = rank.substr(0, 3);
         int score = std::stoi(rank.substr(3));

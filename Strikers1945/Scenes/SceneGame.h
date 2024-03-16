@@ -11,6 +11,7 @@ class Enemy;
 class EnemyProjectile;
 class SpriteGo;
 class TextGo;
+class InputField;
 class SceneUpgrade;
 
 class SceneGame : public Scene
@@ -26,7 +27,7 @@ protected :
 	Background* background = nullptr;
 	SpriteGo* pauseWindow = nullptr;
 	TextGo* textCountDown = nullptr;
-	TextGo* saveName = nullptr;
+	InputField* saveName = nullptr;
 
 	SceneUpgrade* sceneUpgrade = nullptr;
 

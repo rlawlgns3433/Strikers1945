@@ -16,7 +16,7 @@ protected :
 	Animator animator;
 
 public :
-	Razer(const std::string& name = "bullet");
+	Razer(const std::string& name = "razer");
 	~Razer() override = default;
 
 	void Init() override;
@@ -25,4 +25,3 @@ public :
 
 	const Animator& GetAnimator() const { return animator; }
 };
-

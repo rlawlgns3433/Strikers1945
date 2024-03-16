@@ -18,8 +18,10 @@ protected:
 	Button* bombButton = nullptr;
 	Button* startGameButton = nullptr;
 
-	TextGo goldDisplay;
-	SpriteGo* myFlight = nullptr;
+	TextGo* goldDisplay = nullptr;
+	TextGo* extraPowerCost = nullptr;
+	TextGo* extraLifesCost = nullptr;
+	TextGo* extraBombsCost = nullptr;
 
 	sf::Vector2f windowSize;
 	sf::Sprite fighterSprite;
@@ -31,12 +33,10 @@ protected:
 
 	float alpha;
 
-	long long currentGold = 0;
+	size_t currentGold = 0;
 	int extraPowerLevel = 0;
 	int extraLifes = 0;
 	int extraBombs = 0;
-
-	bool isButtonPressed = false;
 
 public:
 	SceneUpgrade(SceneIDs id);
@@ -51,14 +51,21 @@ public:
 
 	int GetGold();
 
-	void UpgradePowerLevel();
-	void UpgradeExtraLifes();
-	void UpgradeExtraBombs();
+	size_t GetCurrentGold() const { return currentGold; }
+	void AddCurrentGold(size_t add) { currentGold += add; }
+	void SetCurrentGold(size_t currentGold) { this->currentGold = currentGold; }
 
 	int GetExtraPowerLevel() const { return extraPowerLevel; }
+	void AddExtraPowerLevel(int add) { extraPowerLevel += add; }
+	void SetExtraPowerLevel(int extraPowerLevel) { this->extraPowerLevel = extraPowerLevel; }
+
 	int GetExtraLifes() const { return extraLifes; }
+	void AddExtraLifes(int add) { extraLifes += add; }
+	void SetExtraLifes(int extraLifes) { this->extraLifes = extraLifes; }
+
 	int GetExtraBombs() const { return extraBombs; }
+	void AddExtraBombs(int add) { extraBombs += add; }
+	void SetExtraBombs(int extraBombs) { this->extraBombs = extraBombs; }
 
 	std::vector<int> GetExtraStat();
-	void SaveGold();
 };
