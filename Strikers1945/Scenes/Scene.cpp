@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Scene.h"
+#include <InputField.h>
 
 Scene::Scene(SceneIDs id) : id(id), textureManager(ResourceManager<sf::Texture>::Instance()), fontManager(ResourceManager<sf::Font>::Instance()),
 soundManager(ResourceManager<sf::SoundBuffer>::Instance())
@@ -92,7 +93,7 @@ void Scene::UpdateEvent(const sf::Event& event)
 			{
 				if (event.text.unicode < 128)
 				{
-					dynamic_cast<TextGo*>(obj)->AddText(static_cast<char>(event.text.unicode));
+					dynamic_cast<InputField*>(obj)->AddText(static_cast<char>(event.text.unicode));
 				}
 			}
 		}
@@ -103,7 +104,7 @@ void Scene::UpdateEvent(const sf::Event& event)
 			{
 				if (event.text.unicode < 128)
 				{
-					dynamic_cast<TextGo*>(obj)->AddText(static_cast<char>(event.text.unicode));
+					dynamic_cast<InputField*>(obj)->AddText(static_cast<char>(event.text.unicode));
 				}
 			}
 		}

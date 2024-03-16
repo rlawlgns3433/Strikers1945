@@ -13,6 +13,7 @@ protected:
 
 public:
 	TextGo(const std::string& name = "");
+	~TextGo() override = default;
 
 	std::string GetText() const;
 	void Set(const sf::Font& font, const std::string str, size_t size, const sf::Color color);

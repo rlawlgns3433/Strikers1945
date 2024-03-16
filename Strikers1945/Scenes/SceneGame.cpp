@@ -11,6 +11,7 @@
 #include "SpriteGo.h"
 #include "TextGo.h"
 #include "Item.h"
+#include "InputField.h"
 #include "SceneUpgrade.h"
 
 SceneGame::SceneGame(SceneIDs id) 
@@ -59,7 +60,7 @@ void SceneGame::Init()
     textCountDown->SetActive(false);
     AddGameObject(textCountDown, Layers::Ui);
 
-    saveName = new TextGo();
+    saveName = new InputField();
     saveName->Init();
     saveName->Reset();
     saveName->Set(font, saveNameFormat, 50, sf::Color::White);
@@ -226,11 +227,11 @@ void SceneGame::UpdateGameover(float dt)
 
     if (countDown <= 0)
     {
-        if (ranking.size() < 2 || (*(ranking.begin() + 2)).second < player->GetScore())
+        if (ranking.size() < 3 || (*(ranking.begin() + 2)).second < player->GetScore())
         {
             fadeWindow.setFillColor(sf::Color(0, 0, 0, 0));
-            saveName->SetSortLayer(1);
-            ResortGameObject(saveName);
+            //saveName->SetSortLayer(1);
+            //ResortGameObject(saveName);
             saveName->SetActive(true);
             isNewRecord = true;
             if (clock.getElapsedTime().asSeconds() <= nameInputInterval)
@@ -352,7 +353,7 @@ void SceneGame::SaveHighScore()
     input.open("highScore.txt", std::ios::app);
     if (input.is_open())
     {
-        input << saveName->GetText().substr(12, 15) <<  player->GetScore() << '\n' /*<< playTimer*/;
+        input << saveName->GetText().substr(12, 15) <<  player->GetScore() << '\n';
     }
 
     input.close();
