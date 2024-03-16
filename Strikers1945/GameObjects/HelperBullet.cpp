@@ -14,6 +14,7 @@ void HelperBullet::Init()
 void HelperBullet::Reset()
 {
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
+	isDeterminedTarget = false;
 	SetTexture("graphics/Strikers1945/helperBullet.png");
 	SetOrigin(Origins::BC);
 }
@@ -27,6 +28,11 @@ void HelperBullet::Update(float dt)
 		closestEnemy = FindClosestEnemy();
 		if(closestEnemy != nullptr)
 			isDeterminedTarget = true;
+		else
+		{
+			isDeterminedTarget = false;
+			return;
+		}
 	}
 	if(isDeterminedTarget && closestEnemy->GetActive() 
 		 && !closestEnemy->isDead())

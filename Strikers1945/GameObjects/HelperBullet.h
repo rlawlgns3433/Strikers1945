@@ -11,7 +11,6 @@ protected :
 	HelperBullet& operator=(HelperBullet&&)			= delete;
 	
 	SceneGame* sceneGame = nullptr;
-	Enemy* closestEnemy = nullptr;
 
 	sf::Vector2f direction;
 
@@ -22,6 +21,8 @@ protected :
 public:
 	HelperBullet(const std::string& name = "helperBullet");
 	~HelperBullet() override = default;
+
+	Enemy* closestEnemy = nullptr;
 
 	void Init() override;
 	void Reset() override;;

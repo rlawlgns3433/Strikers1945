@@ -40,12 +40,12 @@ void SceneEnding::Enter()
 {
 	Scene::Enter();
     ranking = GetScores();
-    for (int i = 0; i < ranking.size(); ++i)
+    for (int i = 0; i < std::min(3, (int)ranking.size()); ++i)
     {
         std::cout << (*(ranking.begin() + i)).first << " : " << (*(ranking.begin() + i)).second << std::endl;
     }
 
-    for (int i = 0; i < ranking.size(); ++i)
+    for (int i = 0; i < std::min(3, (int)ranking.size()); ++i)
     {
         textRanking.push_back(new TextGo("textranking"));
         textRanking[i]->Init();

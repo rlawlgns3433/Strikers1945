@@ -16,14 +16,14 @@ void PlayerHelper::Reset()
 {
 	for (auto& bullet : usingHelperBulletlist)
 	{
-		bullet->Reset();
 		bullet->SetActive(false);
+		bullet->closestEnemy = nullptr;
 	}
 
 	for (auto& bullet : unusingHelperBulletlist)
 	{
-		bullet->Reset();
 		bullet->SetActive(false);
+		bullet->closestEnemy = nullptr;
 	}
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetCurrentScene());
