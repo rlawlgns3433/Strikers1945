@@ -27,9 +27,10 @@ protected :
 	Background* background = nullptr;
 	SpriteGo* pauseWindow = nullptr;
 	TextGo* textCountDown = nullptr;
+	TextGo* textInsertCoin = nullptr;
 	InputField* saveName = nullptr;
-
 	SceneUpgrade* sceneUpgrade = nullptr;
+	UiHUD* hud = nullptr;
 
 	std::vector<std::pair<std::string, int>> ranking;
 	std::string saveNameFormat = "Save Name : ";
@@ -38,6 +39,7 @@ protected :
 	sf::Clock clock;
 	sf::Font font;
 
+	int currentScore = 0;
 	int countDown = 10;
 	int hiScore;
 	int gold;
@@ -56,7 +58,6 @@ public :
 	SceneGame(SceneIDs id);
 	~SceneGame() override = default;
 
-	UiHUD* hud = nullptr;
 	AnimPlayer* player = nullptr;
 
 	std::list<Enemy*> enemyList;

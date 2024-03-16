@@ -147,13 +147,19 @@ void Enemy::Update(float dt)
 				}
 			}
 
-			if (hp < maxHp * 0.99f)
+			if (hp < maxHp * 0.5f)
 			{
 				bossRazer->SetActive(true);
 				RazerGunPattern(dt);
 			}
 		}
 		else MoveStraight(dt);
+
+		if (isAlive && bossRazer->GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
+			!player->GetIsInvincible())
+		{
+			player->OnDie();
+		}
 	}
 	break;
 	case Enemy::Types::Speacial:
@@ -168,12 +174,6 @@ void Enemy::Update(float dt)
 	{
 		player->OnDie();
 		attackTimer = 0.f;
-	}
-
-	if (isAlive && bossRazer->GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
-		!player->GetIsInvincible())
-	{
-		player->OnDie();
 	}
 
 	if (isAlive && continuousAttackTimer > continuousAttackInterval)

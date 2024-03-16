@@ -25,8 +25,7 @@ void AnimPlayer::Init()
 	clipInfos.push_back({ data.animationIdleClipId, data.animationMoveClipId, data.animationDeadClipId, data.animationBombClipId, false, true });
 
 	sceneGame = dynamic_cast<SceneGame*>(SCENE_MANAGER.GetScene(SceneIDs::SceneGame));
-	hud = new UiHUD();
-	sceneGame->AddGameObject(hud, Layers::Ui);
+	hud = dynamic_cast<UiHUD*>(sceneGame->FindGameObject("hud"));
 
 	std::function<void()> deadEvent = std::bind(&AnimPlayer::DeadEvent, this);
 	animator.AddEvent(data.animationDeadClipId, 10, deadEvent);
@@ -321,18 +320,19 @@ void AnimPlayer::SetCheatMode()
 {
 	if (isCheated)
 	{
-		SetLife(3);
-		SetPowerLevel(1);
-		hud->SetLifes(lifes);
+		SetLife(data.lifes);
+		SetPowerLevel(data.initialpowerLevel);
+		SetBombItem(data.bombCount);
 	}
 	else
 	{
 		SetLife(999);
 		SetPowerLevel(99);
 		SetBombItem(999);
-		hud->SetLifes(lifes);
-		hud->SetBombCount(bombCount );
 	}
+
+	hud->SetLifes(lifes);
+	hud->SetBombCount(bombCount);
 	isCheated = !isCheated;
 }
 
