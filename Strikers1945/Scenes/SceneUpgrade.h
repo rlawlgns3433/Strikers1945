@@ -18,7 +18,10 @@ protected:
 	Button* bombButton = nullptr;
 	Button* startGameButton = nullptr;
 
-	TextGo goldDisplay;
+	TextGo* goldDisplay = nullptr;
+	TextGo* extraPowerCost = nullptr;
+	TextGo* extraLifesCost = nullptr;
+	TextGo* extraBombsCost = nullptr;
 
 	sf::Vector2f windowSize;
 	sf::Sprite fighterSprite;

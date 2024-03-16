@@ -2,6 +2,8 @@
 #include "SpriteGo.h"
 #include "Enemy.h"
 
+class SceneGame;
+
 class HelperBullet : public SpriteGo
 {
 protected :

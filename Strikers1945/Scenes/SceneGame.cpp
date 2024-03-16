@@ -246,6 +246,14 @@ void SceneGame::UpdateGameover(float dt)
             }
             else
             {
+                if (saveName->GetText().size() < 15)
+                {
+                    for (int i = saveName->GetText().size(); i < 15; ++i)
+                    {
+                        saveName->SetText(saveName->GetText().append("A"));
+                    }
+                }
+
                 SaveHighScore();
                 saveName->SetFocused(false);
                 saveName->SetActive(false);
@@ -361,7 +369,7 @@ void SceneGame::SaveHighScore()
 
 std::vector<std::pair<std::string, int>>& SceneGame::GetScores()
 {
-    std::ifstream file("highScore.txt");
+    std::ifstream file("highScore.txt", std::ios::in | std::ios::out | std::ios::app);
 
     if (!file.is_open()) {
         std::cerr << "파일을 열 수 없습니다." << std::endl;
@@ -369,7 +377,7 @@ std::vector<std::pair<std::string, int>>& SceneGame::GetScores()
 
     std::string rank;
     int i = 0;
-    while (file >> rank)
+    while (std::getline(file, rank))
     {
         std::string name = rank.substr(0, 3);
         int score = std::stoi(rank.substr(3));

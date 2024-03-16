@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "HelperBullet.h"
+#include "SceneGame.h"
 
 HelperBullet::HelperBullet(const std::string& name)
 	: SpriteGo(name)

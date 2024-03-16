@@ -245,6 +245,10 @@ void AnimPlayer::OnDie()
 
 	if (powerLevel > 1)
 	{
+		if (isCheated)
+		{
+			return; 
+		}
 		SetPowerLevel(1);
 		SetHelperCount(1);
 
