@@ -13,10 +13,19 @@ void Framework::Init(int width, int height, const std::string& name)
     DATATABLE_MANAGER.Init();
     SCENE_MANAGER.Init();
     InputManager::Init();
+
+    font = *FONT_MANAGER.GetResource("fonts/ttf/strikers1945.ttf");
+    fpsText.setFont(font);
+    fpsText.setCharacterSize(24);
+    fpsText.setFillColor(sf::Color::White);
+    fpsText.setPosition(10, 50);
 }
 
 void Framework::Do()
 {
+    sf::Clock fpsClock;
+    int frameCount = 0;
+
     while (window.isOpen())
     {
         deltaTime = realDeltaTime = clock.restart();
@@ -27,7 +36,7 @@ void Framework::Do()
 
         fixedDeltaTime += deltaTime;
 
-        InputManager::Clear(); // 키 입력 초기화
+        InputManager::Clear();
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -54,9 +63,17 @@ void Framework::Do()
             }
         }
         
+        frameCount++;
+        if (fpsClock.getElapsedTime().asSeconds() >= 1.0f) {
+            fpsText.setString("FPS: " + std::to_string(frameCount));
+            frameCount = 0;
+            fpsClock.restart();
+        }
+
         // Draw
         window.clear();
         SCENE_MANAGER.Draw(window);
+        window.draw(fpsText);
         window.display();
     }
 }

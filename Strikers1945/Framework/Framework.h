@@ -27,6 +27,8 @@ public:
 	sf::Time deltaTime;
 
 	sf::Time fixedDeltaTime;
+	sf::Font font;
+	sf::Text fpsText;
 
 	float timeScale = 1.f;
 	float fixedUpdateTime = 1.f / 50.f;

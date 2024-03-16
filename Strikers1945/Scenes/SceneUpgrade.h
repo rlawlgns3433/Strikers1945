@@ -19,7 +19,6 @@ protected:
 	Button* startGameButton = nullptr;
 
 	TextGo goldDisplay;
-	SpriteGo* myFlight = nullptr;
 
 	sf::Vector2f windowSize;
 	sf::Sprite fighterSprite;

@@ -45,12 +45,6 @@ void SceneUpgrade::Init()
 	AddGameObject(bombButton, Layers::Ui); 
 	AddGameObject(startGameButton, Layers::Ui);
 
-	myFlight = new SpriteGo();
-	myFlight->SetTexture("graphics/Strikers1945/MyFighter.png"); 
-	myFlight->SetPosition({ windowSize.x * 0.5f, windowSize.y * 0.2f });
-	myFlight->SetOrigin(Origins::MC);
-	AddGameObject(myFlight, Layers::Ui);
-
 	Scene::Init();
 }
  
@@ -72,12 +66,12 @@ void SceneUpgrade::Enter()
 void SceneUpgrade::Exit()
 {
 	Scene::Exit();
-
 }
 
 void SceneUpgrade::Update(float dt)
 {
 	Scene::Update(dt);
+	goldDisplay.SetText("Gold: " + std::to_string(currentGold));
 }
 
 void SceneUpgrade::Draw(sf::RenderWindow& window)
