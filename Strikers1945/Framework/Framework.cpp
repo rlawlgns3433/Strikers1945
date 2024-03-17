@@ -8,6 +8,7 @@ void Framework::Init(int width, int height, const std::string& name)
     windowSize.x = width;
     windowSize.y = height;
 
+
     window.create(sf::VideoMode(windowSize.x, windowSize.y), name);
 
     DATATABLE_MANAGER.Init();
@@ -19,6 +20,9 @@ void Framework::Init(int width, int height, const std::string& name)
     fpsText.setCharacterSize(24);
     fpsText.setFillColor(sf::Color::White);
     fpsText.setPosition(10, 50);
+
+    icon.loadFromFile("graphics/Strikers1945/assets/icon.png");
+    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
 void Framework::Do()
