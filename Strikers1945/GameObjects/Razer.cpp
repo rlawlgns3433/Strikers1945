@@ -29,3 +29,8 @@ void Razer::Update(float dt)
 		animator.Play("animation/Enemy/Razer.csv");
 	}
 }
+
+void Razer::Stop()
+{
+	animator.Stop();
+}

@@ -23,5 +23,7 @@ public :
 	void Reset() override;;
 	void Update(float dt) override;
 
+	void Stop();
+
 	const Animator& GetAnimator() const { return animator; }
 };

@@ -112,7 +112,7 @@ void Animator::AddEvent(const std::string& clipId, int frame, std::function<void
 	eventList.push_back({ clipId, frame, action });
 }
 
-void Animator::ClearEvenet()
+void Animator::ClearEvent()
 {
 	eventList.clear();
 }

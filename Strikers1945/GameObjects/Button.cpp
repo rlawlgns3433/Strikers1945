@@ -105,8 +105,9 @@ void Button::SetButton(sf::Vector2f size, sf::Vector2f position, sf::Color color
 {
 	shape.setSize(size);
 	shape.setPosition(position);
-	shape.setFillColor(color);
+	SetButtonColor(color);
 	SetOrigin(origin);
+
 }
 
 void Button::SetButtonText(const sf::Font& font, const std::string& label, size_t labelSize, sf::Color labelColor, sf::Vector2f position, Origins origin)
@@ -122,6 +123,27 @@ void Button::SetButtonText(const sf::Font& font, const std::string& label, size_
 void Button::SetButtonColor(sf::Color color)
 {
 	shape.setFillColor(color);
+	SetButtonColorDefault(color);
+	SetButtonColorFocused(color);
+	SetButtonColorPressed(color);
+}
+
+void Button::SetButtonColorDefault(sf::Color color)
+{
+	color.a = 255.f;
+	buttonColorDefault = color;
+}
+
+void Button::SetButtonColorFocused(sf::Color color)
+{
+	color.a = 200.f;
+	buttonColorFocused = color;
+}
+
+void Button::SetButtonColorPressed(sf::Color color)
+{
+	color.a = 127.f;
+	buttonColorPressed = color;
 }
 
 sf::FloatRect Button::GetLocalBounds()

@@ -18,7 +18,7 @@ void AniTest::Reset()
 	SetOrigin(Origins::BC);
 	SetPosition({ 0.f, 0.f });
 
-	animator.ClearEvenet();
+	animator.ClearEvent();
 
 	std::function<void()> funcInstance = std::bind(&AniTest::TestInstance, this);  
 	animator.AddEvent("animations/Jump.csv", 5, funcInstance);

@@ -33,9 +33,7 @@ public :
 		Regular2,
 		Regular3,
 		MidBoss,
-		Boss,
-		Speacial,
-		Gound
+		Boss
 	};
 
 	enum class ShootTypes
@@ -129,14 +127,13 @@ public :
 	void Init();
 	void Reset();
 	void Update(float dt);
-	void UpdateGame(float dt);
 	void Draw(sf::RenderWindow& window);
 
 	void Shoot();
 	void ShootFrontOneTime();
 	void ShootFrontThreeTime();
-	void SpreadShotPattern(int bulletsCount = 10, float spreadAngle = 180.0f, float projectileSpeed = 300.0f);
-	void TargetingShotPattern(int bulletsCount = 1);
+	void SpreadShotPattern(int projectileCount = 10, float spreadAngle = 180.0f, float projectileSpeed = 300.0f);
+	void TargetingShotPattern(int projectileCount = 1);
 	void RazerGunPattern(float dt);
 	void RotateBossPattern(float dt);
 
