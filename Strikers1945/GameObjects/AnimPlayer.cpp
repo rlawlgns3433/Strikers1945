@@ -66,7 +66,7 @@ void AnimPlayer::Reset()
 	powerLevel = data.initialpowerLevel;
 	lifes = data.lifes;
 	bombCount = data.bombCount;
-	damage = 9999;
+	damage = data.damage;
 	score = data.score;
 	currentHelperCount = powerLevel;
 
