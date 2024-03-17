@@ -83,10 +83,6 @@ void Enemy::Init()
 		sceneGame->AddGameObject(bossRazer);
 	}
 		break;
-	case Enemy::Types::Speacial:
-		break;
-	case Enemy::Types::Gound:
-		break;
 	}
 }
 
@@ -104,6 +100,9 @@ void Enemy::Update(float dt)
 {
 	SpriteGo::Update(dt);
 	animator.Update(dt);
+
+
+
 	continuousAttackTimer += dt;
 	attackTimer += dt;
 
@@ -152,20 +151,20 @@ void Enemy::Update(float dt)
 				bossRazer->SetActive(true);
 				RazerGunPattern(dt);
 			}
+			if (sceneGame->GetStatus() == GameStatus::GameOver)
+			{
+				bossRazer->SetActive(false);
+			}
 		}
 		else MoveStraight(dt);
 
-		if (isAlive && bossRazer->GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
+		if (isAlive && bossRazer->GetActive()  && bossRazer->GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
 			!player->GetIsInvincible())
 		{
 			player->OnDie();
 		}
 	}
 	break;
-	case Enemy::Types::Speacial:
-		break;
-	case Enemy::Types::Gound:
-		break;
 	}
 
 	if (isAlive && GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
@@ -351,17 +350,17 @@ void Enemy::BossDeadEvent()
 	sceneGame->SetStatus(GameStatus::GameOver);
 }
 
-void Enemy::SpreadShotPattern(int bulletsCount, float spreadAngle, float projectileSpeed)
+void Enemy::SpreadShotPattern(int projectileCount, float spreadAngle, float projectileSpeed)
 {
 	sf::Vector2f directionToPlayer = Utils::MyMath::GetNormal(player->GetPosition() - position);
 	float playerAngle = std::atan2(directionToPlayer.y, directionToPlayer.x);
-	float angleBetweenBullets = (spreadAngle * (3.14159265f / 180.0f)) / (bulletsCount - 1);
-	float startingAngle = playerAngle - (spreadAngle * (3.14159265f / 180.0f) / 2);
+	float angleBetweenprojectiles = (spreadAngle * (M_PI / 180.0f)) / (projectileCount - 1);
+	float startingAngle = playerAngle - (spreadAngle * (M_PI / 180.0f) / 2);
 
-	for (int i = 0; i < bulletsCount; ++i)
+	for (int i = 0; i < projectileCount; ++i)
 	{
-		float bulletAngle = startingAngle + angleBetweenBullets * i;
-		sf::Vector2f bulletDirection = sf::Vector2f(std::cos(bulletAngle), std::sin(bulletAngle));
+		float projectileAngle = startingAngle + angleBetweenprojectiles * i;
+		sf::Vector2f projectileDirection = sf::Vector2f(std::cos(projectileAngle), std::sin(projectileAngle));
 
 		EnemyProjectile* projectile = nullptr;
 		if (sceneGame->unusingProjectileList.empty())
@@ -379,17 +378,17 @@ void Enemy::SpreadShotPattern(int bulletsCount, float spreadAngle, float project
 		projectile->SetActive(true);
 		projectile->SetPosition(position);
 		projectile->SetSpeed(projectileSpeed);
-		projectile->SetDirection(bulletDirection);
+		projectile->SetDirection(projectileDirection);
 		sceneGame->usingProjectileList.push_back(projectile);
 		sceneGame->AddGameObject(projectile);
 	}
 }
 
-void Enemy::TargetingShotPattern(int bulletsCount)
+void Enemy::TargetingShotPattern(int projectileCount)
 {
 	sf::Vector2f playerPosition = player->GetPosition();
 
-	for (int i = 0; i < bulletsCount; ++i)
+	for (int i = 0; i < projectileCount; ++i)
 	{
 		EnemyProjectile* projectile = nullptr;
 		if (sceneGame->unusingProjectileList.empty())

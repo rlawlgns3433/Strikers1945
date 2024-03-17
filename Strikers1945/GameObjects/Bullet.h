@@ -29,4 +29,8 @@ public :
 	void Reset() override;;
 	void Update(float dt) override;
 	void FixedUpdate(float dt);
+
+	float GetBulletSpeed() const { return speed; }
+	void AddBulletSpeed(float add) { speed += add; }
+	void SetBulletSpeed(float speed) { this->speed = speed; }
 };

@@ -30,6 +30,8 @@ public:
 	sf::Font font;
 	sf::Text fpsText;
 
+	sf::Image icon;
+
 	float timeScale = 1.f;
 	float fixedUpdateTime = 1.f / 50.f;
 

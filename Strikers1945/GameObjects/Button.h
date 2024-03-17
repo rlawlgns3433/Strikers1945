@@ -28,6 +28,7 @@ protected:
 	sf::RectangleShape shape;
 
 	sf::Color buttonColor = sf::Color(127, 127, 127, 255);
+	sf::Color buttonColorDefault = sf::Color(127, 127, 127, 255);
 	sf::Color buttonColorFocused = sf::Color(127, 127, 127, 200);
 	sf::Color buttonColorPressed = sf::Color(127, 127, 127, 127);
 
@@ -47,7 +48,12 @@ public:
 
 	void SetButton(sf::Vector2f size, sf::Vector2f position, sf::Color color, Origins origin);
 	void SetButtonText(const sf::Font& font, const std::string& label, size_t labelSize, sf::Color labelColor, sf::Vector2f position, Origins origin);
+
 	void SetButtonColor(sf::Color color);
+	void SetButtonColorDefault(sf::Color color);
+	void SetButtonColorFocused(sf::Color color);
+	void SetButtonColorPressed(sf::Color color);
+
 	void ExecuteButtonAction();
 
 	void UpgradePowerLevel();

@@ -94,5 +94,5 @@ public:
 	bool IsPlaying() const { return this->isPlaying; }
 
 	void AddEvent(const std::string& clipId, int frame, std::function<void()> action);
-	void ClearEvenet();
+	void ClearEvent();
 };
