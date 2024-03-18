@@ -107,4 +107,10 @@ namespace Utils
 			directions.push_back(direction);
 		}
 	}
+	sf::Vector2f MyMath::GetDirectionFromAngle(float angleDegrees)
+	{
+		float angleRadians = Deg2Rad(angleDegrees);
+		return sf::Vector2f(std::cos(angleRadians), std::sin(angleRadians));
+
+	}
 }

@@ -146,7 +146,7 @@ void Enemy::Update(float dt)
 				}
 			}
 
-			if (hp < maxHp * 0.5f)
+			if (hp < maxHp * 0.99f)
 			{
 				bossRazer->SetActive(true);
 				RazerGunPattern(dt);
@@ -158,10 +158,31 @@ void Enemy::Update(float dt)
 		}
 		else MoveStraight(dt);
 
-		if (isAlive && bossRazer->GetActive()  && bossRazer->GetGlobalBounds().intersects(player->GetGlobalBounds()) &&
-			!player->GetIsInvincible())
+		if (isAlive && bossRazer->GetActive() && !player->GetIsInvincible())
 		{
-			player->OnDie();
+			const float laserLength = 300;
+			const int numPoints = 20;
+			sf::Vector2f laserDirection = Utils::MyMath::GetDirectionFromAngle(bossRazer->GetRotation() - 90);
+
+			bool collisionDetected = false;
+			for (int i = 0; i < numPoints; ++i)
+			{
+				float segmentLength = laserLength / numPoints;
+				sf::Vector2f point = bossRazer->GetPosition() + laserDirection * (i * segmentLength);
+
+				sf::FloatRect playerBounds = player->GetGlobalBounds();
+
+				if (playerBounds.contains(point))
+				{
+					collisionDetected = true;
+					break;
+				}
+			}
+
+			if (collisionDetected)
+			{
+				player->OnDie();
+			}
 		}
 	}
 	break;

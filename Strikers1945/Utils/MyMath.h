@@ -20,5 +20,6 @@ namespace Utils
 
 		static void AngleWithDirectionOffsets(const sf::Vector2f& look, sf::Vector2f& directionPlus30, sf::Vector2f& directionMinus30);
 		static void GenerateDirectionVectors(const sf::Vector2f& look, std::vector<sf::Vector2f>& directions, int numVectors, float angleDifference);
+		static sf::Vector2f GetDirectionFromAngle(float angleDegrees);
 	};
 }
