@@ -142,7 +142,6 @@
     <ClCompile Include="GameObjects\AnimPlayer.cpp" />
     <ClCompile Include="GameObjects\Background.cpp" />
     <ClCompile Include="GameObjects\Animator.cpp" />
-    <ClCompile Include="AniTest.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\DataTableManager.cpp" />
     <ClCompile Include="GameObjects\Enemy.cpp" />
@@ -163,7 +162,6 @@
     <ClCompile Include="DataTables\PlayerTable.cpp" />
     <ClCompile Include="GameObjects\InputField.cpp" />
     <ClCompile Include="Scenes\SceneEnding.cpp" />
-    <ClCompile Include="Scenes\SceneDev1.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="Scenes\SceneUpgrade.cpp" />
     <ClCompile Include="Utils\MyMath.cpp" />
@@ -191,7 +189,6 @@
     <ClInclude Include="GameObjects\Background.h" />
     <ClInclude Include="GameObjects\Animator.h" />
     <ClInclude Include="GameObjects\AnimPlayer.h" />
-    <ClInclude Include="AniTest.h" />
     <ClInclude Include="DataTables\DataTable.h" />
     <ClInclude Include="DataTables\DataTableManager.h" />
     <ClInclude Include="GameObjects\Enemy.h" />
@@ -214,7 +211,6 @@
     <ClInclude Include="rapidcsv.h" />
     <ClInclude Include="GameObjects\Razer.h" />
     <ClInclude Include="Scenes\SceneEnding.h" />
-    <ClInclude Include="Scenes\SceneDev1.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />
     <ClInclude Include="Scenes\SceneUpgrade.h" />
     <ClInclude Include="Utils\MyMath.h" />
