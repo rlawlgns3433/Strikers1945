@@ -2,13 +2,13 @@
 원작 게임 Strikers 1945를 모작한 프로젝트입니다.
 
 # 개발 기간
-2024-03-05 ~ 2024-03-18
+2024-03-05 ~ 2024-03-17
 
 # 개발 인원
 1인 / 김지훈
 
 # 개발 환경
-<img src="https://img.shields.io/badge/Visual Studio-777777?style=flat-square&logo=Visual Studio&logoColor=purple"> <img src="https://img.shields.io/badge/SFML-567e25?style=for-the-badge&logo=SFML&logoColor=white">
+<img src="https://img.shields.io/badge/Github-000000?style=flat-square&logo=Github&logoColor=ffffff"> <img src="https://img.shields.io/badge/Visual Studio-777777?style=flat-square&logo=Visual Studio&logoColor=purple"> <img src="https://img.shields.io/badge/C++-00599C?style=flat-square&logo=C%2B%2B&logoColor=white"><img src="https://img.shields.io/badge/SFML-567e25?style=flat-square&logo=SFML&logoColor=white">
 
 # 프로젝트 소개
 Strikers 1945는 제2차 세계대전을 배경으로 하고 있으며, 플레이어는 여러 종류의 전투기 중 하나를 선택하여 적의 공격을 피하고 반격하면서 레벨을 진행해 나가는 것이 목표입니다. 각 전투기를 사용해 고유의 기본 공격과 강력한 '폭탄' 공격을 이용해 다양한 적 유닛과 보스와 맞서 싸우는 게임입니다.
@@ -22,7 +22,7 @@ Strikers 1945는 제2차 세계대전을 배경으로 하고 있으며, 플레�
 - 아이템 드랍 및 적용 : 파워업, 폭탄, 생명, 골드
 - 애니메이션 적용
 
-## 최종 버전 : 2024-03-11 ~ 2024-03-18
+## 최종 버전 : 2024-03-11 ~ 2024-03-17
 - 오브젝트 풀링 적용 : 플레이어, 적 총알
 - 데이터 테이블화 : 플레이어, 적, 아이템
 - 적 공격 패턴 구현 : 전방 발사, 회전하며 발사, 스프레드, 타게팅, 레이저
