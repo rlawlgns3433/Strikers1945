@@ -47,4 +47,4 @@ Strikers 1945는 제2차 세계대전을 배경으로 하고 있으며, 플레�
 화면우측 하단에 InputField에 대한 처리와 Button 클래스의 예시를 볼 수 있습니다. 이 UI 컴포넌트들은 사용자의 입력 이벤트와 상호작용을 하는데, 각각의 클래스는 독립적인 기능을 가지고 있습니다. 따라서 UX를 개선하기 위해 디자인 변경을 필요로 할 때 해당 클래스만 수정하여 사용할 수 있습니다.
 
 # 시연 영상
-[Strikers1945 시연 영상](https://drive.google.com/file/d/1xqlUZLXfmHZAG5TGyN8SXWgmofejnwaO/view?usp=drive_link)
+[Strikers1945 시연 영상](https://youtu.be/bOM7LR6k-qQ)
